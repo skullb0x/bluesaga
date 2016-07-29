@@ -150,7 +150,7 @@ public class LoginScreen {
 			
 			if(ScreenHandler.getActiveScreen() == ScreenType.LOGIN){
 				if(RegisterButton.isClicked(mouseX,mouseY)){
-					
+					WebUtils.openWebpage("http://www.bluesaga.org/register.php");
 				}else if(LoginButton.isClicked(mouseX,mouseY)){
 	 				if(!clickedLogin){
 	 					ScreenHandler.setLoadingStatus(LanguageUtils.getString("ui.status.connecting"));
