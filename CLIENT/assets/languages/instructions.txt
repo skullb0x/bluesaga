@@ -1,0 +1,15 @@
+INSTRUCTIONS
+============
+
+1. Go to www.bluesaga.org/translations
+
+2. Download a translation file
+ 
+3. Copy the downloaded file to this folder
+
+Now the text in the game will be translated.
+
+If some text is still in english, you can help out and translate the missing parts.
+Just go to www.bluesaga.org/translations and click Edit, and start filling in the gaps!
+
+Thanks!

@@ -1,0 +1,303 @@
+{
+    "movies": {
+        "press_escape": "PRESS ESCAPE TO SKIP",
+        "server_restart": "SERVER RESTARTS IN A MOMENT",
+        "movie2": {
+            "text1": "Who dares enter our domains...",
+            "text2": "These lands belong to lord Nimbul now!",
+            "text3": "You are but a drop in the sea of sacrifice..."
+        },
+        "cards": {
+            "collect_cards": "Collected all cards!",
+            "congratulations": "Congraturations!",
+            "world_change": "Suddently the world trembled and lands started moving..."
+        }
+    },
+    "ui": {
+        "status": {
+            "new_client_available": "New version of client available!",
+            "visit_site": "Visit the www.bluesaga.org for downloads",
+            "new_version": "New version of client available! Restart the client to let it update, if not working, re-download the game from www.bluesaga.org",
+            "skills": "Loading skills info...",
+            "connecting": "Connecting to server...",
+            "player": "Loading player info...",
+            "loading": "Loading...",
+            "actionbar": "Loading actionbar data...",
+            "monsters": "Loading monsters info...",
+            "no_player_data": "Can't get player data!",
+            "no_connect": "Can't connect to server!",
+            "abilities": "Loading abilities info...",
+            "reconnect": "Reconnect in",
+            "complete": "Loading complete!",
+            "seconds": "seconds",
+            "map": "Loading map info...",
+            "no_reconnect": "Failed to reconnecta to server!",
+            "slow": "Your conncetion is slow, lost connection with server",
+            "particles": "Loading particles info...",
+            "saving_mini_map": "Saving minimap..."
+        },
+        "character_selection": {
+            "new_password_wrong": "New password is not repeated right!",
+            "request_data": "Requesting data from server...",
+            "old_password": "Old password",
+            "send": "Sending request...",
+            "deleted_in": "Deleted in",
+            "cancel": "Cancel delete",
+            "repeat": "Repeat new password",
+            "create": "Create",
+            "recover": "Recover",
+            "change_password": "Change password",
+            "days": "Days",
+            "beta_warning": "Since this is a beta version, security can't be guaranteed, so don't use any multipasses!",
+            "delete": "Delete character",
+            "new_password": "New password"
+        },
+        "character_create": {
+            "create_character": "Create Character",
+            "incorrect_name": "Name is incorrect, can't be empty and can't contain spaces, numbers nor special chars.",
+            "select_family": "Select a creature family!",
+            "select_creature": "Select a creature!",
+            "select_class": "Select a class!",
+            "creating_character": "Creating character..."
+        },
+        "fishing": {
+            "catch": "CATCH!"
+        },
+        "character_window": {
+            "to_next_level": "to next level"
+        },
+        "area_effect": {
+            "unguarded_zone": "Lawless Zone",
+            "safe_zone": "Safe Zone"
+        },
+        "cardbook": {
+            "name": "Card Book",
+            "slot_taken": "Slot already occupied",
+            "wrong_slot": "Wrong slot"
+        },
+        "players_window": {
+            "party_members": "Party members",
+            "no_party_active": "No party active",
+            "add_friend": "Add friend",
+            "party": "Party",
+            "no_friends": "No friends online",
+            "players_online": "Players online",
+            "enter_player_name": "Enter player name",
+            "add_player": "Add Player"
+        },
+        "top_menu": {
+            "card_book": "Card B(o)ok",
+            "skills": "S(k)ills",
+            "abilities": "A(b)ilities",
+            "inventory": "(I)nventory",
+            "players": "(P)layers",
+            "quests": "(Q)uests",
+            "character_info": "(C)haracter Info",
+            "game_menu": "Game Menu (Esc)"
+        },
+        "inventory": {
+            "right_click_to_use": "Right-click to use",
+            "right_click_to_eat": "Right-click to eat",
+            "right_click_to_read": "Right-click to read"
+        },
+        "buttons": {
+            "end_conversation": "End conversation",
+            "accept": "Accept",
+            "check_in": "Check in",
+            "back": "Back",
+            "buy_sell_items": "Buy/Sell items",
+            "no_way": "No way",
+            "no_thanks": "No Thanks",
+            "cancel": "Cancel",
+            "on_my_way": "I'm on my way!"
+        },
+        "login": {
+            "mail": "Mail",
+            "check": "Checking login-info with server...",
+            "instructions": "Fill in your mail and password",
+            "wrong": "Wrong mail or password",
+            "forgot": "Forgot password",
+            "enter": "ENTER THE WORLD",
+            "retry": "Retry in",
+            "create": "Create a free account",
+            "password": "Password",
+            "fill_both": "Fill in both your mail and password"
+        },
+        "chat": {
+            "channelname": "#channelname to create/join channel",
+            "playername": "@playername to send message",
+            "respawn": "You've respawned at your last checkpoint",
+            "crew": "Crew",
+            "channels": "/channels to list all channels",
+            "tab": "Press TAB to change channel",
+            "local": "Local",
+            "type": "Press ENTER to type in the chat",
+            "world": "World"
+        },
+        "web": {
+            "get_more_skins": "Get more skins",
+            "wide_selection": "Choose from a wide selection of skins",
+            "customize": "Customize your character",
+            "get_more_space": "Get more space",
+            "expand_chest": "Expand your personal chest",
+            "keep_safe": "Get more space to keep your items safe"
+        },
+        "game_menu": {
+            "music": "Music",
+            "logout": "Logout character",
+            "quit": "Quit to desktop",
+            "sfx": "Sfx",
+            "options": "Options"
+        },
+        "bounty": {
+            "place_bounty": "Place bounty",
+            "sum": "Sum",
+            "player_name": "Player name",
+            "no_bounties": "NO BOUNTIES AVAILABLE"
+        },
+        "quest": {
+            "rec_level": "Rec. Level",
+            "status_accepted": "Status: Accepted",
+            "status_get_reward": "Status: Get reward"
+        },
+        "classes": {
+            "no_primary_class": "No Primary Class",
+            "no_secondary_class": "No Secondary Class"
+        },
+        "skins": {
+            "no_character_skins": "You have no character skins"
+        },
+        "crafting": {
+            "no_recipes": "You know no recipes using this"
+        },
+        "split": {
+            "enter_amount": "Enter amount"
+        },
+        "mini_map": {
+            "mini_map": "Mini Map"
+        },
+        "options": {
+            "sfx": "SFX",
+            "music": "MUSIC",
+            "off": "OFF"
+        },
+        "shop": {
+            "right_click_sell": "Right-click to sell",
+            "sell_value": "Sell value"
+        }
+    },
+    "messages": {
+        "ability": {
+            "cant_perform_action": "Can't perform action here",
+            "ability_not_ready": "Ability not ready",
+            "not_enough_mana": "Not enough mana"
+        },
+        "battle": {
+            "least_level_pvp": "You must be at least level 10 to engage in PvP!",
+            "low_level_players": "You cannot attack low level players",
+            "cant_attack_party_member": "You can't attack your own party members!"
+        },
+        "chat": {
+            "muted": "You have been muted till next server restart",
+            "wait_announce": "You must wait 1 minute to announce something again"
+        },
+        "inventory": {
+            "have_key": "You already have this key",
+            "added_to_keychain": "added to your keychain!",
+            "have_recipe": "You already have this recipe",
+            "added_to_craftbook": "added to your craftbook!",
+            "added_to_inventory": "added to your inventory!",
+            "dropped_on_ground": "dropped on the ground",
+            "full": "Your inventory is full!",
+            "you_used": "You used",
+            "cant_equip_slot": "You can't equip this item in that slot!"
+        },
+        "party": {
+            "created_party": "You have created a party!",
+            "join_party": "You have been invited to join the",
+            "party": "party",
+            "already_in_party": "Player is already in a party!",
+            "level_req": "Player level is either too high or low for party!",
+            "player_not_online": "Player is not online!",
+            "add_self": "No need to add yourself to the party!",
+            "player_not_exist": "Player does not exist!",
+            "joined_party": "joined the party!",
+            "now_member": "You are now a member of a party! Press P to view party members",
+            "left_party": "left the party!",
+            "disbanded": "Party disbanded!"
+        },
+        "classes": {
+            "already_have": "You already have this class!",
+            "cant_learn": "You can't learn this class as your primary, since you are a ",
+            "learn_as_secondary": "But you can learn it as a secondary!",
+            "leveled_up": "leveled up!",
+            "lost_level": "You lost a level in "
+        },
+        "connect": {
+            "is_now_online": "is now online",
+            "talk_to_inn_keeper": "Talk to the inn-keeper on the first floor of Chompa Inn!"
+        },
+        "friends": {
+            "already_in_list": "Friend is already in your list",
+            "player_not_exist": "A player with that name does not exist, check your spelling",
+            "cant_add_yourself": "You can't add yourself to the list",
+            "cant_add_admins": "Can't add admins",
+            "friend_added": "Friend added!"
+        },
+        "gathering": {
+            "need_higher_level": "You need a higher level in herbalism"
+        },
+        "crafting": {
+            "missing_need": "Ingredients missing! You need:",
+            "successful": "Crafting successful!"
+        },
+        "quest": {
+            "checked_in": "You've checked in at this inn",
+            "gained": "You've gained the",
+            "ability": "ability!",
+            "travel_deep_water": "You can now travel on deep water",
+            "missing_items": "You are missing the requested item(s)",
+            "already_have": "You already have the",
+            "aquired_boat": "You've aquired a boat",
+            "added": "quest added",
+            "completed": "completed!",
+            "updated": "updated!",
+            "need_eat_first": "You need to eat first in order to regain health and mana"
+        },
+        "shop": {
+            "not_enough_silver": "Not enough silver to exchange!",
+            "not_enough_copper": "Not enough copper to exchange!",
+            "no_money": "No money available to exchange!",
+            "not_enough_money": "Not enough money!",
+            "ability_not_exist": "Ability does not exist!",
+            "item_not_exist": "Item does not exist!",
+            "copper_removed": "cc removed from your inventory",
+            "ability_already_aquired": "Ability already aquired!",
+            "not_have_requirements": "You do not have the requirements!",
+            "no_sell": "Can't be sold!",
+            "need_level_sell": "Need to be level 2 to sell items!"
+        },
+        "walking": {
+            "no_enter_safe_zones": "Can't enter safe-zones while marked as Crusader",
+            "need_boat_ticket": "You need a boat ticket to use this ship",
+            "you_lost": "You lost",
+            "need_key": "You need a key to enter!",
+            "need_boat": "You need a boat to travel the seas",
+            "need_better_boat": "You need a better boat to travel deep waters"
+        },
+        "server": {
+            "restart_fifteen": "Server will do a quick restart in 15 min",
+            "restart_one": "Server will do a quick restart in 1 min",
+            "has_problems": "Server has problems right now, can't login"
+        },
+        "bounty": {
+            "placed_bounty": "Bounty placed on",
+            "gained_bounty": "You gained a bounty of",
+            "for_killing": "for killing"
+        },
+        "cards": {
+            "not_chest": "Can't place card in chests!",
+            "lost_card": "was lost due to inactivity"
+        }
+    } 
+}
