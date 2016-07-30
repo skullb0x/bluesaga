@@ -3,10 +3,13 @@
 .project
 .metadata
 bin/**
+**/build/**
+**/crashlogs/**
 tmp/**
 tmp/**/*
 *.tmp
 *.bak
+*~
 *.swp
 *~.nib
 local.properties

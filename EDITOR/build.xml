@@ -1,0 +1,31 @@
+<project name="bluesaga" default="compile" basedir=".">
+    <description>
+        BlueSaga - Map Editor
+    </description>
+
+  <property name="src-editor" location="src"/>
+  <property name="build"      location="build"/>
+  <property name="include"    location="../JARS"/>
+
+  <property name="compile.debug"              value="true"/>
+  <property name="compile.deprecation"        value="false"/>
+  <property name="compile.jdk-version.source" value="1.8"/>
+  <property name="compile.jdk-version.target" value="1.8"/>
+  <property name="compile.optimize"           value="true"/>
+
+  <target name="compile">
+    <mkdir dir="${build}"/>
+    <javac srcdir="${src-editor}" destdir="${build}" debug="on" includeantruntime='false'>
+      <classpath>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+  </target>
+
+</project>
