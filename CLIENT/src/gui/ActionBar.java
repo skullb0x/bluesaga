@@ -93,10 +93,15 @@ public class ActionBar {
 								weaponClassId = BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType).getClassId();
 							}
 							if(classId > 0){
-								// TODO: Exception for fishing, make this better
-								if(classId == 101 && (BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType).getId() == 173 
-									|| BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType).getId() == 193)){
-									canUse = true;
+								// Fishing bug fixed [Arkhist]
+								if(classId == 101) {
+									if (BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType) != null) {
+											if(BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType).getId() == 173
+													|| BlueSaga.playerCharacter.MyEquipHandler.getEquipment(equipType).getId() == 193) {
+												canUse = true;
+											}
+									}
+									
 								}else {
 									int weaponBaseClassId = 0;
 									if(GameInfo.classDef.get(weaponClassId) != null){
