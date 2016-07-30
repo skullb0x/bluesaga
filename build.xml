@@ -1,0 +1,112 @@
+<project name="bluesaga" default="compile" basedir=".">
+    <description>
+        BlueSaga
+    </description>
+
+  <!-- set global properties for this build -->
+
+  <property name="src-client"     location="CLIENT"/>
+  <property name="src-editor"     location="EDITOR"/>
+  <property name="src-server"     location="SERVER"/>
+  <property name="src-common"     location="COMMON"/>
+  <property name="src-map"        location="MAP_GENERATOR"/>
+  <property name="src-particle"   location="ParticleEditor"/>
+
+  <property name="build-client"   location="build/CLIENT"/>
+  <property name="build-editor"   location="build/EDITOR"/>
+  <property name="build-server"   location="build/SERVER"/>
+  <property name="build-common"   location="build/COMMON"/>
+  <property name="build-map"      location="build/MAP_GENERATOR"/>
+  <property name="build-particle" location="build/ParticleEditor"/>
+
+  <property name="include" location="JARS"/>
+
+  <property name="compile.debug"              value="true"/>
+  <property name="compile.deprecation"        value="false"/>
+  <property name="compile.jdk-version.source" value="1.8"/>
+  <property name="compile.jdk-version.target" value="1.8"/>
+  <property name="compile.optimize"           value="true"/>
+
+  <target name="compile" depends="client, editor, server" />
+
+  <target name="common">
+    <mkdir dir="${build-common}"/>
+    <javac srcdir="${src-common}" destdir="${build-common}" debug="on" includeantruntime='false'/>
+  </target>
+
+  <target name="map" depends="common">
+    <mkdir dir="${build-map}"/>
+    <javac srcdir="${src-map}" destdir="${build-map}" debug="on" includeantruntime='false'>
+      <classpath>
+        <pathelement path="${build-common}"/>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="particle" depends="common">
+    <mkdir dir="${build-particle}"/>
+    <javac srcdir="${src-particle}" destdir="${build-particle}" debug="on" includeantruntime='false'>
+      <classpath>
+        <pathelement path="${build-common}"/>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="client" depends="common">
+    <mkdir dir="${build-client}"/>
+    <javac srcdir="${src-client}" destdir="${build-client}" debug="on" includeantruntime='false'>
+      <classpath>
+        <pathelement path="${build-common}"/>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="editor">
+    <mkdir dir="${build-editor}"/>
+    <javac srcdir="${src-editor}" destdir="${build-editor}" debug="on" includeantruntime='false'>
+      <classpath>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="server" depends="common, map">
+    <mkdir dir="${build-server}"/>
+    <javac srcdir="${src-server}" destdir="${build-server}" debug="on" includeantruntime='false'>
+      <classpath>
+        <pathelement path="${build-common}"/>
+        <pathelement path="${build-map}"/>
+        <fileset dir="${include}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="clean-client">
+    <delete dir="${build-client}"/>
+    <delete dir="${build-common}"/>
+  </target>
+
+  <target name="clean-editor">
+    <delete dir="${build-editor}"/>
+  </target>
+
+  <target name="clean-server">
+    <delete dir="${build-server}"/>
+    <delete dir="${build-common}"/>
+    <delete dir="${build-map}"/>
+  </target>
+
+</project>
