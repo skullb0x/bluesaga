@@ -237,6 +237,12 @@ public abstract class Server {
 				ticksCount = 0;
 				//ServerMessage.printMessage("Ticks/Second: " + actualTPS);				
 			}
+			
+			try {
+				Thread.currentThread().sleep(10L);
+			} catch (InterruptedException ex) {
+				return;
+			}
 		}
 	}
 
