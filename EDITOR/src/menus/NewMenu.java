@@ -53,7 +53,7 @@ public class NewMenu {
 		
 		typeList = new GuiList(200,100);
 		
-		ResultSet mapType = BP_EDITOR.mapDB.askDB("select distinct(Type) from area");
+		ResultSet mapType = BP_EDITOR.mapDB.askDB("select distinct(Type) from area_tile");
 		try {
 			while(mapType.next()){
 				typeList.addItem(mapType.getString("Type"));	

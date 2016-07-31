@@ -40,7 +40,7 @@ public class WorldMap  {
 	
 	
 	public void loadMap(int mapId) {
-		ResultSet rs = BP_EDITOR.mapDB.askDB("select Id, Name from area where Id = " + mapId);
+		ResultSet rs = BP_EDITOR.mapDB.askDB("select Id, Name from area_tile where Id = " + mapId);
 
 		try {
 			if(rs.next()){
