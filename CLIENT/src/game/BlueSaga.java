@@ -298,6 +298,9 @@ public class BlueSaga extends BasicGame {
 
 	public static void main(String[] args) { 
 
+		if(args.length>0 && "-dev".equals(args[0])) {
+		  ClientSettings.DEV_MODE = true;
+		}
 		
 		if(!ClientSettings.DEV_MODE){
 			// CRASH REPORTS
@@ -343,8 +346,7 @@ public class BlueSaga extends BasicGame {
 			          "images/icons/24x24.png",
 			          "images/icons/32x32.png",
 			          "images/icons/64x64.png",
-			          "images/icons/128x128.png",
-			          "images/icons/256x256.png"
+			          "images/icons/128x128.png"
 			         });
 			
 			app.start();
