@@ -65,7 +65,6 @@ public class Database {
 	
 	public void deleteMap(int AreaId){
 		updateDB("delete from area_tile where AreaId = "+AreaId);
-		updateDB("delete from area where Id = "+AreaId);
 		updateDB("delete from area_creature where AreaId = "+AreaId);
 		updateDB("delete from area_container where AreaId = "+AreaId);
 	}

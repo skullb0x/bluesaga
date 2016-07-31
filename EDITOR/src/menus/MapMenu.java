@@ -41,7 +41,7 @@ public class MapMenu {
 		int x = 0;
 		int y = 20;
 		
-		ResultSet rs = BP_EDITOR.mapDB.askDB("select Id, Name from area order by Id asc");
+		ResultSet rs = BP_EDITOR.mapDB.askDB("select Id, Name from area_tile order by Id asc");
 		
 		try {
 			while(rs.next()){
