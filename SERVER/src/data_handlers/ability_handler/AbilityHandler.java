@@ -137,35 +137,35 @@ public class AbilityHandler extends Handler {
 
 		if(ServerGameInfo.abilityDef.containsKey(abilityId)){
 			Ability abilityInfo = ServerGameInfo.abilityDef.get(abilityId);
-			String infoToSend = "255,234,116;"+abilityInfo.getName()+"/";
-
-			infoToSend += "0,0,0; /";
-
-			infoToSend += "255,255,255;"+abilityInfo.getDescription()+"/";
-
-			infoToSend += "0,0,0; /";
+			StringBuilder infoToSend = new StringBuilder(1000);
+			infoToSend.append(infoType)
+			          .append("#255,234,116;")
+			          .append(abilityInfo.getName())
+			          .append("/0,0,0; /255,255,255;")
+			          .append(abilityInfo.getDescription())
+			          .append("/0,0,0; /");
 
 			if(abilityInfo.getDamage() > 0){
-				infoToSend += TextFormater.formatInfo("Damage: "+abilityInfo.getDamage());
+				TextFormater.formatInfo(infoToSend, "Damage: "+abilityInfo.getDamage());
 			}
 
 			if(abilityInfo.getStatusEffects().size() > 0){
 
-				infoToSend += TextFormater.formatInfo("Status Effects: ");
+				TextFormater.formatInfo(infoToSend, "Status Effects: ");
 				for(StatusEffect se: abilityInfo.getStatusEffects()){
-					infoToSend += TextFormater.formatInfo(se.getName());
+					TextFormater.formatInfo(infoToSend, se.getName());
 				}
 			}
 
-			infoToSend += "0,0,0; /";
+			infoToSend.append("0,0,0; /");
 
 			if(abilityInfo.isInstant()){
-				infoToSend += TextFormater.formatInfo("Type: Instant");
+				TextFormater.formatInfo(infoToSend, "Type: Instant");
 			}else{
-				infoToSend += TextFormater.formatInfo("Type: Projectile");
+				TextFormater.formatInfo(infoToSend, "Type: Projectile");
 			}
 
-			infoToSend += "0,0,0; /";
+			infoToSend.append("0,0,0; /");
 
 			if(abilityInfo.getClassId() > 0){
 				if(ServerGameInfo.classDef.containsKey(abilityInfo.getClassId())){
@@ -176,12 +176,11 @@ public class AbilityHandler extends Handler {
 						hasClass = true;
 					}
 
-					infoToSend += TextFormater.formatConditionInfo("Req Class: "+ServerGameInfo.classDef.get(abilityInfo.getClassId()).name,hasClass);
-
+					TextFormater.formatConditionInfo(infoToSend, "Req Class: "+ServerGameInfo.classDef.get(abilityInfo.getClassId()).name,hasClass);
 
 					if(hasClass){
 						if(client.playerCharacter.getClassById(abilityInfo.getClassId()) != null){
-							infoToSend += TextFormater.formatReqInfo("Req Class Lvl: ", abilityInfo.getClassLevel(), client.playerCharacter.getClassById(abilityInfo.getClassId()).level);
+							TextFormater.formatReqInfo(infoToSend, "Req Class Lvl: ", abilityInfo.getClassLevel(), client.playerCharacter.getClassById(abilityInfo.getClassId()).level);
 						}
 					}
 				}
@@ -193,26 +192,24 @@ public class AbilityHandler extends Handler {
 					if(abilityInfo.getFamilyId() == client.playerCharacter.getFamilyId()){
 						hasFamily = true;
 					}
-					infoToSend += TextFormater.formatConditionInfo("Req Family: "+ServerGameInfo.familyDef.get(abilityInfo.getFamilyId()).getName(),hasFamily);
+					TextFormater.formatConditionInfo(infoToSend, "Req Family: "+ServerGameInfo.familyDef.get(abilityInfo.getFamilyId()).getName(),hasFamily);
 				}
 			}
 
-			infoToSend += "0,0,0; /";
+			infoToSend.append("0,0,0; /");
 
-			infoToSend += TextFormater.formatInfo("Mana cost: "+abilityInfo.getManaCost());
-			infoToSend += TextFormater.formatInfo("Cooldown: "+abilityInfo.getCooldown()+" sec");
+			TextFormater.formatInfo(infoToSend, "Mana cost: "+abilityInfo.getManaCost());
+			TextFormater.formatInfo(infoToSend, "Cooldown: "+abilityInfo.getCooldown()+" sec");
 
-			infoToSend += "0,0,0; /";
-
+			infoToSend.append("0,0,0; /");
 
 			if(infoType.equals("shop")){
-				infoToSend += "0,0,0; /";
+				infoToSend.append("0,0,0; /");
 				boolean canAfford = client.playerCharacter.hasCopper(abilityInfo.getPrice());
-				infoToSend += TextFormater.formatPriceInfo("Price: ",abilityInfo.getPrice(),canAfford);
+				TextFormater.formatPriceInfo(infoToSend, "Price: ",abilityInfo.getPrice(),canAfford);
 			}
 
-
-			addOutGoingMessage(client,"ability_info",infoType+"#"+infoToSend);
+			addOutGoingMessage(client,"ability_info",infoToSend.toString());
 		}
 	}
 	
@@ -353,7 +350,10 @@ public class AbilityHandler extends Handler {
 
 										if(s.Ready && isVisibleForPlayer(s.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
 
-											addOutGoingMessage(s,"use_ability",client.playerCharacter.getSmallData()+";"+ABILITY.getAbilityId()+","+ABILITY.getColor().getRed()+","+ABILITY.getColor().getGreen()+","+ABILITY.getColor().getBlue()+","+ABILITY.getGraphicsNr()+","+ABILITY.getAnimationId()+","+client.playerCharacter.getAttackSpeed());
+											addOutGoingMessage(s,"use_ability",
+													client.playerCharacter.getSmallData()+';'+ABILITY.getAbilityId()+','+ABILITY.getColor().getRed()+','
+													+ABILITY.getColor().getGreen()+','+ABILITY.getColor().getBlue()+','+ABILITY.getGraphicsNr()+','
+													+ABILITY.getAnimationId()+','+client.playerCharacter.getAttackSpeed());
 										}
 									}
 
@@ -384,7 +384,7 @@ public class AbilityHandler extends Handler {
 										
 										Server.WORLD_MAP.getTile(client.playerCharacter.getX(), client.playerCharacter.getY(), client.playerCharacter.getZ()).setOccupant(CreatureType.Player, client.playerCharacter);
 
-										addOutGoingMessage(client, "respawn", client.playerCharacter.getX()+","+client.playerCharacter.getY()+","+client.playerCharacter.getZ());
+										addOutGoingMessage(client, "respawn", client.playerCharacter.getX()+","+client.playerCharacter.getY()+','+client.playerCharacter.getZ());
 
 									}else{
 
@@ -468,7 +468,10 @@ public class AbilityHandler extends Handler {
 							Client s = entry.getValue();
 
 							if(s.Ready && isVisibleForPlayer(s.playerCharacter,MONSTER.getX(),MONSTER.getY(),MONSTER.getZ())){
-								addOutGoingMessage(s,"use_ability",MONSTER.getSmallData()+";"+ABILITY.getAbilityId()+","+ABILITY.getColor().getRed()+","+ABILITY.getColor().getGreen()+","+ABILITY.getColor().getBlue()+","+ABILITY.getGraphicsNr()+","+ABILITY.getAnimationId()+","+MONSTER.getAttackSpeed());
+								addOutGoingMessage(s,"use_ability",
+										MONSTER.getSmallData()+';'+ABILITY.getAbilityId()+','+ABILITY.getColor().getRed()+','
+										+ABILITY.getColor().getGreen()+','+ABILITY.getColor().getBlue()+','+ABILITY.getGraphicsNr()+','
+										+ABILITY.getAnimationId()+','+MONSTER.getAttackSpeed());
 							}
 						}
 
@@ -545,8 +548,8 @@ public class AbilityHandler extends Handler {
 				Client s = entry.getValue();
 
 				if(s.Ready && isVisibleForPlayer(s.playerCharacter , startX, startY, startZ)){
-					addOutGoingMessage(s,"projectile",ABILITY.getProjectileId()+","+startX+","+startY+","+startZ+","+newProjectile2.getGoalX()+","+newProjectile2.getGoalY()+","+ABILITY.getDelay()+",1,0");
-					addOutGoingMessage(s,"projectile",ABILITY.getProjectileId()+","+startX+","+startY+","+startZ+","+newProjectile3.getGoalX()+","+newProjectile3.getGoalY()+","+ABILITY.getDelay()+",1,0");
+					addOutGoingMessage(s,"projectile",ABILITY.getProjectileId()+","+startX+','+startY+','+startZ+','+newProjectile2.getGoalX()+','+newProjectile2.getGoalY()+','+ABILITY.getDelay()+",1,0");
+					addOutGoingMessage(s,"projectile",ABILITY.getProjectileId()+","+startX+','+startY+','+startZ+','+newProjectile3.getGoalX()+','+newProjectile3.getGoalY()+','+ABILITY.getDelay()+",1,0");
 				}
 			}
 
@@ -572,7 +575,7 @@ public class AbilityHandler extends Handler {
 					}
 				}
 				
-				addOutGoingMessage(s,"projectile",projectileId+","+startX+","+startY+","+startZ+","+goalX+","+goalY+","+ABILITY.getDelay()+","+speed+","+ABILITY.getProjectileEffectId());
+				addOutGoingMessage(s,"projectile",projectileId+","+startX+','+startY+','+startZ+','+goalX+','+goalY+','+ABILITY.getDelay()+','+speed+','+ABILITY.getProjectileEffectId());
 			}
 		}
 
@@ -714,7 +717,7 @@ public class AbilityHandler extends Handler {
 
 									if(s.Ready){
 										if(isVisibleForPlayer(s.playerCharacter,CASTER.getX(),CASTER.getY(),CASTER.getZ())){
-											addOutGoingMessage(s,"creature_goto",CASTER.getSmallData()+";"+gotoX+","+gotoY+","+speed);
+											addOutGoingMessage(s,"creature_goto",CASTER.getSmallData()+';'+gotoX+','+gotoY+','+speed);
 										}
 									}
 								}
@@ -830,7 +833,7 @@ public class AbilityHandler extends Handler {
 							Client s = entry.getValue();
 
 							if(s.Ready && isVisibleForPlayer(s.playerCharacter,CASTER.getX(),CASTER.getY(),CASTER.getZ())){
-								addOutGoingMessage(s,"creature_goto",CASTER.getSmallData()+";"+gotoX+","+gotoY+","+speed);
+								addOutGoingMessage(s,"creature_goto",CASTER.getSmallData()+';'+gotoX+','+gotoY+','+speed);
 							}
 						}
 
@@ -1037,8 +1040,8 @@ public class AbilityHandler extends Handler {
 
 							regainedHealth = s.playerCharacter.regainHealth(inSafeZone);
 
-							addOutGoingMessage(s, "stat", "HEALTH_REGAIN;"+s.playerCharacter.getStat("HEALTH_REGAIN")+";"+s.playerCharacter.getSatisfied());
-							addOutGoingMessage(s, "stat", "MANA_REGAIN;"+s.playerCharacter.getStat("MANA_REGAIN")+";"+s.playerCharacter.getSatisfied());
+							addOutGoingMessage(s, "stat", "HEALTH_REGAIN;"+s.playerCharacter.getStat("HEALTH_REGAIN")+';'+s.playerCharacter.getSatisfied());
+							addOutGoingMessage(s, "stat", "MANA_REGAIN;"+s.playerCharacter.getStat("MANA_REGAIN")+';'+s.playerCharacter.getSatisfied());
 						}
 
 						if(regainedHealth != 0){
@@ -1049,7 +1052,7 @@ public class AbilityHandler extends Handler {
 									Client other = entry2.getValue();
 									if(other.Ready){
 										if(isVisibleForPlayer(other.playerCharacter,s.playerCharacter.getX(),s.playerCharacter.getY(), s.playerCharacter.getZ())){
-											addOutGoingMessage(other,"changehealthstatus",s.playerCharacter.getSmallData()+";"+s.playerCharacter.getHealthStatus());
+											addOutGoingMessage(other,"changehealthstatus",s.playerCharacter.getSmallData()+';'+s.playerCharacter.getHealthStatus());
 										}
 									}
 								}
@@ -1059,7 +1062,7 @@ public class AbilityHandler extends Handler {
 						// UPDATE COOLDOWNS
 						for(Ability a:s.playerCharacter.getAbilities()){
 							if(a.checkReady()){
-								addOutGoingMessage(s,"ability_ready",""+a.getAbilityId());
+								addOutGoingMessage(s,"ability_ready",String.valueOf(a.getAbilityId()));
 							}
 						}						
 					}

@@ -73,14 +73,18 @@ public class QuestHandler extends Handler {
 			if(serverData.startsWith("<myquests>")){
 				ResultSet myQuestInfo = Server.userDB.askDB("select QuestId, Status from character_quest where CharacterId = "+client.playerCharacter.getDBId()+" and Status > 0 and Status < 3");
 
-				String questData = "";
+				StringBuilder questData = new StringBuilder(1000);
 
 				try {
 					while(myQuestInfo.next()){
 						ResultSet questInfo = Server.mapDB.askDB("select Name, Type, Level from quest where Id = "+myQuestInfo.getInt("QuestId"));
 
 						if(questInfo.next()){
-							questData += myQuestInfo.getInt("QuestId")+","+questInfo.getString("Name")+","+questInfo.getString("Type")+","+myQuestInfo.getString("Status")+","+questInfo.getInt("Level")+";";
+							questData.append(myQuestInfo.getInt("QuestId")).append(',')
+							         .append(questInfo.getString("Name")).append(',')
+							         .append(questInfo.getString("Type")).append(',')
+							         .append(myQuestInfo.getString("Status")).append(',')
+							         .append(questInfo.getInt("Level")).append(';');
 						}
 						questInfo.close();
 					}
@@ -89,10 +93,10 @@ public class QuestHandler extends Handler {
 					e.printStackTrace();
 				}
 
-				if(questData.equals("")){
-					questData = "None";
+				if(questData.length() == 0){
+					questData.append("None");
 				}
-				addOutGoingMessage(client, "myquests", questData);
+				addOutGoingMessage(client, "myquests", questData.toString());
 			}
 
 
@@ -143,7 +147,11 @@ public class QuestHandler extends Handler {
 
 				// NpcName / QuestId, QuestName, QuestStatus; QuestId2, QuestName2, QuestStatus2 / ShopOrNot
 
-				String npcInfo = NPC.getDBId()+";"+NPC.getX()+";"+NPC.getY()+";"+NPC.getName()+"/";
+				StringBuilder npcInfo = new StringBuilder(1000);
+				npcInfo.append(NPC.getDBId()).append(';')
+				       .append(NPC.getX()).append(';')
+				       .append(NPC.getY()).append(';')
+				       .append(NPC.getName()).append('/');
 
 				// GET QUESTS FROM NPC
 				ResultSet rs = Server.mapDB.askDB("select Id, Name, Type, ParentQuestId, Level from quest where NpcId = "+NPC.getDBId()+" order by OrderNr asc");
@@ -183,7 +191,12 @@ public class QuestHandler extends Handler {
 
 						if(showOk){
 							// SEND QUEST IF NOT COMPLETED
-							npcInfo += rs.getInt("Id")+","+rs.getString("Name")+","+rs.getString("Type")+","+rs.getInt("Level")+","+questStatus+";";
+							
+							npcInfo.append(rs.getInt("Id")).append(',')
+							       .append(rs.getString("Name")).append(',')
+							       .append(rs.getString("Type")).append(',')
+							       .append(rs.getInt("Level")).append(',')
+							       .append(questStatus).append(';');
 
 							nrQuests++;
 						}
@@ -191,10 +204,8 @@ public class QuestHandler extends Handler {
 					rs.close();
 
 					if(nrQuests == 0){
-						npcInfo +="None";
+						npcInfo.append("None");
 					}
-
-					npcInfo += "/";
 
 					// GET SHOP FROM NPC
 
@@ -207,9 +218,7 @@ public class QuestHandler extends Handler {
 					}
 					rs.close();
 
-					npcInfo += shopId;
-
-					npcInfo += "/";
+					npcInfo.append('/').append(shopId);
 
 					// GET CHECKIN FROM NPC
 					int checkInId = 0;
@@ -221,12 +230,9 @@ public class QuestHandler extends Handler {
 					}
 					rs.close();
 
-					npcInfo += checkInId;
-
+					npcInfo.append('/').append(checkInId);
 
 					// GET BOUNTY MERCHANT
-
-					npcInfo += "/";
 
 					int bountyId = 0;
 /*
@@ -237,14 +243,14 @@ public class QuestHandler extends Handler {
 					}
 					rs.close();
 */
-					npcInfo += bountyId;
+					npcInfo.append('/').append(bountyId);
 
 
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 
-				addOutGoingMessage(client,"talknpc",npcInfo);
+				addOutGoingMessage(client,"talknpc",npcInfo.toString());
 
 			}
 		}

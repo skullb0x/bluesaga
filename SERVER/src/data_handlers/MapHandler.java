@@ -135,19 +135,17 @@ public class MapHandler extends Handler {
 			addOutGoingMessage(client,"canwalk",client.playerCharacter.getX()+","+client.playerCharacter.getY()+","+client.playerCharacter.getZ()+","+client.playerCharacter.getStat("SPEED"));
 
 			// Gather tile data
-			String screenData = "";
+			StringBuilder screenData = new StringBuilder(1000);
 
 			for(int j = client.playerCharacter.getY() - ServerSettings.TILE_HALF_H - 1; j < client.playerCharacter.getY() + ServerSettings.TILE_HALF_H+2; j++){
 				for(int i = client.playerCharacter.getX() - ServerSettings.TILE_HALF_W - 1; i < client.playerCharacter.getX() + ServerSettings.TILE_HALF_W+2; i++){
 
-					String tileInfo = getTileInfo(client, i, j, z, tileData);
-
-					screenData += tileInfo;
+					getTileInfo(client, i, j, z, tileData, screenData);
 				}
 			}
 
 			// Send tile data
-			addOutGoingMessage(client, "screen", screenData);
+			addOutGoingMessage(client, "screen", screenData.toString());
 
 			// Send info about soul if found
 			if(tileData.foundSoul){
@@ -175,7 +173,7 @@ public class MapHandler extends Handler {
 	 * @param tileData - additional info about the whole screen of tiles
 	 * @return
 	 */
-	public static String getTileInfo(Client client, int tileX, int tileY, int tileZ, TileData tileData){
+	public static void getTileInfo(Client client, int tileX, int tileY, int tileZ, TileData tileData, StringBuilder buf){
 
 		Tile TILE = Server.WORLD_MAP.getTile(tileX,tileY,tileZ);
 
@@ -259,7 +257,16 @@ public class MapHandler extends Handler {
 			}
 		}
 		
-		return tileX+","+tileY+","+tileZ+","+tileType+","+tileName+","+passable+","+lootInfo+","+objectInfo+","+statusEffects+":"+occupantInfo+";";
+		buf.append(tileX).append(',')
+		   .append(tileY).append(',')
+		   .append(tileZ).append(',')
+		   .append(tileType).append(',')
+		   .append(tileName).append(',')
+		   .append(passable).append(',')
+		   .append(lootInfo).append(',')
+		   .append(objectInfo).append(',')
+		   .append(statusEffects).append(':')
+		   .append(occupantInfo).append(';');
 	}
 
 	public static void checkIfDoorOpens(int MonsterDBId){

@@ -73,10 +73,10 @@ public class ItemHandler extends Handler {
 				}else if(infoType.equals("closet")){
 					int itemId = Integer.parseInt(info[1]);
 					if(itemId == 214){
-						infoToSend = "255,234,116;"+"#ui.web.get_more_skins"+"/";
-						infoToSend += "0,0,0; /";
-						infoToSend += "255,255,255;"+"#ui.web.wide_selection"+"/";
-						infoToSend += "255,255,255;"+"#ui.web.customize"+"/";
+						infoToSend = "255,234,116;"+"#ui.web.get_more_skins"+"/"
+						           + "0,0,0; /"
+						           + "255,255,255;"+"#ui.web.wide_selection"+"/"
+						           + "255,255,255;"+"#ui.web.customize"+"/";
 					}else{
 						infoItem = new Item(ServerGameInfo.itemDef.get(itemId));
 					}
@@ -93,10 +93,10 @@ public class ItemHandler extends Handler {
 					userItemId = Integer.parseInt(info[1]);
 
 					if(userItemId == 0){
-						infoToSend = "255,234,116;"+"#ui.web.get_more_space"+"/";
-						infoToSend += "0,0,0; /";
-						infoToSend += "255,255,255;"+"#ui.web.expand_chest"+"/";
-						infoToSend += "255,255,255;"+"#ui.web.keep_safe"+"/";
+						infoToSend = "255,234,116;"+"#ui.web.get_more_space"+"/"
+						           + "0,0,0; /"
+						           + "255,255,255;"+"#ui.web.expand_chest"+"/"
+						           + "255,255,255;"+"#ui.web.keep_safe"+"/";
 					}else{
 						ResultSet userItemInfo = Server.userDB.askDB("select ItemId, ModifierId, MagicId from user_chest where Id = "+userItemId);
 
@@ -137,11 +137,13 @@ public class ItemHandler extends Handler {
 					}
 					
 				}
-								
+				
+				StringBuilder sb = new StringBuilder(1000);
+				sb.append(infoType)
+					.append('@')
+					.append(infoToSend);
 
 				if(infoItem != null){
-					
-					
 					if(infoItem.getMagicId() > 0){
 						String magicName = "0";
 						String magicColor = "0";
@@ -157,107 +159,108 @@ public class ItemHandler extends Handler {
 							e.printStackTrace();
 						}
 					
-						infoToSend = magicColor+";"+magicName+"/";
+						infoToSend = magicColor+';'+magicName+'/';
 					}
 					
-					infoToSend += infoItem.getColor()+";"+infoItem.getName()+"/";
+					sb.append(infoItem.getColor()).append(';')
+					  .append(infoItem.getName()).append('/')
 
-					infoToSend += "0,0,0; /";
-
-					infoToSend += "255,234,116;"+infoItem.getType()+" - "+infoItem.getSubType()+"/";
+					  .append("0,0,0; /255,234,116;")
+					  .append(infoItem.getType())
+					  .append(" - ")
+					  .append(infoItem.getSubType()).append('/');
 					if(infoItem.isTwoHands()){
-						infoToSend += TextFormater.formatInfo("Two Hands");
-					}					
+						TextFormater.formatInfo(sb, "Two Hands");
+					}
 
-					infoToSend += "0,0,0; /";
+					sb.append("0,0,0; /");
 
 					if(infoItem.getStatValue("MinDamage") > 0 || infoItem.getStatValue("MaxDamage") > 0){
-						infoToSend += TextFormater.formatInfo("Base DMG: "+infoItem.getStatValue("MinDamage")+" - "+infoItem.getStatValue("MaxDamage"));
+						TextFormater.formatInfo(sb, "Base DMG: "+infoItem.getStatValue("MinDamage")+" - "+infoItem.getStatValue("MaxDamage"));
 					}
 
-					infoToSend += TextFormater.formatStatInfo("ARMOR: ",infoItem.getStatValue("ARMOR"));
-					infoToSend += TextFormater.formatStatInfo("Fire DEF: ",infoItem.getStatValue("FIRE_DEF"));
-					infoToSend += TextFormater.formatStatInfo("Cold DEF: ",infoItem.getStatValue("COLD_DEF"));
-					infoToSend += TextFormater.formatStatInfo("Shock DEF: ",infoItem.getStatValue("SHOCK_DEF"));
-					infoToSend += TextFormater.formatStatInfo("Chems DEF: ",infoItem.getStatValue("CHEMS_DEF"));
-					infoToSend += TextFormater.formatStatInfo("Mind DEF: ",infoItem.getStatValue("MIND_DEF"));
+					TextFormater.formatStatInfo(sb, "ARMOR: ",infoItem.getStatValue("ARMOR"));
+					TextFormater.formatStatInfo(sb, "Fire DEF: ",infoItem.getStatValue("FIRE_DEF"));
+					TextFormater.formatStatInfo(sb, "Cold DEF: ",infoItem.getStatValue("COLD_DEF"));
+					TextFormater.formatStatInfo(sb, "Shock DEF: ",infoItem.getStatValue("SHOCK_DEF"));
+					TextFormater.formatStatInfo(sb, "Chems DEF: ",infoItem.getStatValue("CHEMS_DEF"));
+					TextFormater.formatStatInfo(sb, "Mind DEF: ",infoItem.getStatValue("MIND_DEF"));
 
-					infoToSend += "0,0,0; /";
+					sb.append("0,0,0; /");
 
-					infoToSend += TextFormater.formatBonusInfo("STR: ",infoItem.getStatValue("STRENGTH"));
-					infoToSend += TextFormater.formatBonusInfo("INT: ",infoItem.getStatValue("INTELLIGENCE"));
-					infoToSend += TextFormater.formatBonusInfo("AGI: ",infoItem.getStatValue("AGILITY"));
+					TextFormater.formatBonusInfo(sb, "STR: ",infoItem.getStatValue("STRENGTH"));
+					TextFormater.formatBonusInfo(sb, "INT: ",infoItem.getStatValue("INTELLIGENCE"));
+					TextFormater.formatBonusInfo(sb, "AGI: ",infoItem.getStatValue("AGILITY"));
 					
-					infoToSend += TextFormater.formatBonusInfo("SPD: ",infoItem.getStatValue("SPEED"));
-					infoToSend += TextFormater.formatBonusInfo("ATK SPD: ",infoItem.getStatValue("ATTACKSPEED"));
-					infoToSend += TextFormater.formatBonusInfo("CRIT HIT: ",infoItem.getStatValue("CRITICAL_HIT"));
-					infoToSend += TextFormater.formatBonusInfo("ACC: ",infoItem.getStatValue("ACCURACY"));
+					TextFormater.formatBonusInfo(sb, "SPD: ",infoItem.getStatValue("SPEED"));
+					TextFormater.formatBonusInfo(sb, "ATK SPD: ",infoItem.getStatValue("ATTACKSPEED"));
+					TextFormater.formatBonusInfo(sb, "CRIT HIT: ",infoItem.getStatValue("CRITICAL_HIT"));
+					TextFormater.formatBonusInfo(sb, "ACC: ",infoItem.getStatValue("ACCURACY"));
 					
 					
 					if(infoItem.getType().equals("Potion")){
-						infoToSend += TextFormater.formatBonusInfo("Restores Health: ",infoItem.getStatValue("MAX_HEALTH"));
-						infoToSend += TextFormater.formatBonusInfo("Restores Mana: ",infoItem.getStatValue("MAX_MANA"));
-						infoToSend += TextFormater.formatInfo("Instant effect");
+						TextFormater.formatBonusInfo(sb, "Restores Health: ",infoItem.getStatValue("MAX_HEALTH"));
+						TextFormater.formatBonusInfo(sb, "Restores Mana: ",infoItem.getStatValue("MAX_MANA"));
+						TextFormater.formatInfo(sb, "Instant effect");
 					}else if(infoItem.getType().equals("Eatable")){
-						infoToSend += TextFormater.formatBonusInfo("Regain health: ",infoItem.getStatValue("MAX_HEALTH"));
-						infoToSend += TextFormater.formatBonusInfo("Regain mana: ",infoItem.getStatValue("MAX_MANA"));
-						infoToSend += TextFormater.formatInfo("Regain over time,");
-						infoToSend += TextFormater.formatInfo("sleep for faster effect");
+						TextFormater.formatBonusInfo(sb, "Regain health: ",infoItem.getStatValue("MAX_HEALTH"));
+						TextFormater.formatBonusInfo(sb, "Regain mana: ",infoItem.getStatValue("MAX_MANA"));
+						TextFormater.formatInfo(sb, "Regain over time,");
+						TextFormater.formatInfo(sb, "sleep for faster effect");
 					}else{
-						infoToSend += TextFormater.formatBonusInfo("MAX HEALTH: ",infoItem.getStatValue("MAX_HEALTH"));
-						infoToSend += TextFormater.formatBonusInfo("MAX MANA: ",infoItem.getStatValue("MAX_MANA"));
+						TextFormater.formatBonusInfo(sb, "MAX HEALTH: ",infoItem.getStatValue("MAX_HEALTH"));
+						TextFormater.formatBonusInfo(sb, "MAX MANA: ",infoItem.getStatValue("MAX_MANA"));
 					}
 					
-					infoToSend += "0,0,0; /";
+					sb.append("0,0,0; /");
 
-					
-					infoToSend += TextFormater.formatReqInfo("Req STR: ",infoItem.getRequirement("ReqStrength"),client.playerCharacter.getStat("STRENGTH"));
-					infoToSend += TextFormater.formatReqInfo("Req INT: ",infoItem.getRequirement("ReqIntelligence"),client.playerCharacter.getStat("INTELLIGENCE"));
-					infoToSend += TextFormater.formatReqInfo("Req AGI: ",infoItem.getRequirement("ReqAgility"),client.playerCharacter.getStat("AGILITY"));
-					infoToSend += TextFormater.formatReqInfo("Req LVL: ",infoItem.getRequirement("ReqLevel"),client.playerCharacter.getLevel());
+					TextFormater.formatReqInfo(sb, "Req STR: ",infoItem.getRequirement("ReqStrength"),client.playerCharacter.getStat("STRENGTH"));
+					TextFormater.formatReqInfo(sb, "Req INT: ",infoItem.getRequirement("ReqIntelligence"),client.playerCharacter.getStat("INTELLIGENCE"));
+					TextFormater.formatReqInfo(sb, "Req AGI: ",infoItem.getRequirement("ReqAgility"),client.playerCharacter.getStat("AGILITY"));
+					TextFormater.formatReqInfo(sb, "Req LVL: ",infoItem.getRequirement("ReqLevel"),client.playerCharacter.getLevel());
 					if(infoItem.getClassId() > 0){
-						infoToSend += TextFormater.formatConditionInfo("Req Class: "+ServerGameInfo.classDef.get(infoItem.getClassId()).name,client.playerCharacter.hasClass(infoItem.getClassId()));
+						TextFormater.formatConditionInfo(sb, "Req Class: "+ServerGameInfo.classDef.get(infoItem.getClassId()).name,client.playerCharacter.hasClass(infoItem.getClassId()));
 					}
 
 					if(infoType.equals("inv") && infoItem.getType().equals("Readable")){
-						infoToSend += "255,255,255;"+"#ui.inventory.right_click_to_use"+"/";
+						sb.append("255,255,255;#ui.inventory.right_click_to_use/");
 					}
 					if(infoType.equals("inv") && infoItem.getType().equals("Eatable")){
-						infoToSend += "255,255,255;"+"#ui.inventory.right_click_to_eat"+"/";
+						sb.append("255,255,255;#ui.inventory.right_click_to_eat/");
 					}
 					if(infoType.equals("inv") && infoItem.getType().equals("Potion")){
-						infoToSend += "255,255,255;"+"#ui.inventory.right_click_to_use"+"/";
+						sb.append("255,255,255;#ui.inventory.right_click_to_use/");
 					}
 
 					if(infoType.equals("shop")){
-						infoToSend += "0,0,0; /";
+						sb.append("0,0,0; /");
 						boolean canAfford = client.playerCharacter.hasCopper(infoItem.getValue());
 						if(infoItem.getValue() > 0){
-							infoToSend += TextFormater.formatPriceInfo("Price: ",infoItem.getValue(),canAfford);
+							TextFormater.formatPriceInfo(sb, "Price: ",infoItem.getValue(),canAfford);
 						}else{
-							infoToSend += TextFormater.formatInfo("Free");
+							TextFormater.formatInfo(sb, "Free");
 						}
 					}
 
 					if(infoType.equals("invshop")){
-						infoToSend += "0,0,0; /";
+						sb.append("0,0,0; /");
 						int price = infoItem.getValue();
 
 						if(!infoItem.getType().equals("Money")){
 							price = infoItem.getSoldValue();
 						}
 						if(!infoItem.isSellable()){
-							infoToSend += TextFormater.formatInfo("Can't be sold");
+							TextFormater.formatInfo(sb, "Can't be sold");
 						}else {
-							infoToSend += TextFormater.formatValueInfo("#ui.shop.sell_value#: ",price);
-							infoToSend += TextFormater.formatInfo("#ui.shop.right_click_sell");
+							TextFormater.formatValueInfo(sb, "#ui.shop.sell_value#: ",price);
+							TextFormater.formatInfo(sb, "#ui.shop.right_click_sell");
 						}
 					}
 
 				}
 
-				if(infoToSend != ""){
-					addOutGoingMessage(client,"item_info",infoType+"@"+infoToSend);
+				if(sb.length()!=0){
+					addOutGoingMessage(client,"item_info",sb.toString());
 				}
 			}
 
@@ -376,8 +379,8 @@ public class ItemHandler extends Handler {
 					// SEND STATSCHANGE
 					if(usedItem.getType().equals("Eatable")){
 						useColor = new Color(202,253,161);
-						addOutGoingMessage(client, "stat", "HEALTH_REGAIN;"+client.playerCharacter.getStat("HEALTH_REGAIN")+";"+client.playerCharacter.getSatisfied());
-						addOutGoingMessage(client, "stat", "MANA_REGAIN;"+client.playerCharacter.getStat("MANA_REGAIN")+";"+client.playerCharacter.getSatisfied());
+						addOutGoingMessage(client, "stat", "HEALTH_REGAIN;"+client.playerCharacter.getStat("HEALTH_REGAIN")+';'+client.playerCharacter.getSatisfied());
+						addOutGoingMessage(client, "stat", "MANA_REGAIN;"+client.playerCharacter.getStat("MANA_REGAIN")+';'+client.playerCharacter.getSatisfied());
 					}else if(usedItem.getSubType().equals("HEALTH")){
 						useColor = new Color(255,88,88);
 					}else if(usedItem.getSubType().equals("MANA")){
@@ -390,7 +393,7 @@ public class ItemHandler extends Handler {
 
 						if(s.Ready && isVisibleForPlayer(s.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
 							// UserType; UserId; R; G; B
-							addOutGoingMessage(s,"useitem",client.playerCharacter.getSmallData()+";"+useColor.getRed()+","+useColor.getGreen()+","+useColor.getBlue()+","+client.playerCharacter.getHealthStatus()+";"+usedItem.getType()+","+usedItem.getSubType());
+							addOutGoingMessage(s,"useitem",client.playerCharacter.getSmallData()+';'+useColor.getRed()+','+useColor.getGreen()+','+useColor.getBlue()+','+client.playerCharacter.getHealthStatus()+';'+usedItem.getType()+','+usedItem.getSubType());
 						}
 					}
 				}else{

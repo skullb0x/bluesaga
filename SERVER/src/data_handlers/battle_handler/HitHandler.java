@@ -194,10 +194,10 @@ public class HitHandler extends Handler {
 	
 					if(other.Ready && Handler.isVisibleForPlayer(other.playerCharacter, TARGET.getX(), TARGET.getY(),TARGET.getZ())){
 						// Send health status
-						addOutGoingMessage(other, "changehealthstatus",TARGET.getSmallData()+";"+TARGET.getHealthStatus());
+						addOutGoingMessage(other, "changehealthstatus",TARGET.getSmallData()+';'+TARGET.getHealthStatus());
 						
 						if(removeManaShield){
-							addOutGoingMessage(other, "statuseffect_remove", TARGET.getSmallData()+";"+25);
+							addOutGoingMessage(other, "statuseffect_remove", TARGET.getSmallData()+";25");
 						}
 						if(TARGET.getCreatureType() == CreatureType.Player && other.playerCharacter.getDBId() == TARGET.getDBId()){
 							addOutGoingMessage(other,"update_bonusstats",TARGET.getBonusStatsAsString());
@@ -252,7 +252,7 @@ public class HitHandler extends Handler {
 	 
 			if (s.Ready) {
 				if(isVisibleForPlayer(s.playerCharacter,TARGET.getX(),TARGET.getY(),TARGET.getZ())){
-					addOutGoingMessage(s,"creature_hit",TARGET.getSmallData()+";"+damage+","+damageType+","+criticalOrMiss);
+					addOutGoingMessage(s,"creature_hit",TARGET.getSmallData()+';'+damage+','+damageType+','+criticalOrMiss);
 				}
 				
 				// Send updated health to target player

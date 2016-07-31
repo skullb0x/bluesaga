@@ -95,8 +95,8 @@ public class DataHandlers {
 		for(Iterator<Message> i = incomingMessages.iterator(); i.hasNext(); ) {
 			Message m = i.next();
 
-			Client client = m.getClient();
-			String message = "<"+m.getType()+">"+m.getMessage();
+			Client client = m.client;
+			String message = "<"+m.type+">"+m.message;
 
 			ConnectHandler.handleData(client, message);
 
@@ -165,11 +165,11 @@ public class DataHandlers {
 
 	private static boolean sendMessage(Message message){
 		boolean sendOk = true;
-		Client client = message.getClient();
+		Client client = message.client;
 
 		try{
 			try{
-				String dataToSend = "<"+message.getType()+">"+message.getMessage();
+				String dataToSend = "<"+message.type+">"+message.message;
 				
 				byte[] byteMsg = (dataToSend).getBytes();
 				if(client.out != null){

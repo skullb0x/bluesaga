@@ -353,22 +353,17 @@ public class Creature implements Mover {
 	
 	
 	public String getFullData(){
-		
-		String creatureData = getSmallData()+","+getName()+","+getEquipmentInfo()+","+getHealthStatus()+","+getStat("SPEED");
-		
-		creatureData += ","+getCustomization().getMouthFeatureId()+","+getCustomization().getAccessoriesId()+","+getCustomization().getSkinFeatureId();
-		
-		if(isResting()){
-			creatureData += ",1";
-		}else{
-			creatureData += ",0";
-		}
+
+		String creatureData = getSmallData()+','+getName()+','+getEquipmentInfo()+','+getHealthStatus()+','+getStat("SPEED")
+						+ ','+getCustomization().getMouthFeatureId()+','+getCustomization().getAccessoriesId()+','
+						+getCustomization().getSkinFeatureId()
+						+ (isResting() ? ",1" : ",0");
 		
 		return creatureData;
 	}
 	
 	public String getSmallData(){
-		String newCreatureData = getCreatureType().toString()+","+getDBId()+","+getCreatureId()+","+getX()+","+getY()+","+getZ()+","+getRotation();
+		String newCreatureData = getCreatureType().toString()+','+getDBId()+','+getCreatureId()+','+getX()+','+getY()+','+getZ()+','+getRotation();
 		return newCreatureData;
 	}
 	
@@ -426,34 +421,33 @@ public class Creature implements Mover {
 
 	public String getBonusStatsAsString(){
 		
-		String bonusStats = "";
+		StringBuilder bonusStats = new StringBuilder(1000);
 		
-		bonusStats += BonusStats.getValue("STRENGTH") + ",";
-		bonusStats += BonusStats.getValue("INTELLIGENCE") + ",";
-		bonusStats += BonusStats.getValue("AGILITY") + ",";
-		bonusStats += BonusStats.getValue("SPEED") + ",";
+		bonusStats.append(BonusStats.getValue("STRENGTH")).append(',')
+		          .append(BonusStats.getValue("INTELLIGENCE")).append(',')
+		          .append(BonusStats.getValue("AGILITY")).append(',')
+		          .append(BonusStats.getValue("SPEED")).append(',')
 		
-		bonusStats += BonusStats.getValue("CRITICAL_HIT") + ",";
-		bonusStats += BonusStats.getValue("EVASION") + ",";
-		bonusStats += BonusStats.getValue("ACCURACY") + ",";
+		          .append(BonusStats.getValue("CRITICAL_HIT")).append(',')
+		          .append(BonusStats.getValue("EVASION")).append(',')
+		          .append(BonusStats.getValue("ACCURACY")).append(',')
 		
-		bonusStats += BonusStats.getValue("MAX_HEALTH") + ",";
-		bonusStats += BonusStats.getValue("MAX_MANA") + ",";
+		          .append(BonusStats.getValue("MAX_HEALTH")).append(',')
+		          .append(BonusStats.getValue("MAX_MANA")).append(',')
 		
-		bonusStats += BonusStats.getValue("FIRE_DEF") + ",";
-		bonusStats += BonusStats.getValue("COLD_DEF") + ",";
-		bonusStats += BonusStats.getValue("SHOCK_DEF") + ",";
-		bonusStats += BonusStats.getValue("CHEMS_DEF") + ",";
-		bonusStats += BonusStats.getValue("MIND_DEF") + ",";
-		bonusStats += BonusStats.getValue("ARMOR") + ",";
+		          .append(BonusStats.getValue("FIRE_DEF")).append(',')
+		          .append(BonusStats.getValue("COLD_DEF")).append(',')
+		          .append(BonusStats.getValue("SHOCK_DEF")).append(',')
+		          .append(BonusStats.getValue("CHEMS_DEF")).append(',')
+		          .append(BonusStats.getValue("MIND_DEF")).append(',')
+		          .append(BonusStats.getValue("ARMOR")).append(',')
 		
-		bonusStats += getAttackSpeed() + ",";
+		          .append(getAttackSpeed()).append(',')
 		
-		bonusStats += BonusStats.getValue("HEALTH_REGAIN") + ",";
-		bonusStats += BonusStats.getValue("MANA_REGAIN");
+		          .append(BonusStats.getValue("HEALTH_REGAIN")).append(',')
+		          .append(BonusStats.getValue("MANA_REGAIN"));
 		
-		
-		return bonusStats;
+		return bonusStats.toString();
 	}
 	
 	public synchronized void addStatusEffect(StatusEffect newStatusEffect){
@@ -806,46 +800,44 @@ public class Creature implements Mover {
 	
 	public String getEquipmentInfo() {
 		
-		String info = "";
+		StringBuilder info = new StringBuilder();
 		
 		if(HeadItem != null){
-			info += HeadItem.getId()+",";
+			info.append(HeadItem.getId()).append(',');
 		}else {
-			info += "0,";
+			info.append("0,");
 		}
-		info += getCustomization().getHeadSkinId()+",";
+		info.append(getCustomization().getHeadSkinId()).append(',');
 		
 		if(WeaponItem != null){
-			info += WeaponItem.getId()+",";
+			info.append(WeaponItem.getId()).append(',');
 		}else {
-			info += "0,";
+			info.append("0,");
 		}
-		info += getCustomization().getWeaponSkinId()+",";
+		info.append(getCustomization().getWeaponSkinId()).append(',');
 		
 		if(OffHandItem != null){
-			info += OffHandItem.getId()+",";
+			info.append(OffHandItem.getId()).append(',');
 		}else {
-			info += "0,";
+			info.append("0,");
 		}
-		info += getCustomization().getOffHandSkinId()+",";
+		info.append(getCustomization().getOffHandSkinId()).append(',');
 		
 		if(AmuletItem != null){
-			info += AmuletItem.getId()+",";
+			info.append(AmuletItem.getId()).append(',');
 		}else {
-			info += "0,";
+			info.append("0,");
 		}
-		info += getCustomization().getAmuletSkinId()+",";
+		info.append(getCustomization().getAmuletSkinId()).append(',');
 		
 		if(ArtifactItem != null){
-			info += ArtifactItem.getId()+",";
+			info.append(ArtifactItem.getId()).append(',');
 		}else {
-			info += "0,";
+			info.append("0,");
 		}
-		info += getCustomization().getArtifactSkinId();
+		info.append(getCustomization().getArtifactSkinId());
 		
-		
-		
-		return info;
+		return info.toString();
 	}
 	
 
