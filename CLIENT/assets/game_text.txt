@@ -1,252 +1,1247 @@
 {
-    "ui": {
-        "classes": {
-            "no_secondary_class": "No Secondary Class",
-            "no_primary_class": "No Primary Class"
-        },
-        "character_create": {
-            "incorrect_name": "Name is incorrect, can't be empty and can't contain spaces, numbers nor special chars.",
-            "select_creature": "Select a creature!",
-            "select_class": "Select a class!",
-            "creating_character": "Creating character...",
-            "select_family": "Select a creature family!",
-            "create_character": "Create Character"
-        },
-        "status": {
-            "new_version": "New version of client available! Restart the client to let it update, if not working, re-download the game from www.bluesaga.org",
-            "skills": "Loading skills info...",
-            "connecting": "Connecting to server...",
-            "player": "Loading player info...",
-            "loading": "Loading...",
-            "actionbar": "Loading actionbar data...",
-            "monsters": "Loading monsters info...",
-            "saving_mini_map": "Saving minimap...",
-            "no_player_data": "Can't get player data!",
-            "no_connect": "Can't connect to server!",
-            "abilities": "Loading abilities info...",
-            "seconds": "seconds",
-            "reconnect": "Reconnect in",
-            "complete": "Loading complete!",
-            "map": "Loading map info...",
-            "no_reconnect": "Failed to reconnecta to server!",
-            "slow": "Your conncetion is slow, lost connection with server",
-            "particles": "Loading particles info..."
-        },
-        "crafting": {"no_recipes": "You know no recipes using this"},
-        "players_window": {
-            "enter_player_name": "Enter player name",
-            "party_members": "Party members",
-            "no_party_active": "No party active",
-            "add_friend": "Add friend",
-            "no_friends": "No friends online",
-            "party": "Party",
-            "online": "Players online"
-        },
-        "top_menu": {
-            "skills": "Skills",
-            "abilities": "Abilities",
-            "inventory": "Inventory",
-            "players": "Players",
-            "quests": "Quests",
-            "character_info": "Character Info",
-            "game_menu": "Game Menu"
-        },
-        "buttons": {
-            "end_conversation": "End conversation",
-            "accept": "Accept",
-            "back": "Back",
-            "check_in": "Check in",
-            "buy_sell_items": "Buy/Sell items",
-            "no_way": "No way"
-        },
-        "mini_map": {"mini_map": "Mini Map"},
-        "chat": {
-            "channelname": "#channelname to create/join channel",
-            "playername": "@playername to send message",
-            "respawn": "You've respawned at your last checkpoint",
-            "crew": "Crew",
-            "tab": "Press TAB to change channel",
-            "channels": "/channels to list all channels",
-            "local": "Local",
-            "type": "Press ENTER to type in the chat",
-            "world": "World"
-        },
-        "quest": {
-            "rec_level": "Rec. Level",
-            "status_get_reward": "Status: Get reward",
-            "status_accepted": "Status: Accepted"
-        },
-        "area_effect": {
-            "safe_zone": "Save Zone",
-            "unguarded_zone": "Unguarded Zone"
-        },
-        "game_menu": {
-            "music": "Music",
-            "logout": "Logout character",
-            "quit": "Quit to desktop",
-            "sfx": "Sfx",
-            "options": "Options"
-        },
-        "bounty": {
-            "player_name": "Player name",
-            "no_bounties": "NO BOUNTIES AVAILABLE",
-            "sum": "Sum"
-        },
-        "character_window": {"to_next_level": "to next level"},
-        "character_selection": {
-            "new_password_wrong": "New password is not repeated right!",
-            "request_data": "Requesting data from server...",
-            "old_password": "Old password",
-            "send": "Sending request...",
-            "deleted_in": "Deleted in",
-            "cancel": "Cancel delete",
-            "repeat": "Repeat new password",
-            "create": "Create",
-            "recover": "Recover",
-            "change_password": "Change password",
-            "days": "Days",
-            "beta_warning": "Since this is a beta version, security can't be guaranteed, so don't use any multipasses!",
-            "delete": "Delete character",
-            "new_password": "New password"
-        },
-        "split": {"enter_amount": "Enter amount"},
-        "login": {
-            "mail": "Mail",
-            "instructions": "Fill in your mail and password",
-            "check": "Checking login-info with server...",
-            "enter": "ENTER THE WORLD",
-            "forgot": "Forgot password",
-            "wrong": "Wrong mail or password",
-            "retry": "Retry in",
-            "password": "Password",
-            "create": "Create a free account",
-            "fill_both": "Fill in both your mail and password"
-        },
-        "fishing": {"catch": "CATCH!"},
-        "skins": {"no_character_skins": "You have no character skins"},
-        "options": {
-            "music": "MUSIC",
-            "off": "OFF",
-            "sfx": "SFX"
-        }
-    },
     "movies": {
         "movie2": {
             "text3": "You are but a drop in the sea of sacrifice...",
             "text1": "Who dares enter our domains...",
             "text2": "These lands belong to lord Nimbul now!"
         },
+        "cards": {
+            "world_change": "Suddently the world trembled and lands started moving...",
+            "collect_cards": "Collected all cards!",
+            "congratulations": "Congraturations!"
+        },
+        "server_restart": "SERVER RESTARTS IN A MOMENT",
         "press_escape": "PRESS ESCAPE TO SKIP"
     },
-    "language": {
-        "name": "English",
-        "version": "1.0"
-    },
-    "messages": {
-        "classes": {
-            "learn_as_secondary": "But you can learn it as a secondary!",
-            "cant_learn": "You can't learn this class as your primary, since you are a ",
-            "leveled_up": "leveled up!",
-            "already_have": "You already have this class!",
-            "lost_level": "You lost a level in "
+    "ui": {
+        "top_menu": {
+            "skills": "S(k)ills",
+            "abilities": "A(b)ilities",
+            "card_book": "Card B(o)ok",
+            "quests": "(Q)uests",
+            "game_menu": "Game Menu (Esc)",
+            "players": "(P)layers",
+            "character_info": "(C)haracter Info",
+            "inventory": "(I)nventory"
         },
+        "character_create": {
+            "creating_character": "Creating character...",
+            "select_family": "Select a creature family!",
+            "select_class": "Select a class!",
+            "incorrect_name": "Name is incorrect, can't be empty and can't contain spaces, numbers nor special chars.",
+            "create_character": "Create Character",
+            "select_creature": "Select a creature!"
+        },
+        "buttons": {
+            "cancel": "Cancel",
+            "end_conversation": "End conversation",
+            "no_thanks": "No Thanks",
+            "check_in": "Check in",
+            "back": "Back",
+            "buy_sell_items": "Buy/Sell items",
+            "accept": "Accept",
+            "no_way": "No way",
+            "on_my_way": "I'm on my way!"
+        },
+        "mini_map": {"mini_map": "Mini Map"},
         "shop": {
-            "not_enough_silver": "Not enough silver to exchange!",
-            "need_level_sell": "Need to be level 2 to sell items!",
-            "ability_already_aquired": "Ability already aquired!",
-            "no_sell": "Can't be sold!",
-            "not_enough_copper": "Not enough copper to exchange!",
-            "ability_not_exist": "Ability does not exist!",
-            "not_enough_money": "Not enough money!",
-            "no_money": "No money available to exchange!",
-            "copper_removed": "cc removed from your inventory",
-            "item_not_exist": "Item does not exist!",
-            "not_have_requirements": "You do not have the requirements!"
+            "sell_value": "Sell value",
+            "right_click_sell": "Right-click to sell"
         },
-        "walking": {
-            "need_better_boat": "You need a better boat to travel deep waters",
-            "need_key": "You need a key to enter!",
-            "need_boat_ticket": "You need a boat ticket to use this ship",
-            "no_enter_safe_zones": "Can't enter safe-zones while marked as Crusader",
-            "need_boat": "You need a boat to travel the seas",
-            "you_lost": "You lost"
+        "game_menu": {
+            "logout": "Logout character",
+            "music": "Music",
+            "sfx": "Sfx",
+            "options": "Options",
+            "quit": "Quit to desktop"
         },
-        "connect": {
-            "is_now_online": "is now online",
-            "talk_to_inn_keeper": "Talk to the inn-keeper on the first floor of Chompa Inn!"
+        "bounty": {
+            "place_bounty": "Place bounty",
+            "no_bounties": "NO BOUNTIES AVAILABLE",
+            "sum": "Sum",
+            "player_name": "Player name"
         },
-        "crafting": {
-            "missing_need": "Ingredients missing! You need:",
-            "successful": "Crafting successful!"
+        "fishing": {"catch": "CATCH!"},
+        "area_effect": {
+            "safe_zone": "Safe Zone",
+            "unguarded_zone": "Lawless Zone"
         },
-        "chat": {
-            "muted": "You have been muted till next server restart",
-            "wait_announce": "You must wait 1 minute to announce something again"
+        "classes": {
+            "no_secondary_class": "No Secondary Class",
+            "no_primary_class": "No Primary Class"
         },
-        "party": {
-            "already_in_party": "Player is already in a party!",
-            "left_party": "left the party!",
-            "created_party": "You have created a party!",
-            "player_not_exist": "Player does not exist!",
-            "player_not_online": "Player is not online!",
-            "disbanded": "Party disbanded!",
-            "now_member": "You are now a member of a party! Press P to view party members",
-            "level_req": "Player level is either too high or low for party!",
-            "party": "party",
-            "join_party": "You have been invited to join the",
-            "add_self": "No need to add yourself to the party!",
-            "joined_party": "joined the party!"
+        "inventory": {
+            "right_click_to_read": "Right-click to read",
+            "right_click_to_eat": "Right-click to eat",
+            "right_click_to_use": "Right-click to use"
+        },
+        "login": {
+            "instructions": "Fill in your mail and password",
+            "password": "Password",
+            "mail": "Mail",
+            "create": "Create a free account",
+            "fill_both": "Fill in both your mail and password",
+            "check": "Checking login-info with server...",
+            "enter": "ENTER THE WORLD",
+            "forgot": "Forgot password",
+            "retry": "Retry in",
+            "wrong": "Wrong mail or password"
         },
         "quest": {
-            "aquired_boat": "You've aquired a boat",
-            "gained": "You've gained the",
-            "need_eat_first": "You need to eat first in order to regain health and mana",
-            "checked_in": "You've checked in at this inn",
-            "added": "quest added",
-            "updated": "updated!",
-            "already_have": "You already have the",
-            "missing_items": "You are missing the requested item(s)",
-            "travel_deep_water": "You can now travel on deep water",
-            "ability": "ability!",
-            "completed": "completed!"
+            "rec_level": "Rec. Level",
+            "status_get_reward": "Status: Get reward",
+            "status_accepted": "Status: Accepted"
+        },
+        "players_window": {
+            "no_friends": "No friends online",
+            "enter_player_name": "Enter player name",
+            "add_friend": "Add friend",
+            "party_members": "Party members",
+            "no_party_active": "No party active",
+            "players_online": "Players online",
+            "add_player": "Add Player",
+            "party": "Party"
+        },
+        "skins": {"no_character_skins": "You have no character skins"},
+        "character_window": {"to_next_level": "to next level"},
+        "cardbook": {
+            "wrong_slot": "Wrong slot",
+            "name": "Card Book",
+            "slot_taken": "Slot already occupied"
+        },
+        "split": {"enter_amount": "Enter amount"},
+        "web": {
+            "keep_safe": "Get more space to keep your items safe",
+            "expand_chest": "Expand your personal chest",
+            "get_more_space": "Get more space",
+            "customize": "Customize your character",
+            "wide_selection": "Choose from a wide selection of skins",
+            "get_more_skins": "Get more skins"
+        },
+        "chat": {
+            "respawn": "You've respawned at your last checkpoint",
+            "world": "World",
+            "channels": "/channels to list all channels",
+            "tab": "Press TAB to change channel",
+            "playername": "@playername to send message",
+            "channelname": "#channelname to create/join channel",
+            "type": "Press ENTER to type in the chat",
+            "local": "Local",
+            "crew": "Crew"
+        },
+        "crafting": {"no_recipes": "You know no recipes using this"},
+        "options": {
+            "music": "MUSIC",
+            "sfx": "SFX",
+            "off": "OFF"
+        },
+        "character_selection": {
+            "cancel": "Cancel delete",
+            "new_password_wrong": "New password is not repeated right!",
+            "recover": "Recover",
+            "beta_warning": "Since this is a beta version, security can't be guaranteed, so don't use any multipasses!",
+            "delete": "Delete character",
+            "change_password": "Change password",
+            "old_password": "Old password",
+            "repeat": "Repeat new password",
+            "new_password": "New password",
+            "create": "Create",
+            "days": "Days",
+            "request_data": "Requesting data from server...",
+            "send": "Sending request...",
+            "deleted_in": "Deleted in"
+        },
+        "status": {
+            "new_client_available": "New version of client available!",
+            "monsters": "Loading monsters info...",
+            "new_version": "New version of client available! Restart the client to let it update, if not working, re-download the game from www.bluesaga.org",
+            "loading": "Loading...",
+            "actionbar": "Loading actionbar data...",
+            "skills": "Loading skills info...",
+            "abilities": "Loading abilities info...",
+            "no_connect": "Can't connect to server!",
+            "seconds": "seconds",
+            "reconnect": "Reconnect in",
+            "saving_mini_map": "Saving minimap...",
+            "slow": "Your conncetion is slow, lost connection with server",
+            "visit_site": "Visit the www.bluesaga.org for downloads",
+            "connecting": "Connecting to server...",
+            "no_player_data": "Can't get player data!",
+            "complete": "Loading complete!",
+            "particles": "Loading particles info...",
+            "map": "Loading map info...",
+            "no_reconnect": "Failed to reconnecta to server!",
+            "player": "Loading player info..."
+        }
+    },
+    "quests": {
+        "88": {
+            "quest_message": "Watch out for those bats! Once I was bitten by one of them and it seemed as if my blood empowered it!",
+            "name": "Life draining",
+            "reward_message": ""
+        },
+        "89": {
+            "quest_message": "This skull does not belong to a forest creature.. that's for sure..",
+            "name": "What is that?",
+            "reward_message": ""
+        },
+        "110": {
+            "quest_message": "She owns a potion shop here in Green Leaf./Look for the green tree with a potion sign, you will find her there.",
+            "name": "Where can I find the forest sage Minai?",
+            "reward_message": " "
+        },
+        "111": {
+            "quest_message": "When King Albo took power.. many ran../The few of us to stay were enslaved by him.",
+            "name": "Albo the Shroom King",
+            "reward_message": " "
+        },
+        "112": {
+            "quest_message": "It's the ancient gate leading to the Dead Kingdom. Luckily, it was sealed from the inside a long time ago.",
+            "name": "What lies behind the gate?",
+            "reward_message": " "
+        },
+        "113": {
+            "quest_message": "Honestly, I'm not sure.. I guess that staring at this closed gate is the only way for me to feel safe../If someone on the inside ever chooses to open up that gate.. then.. I can promise you that no forest guardian will be able to save us.",
+            "name": "What are you doing here?",
+            "reward_message": " "
+        },
+        "114": {
+            "quest_message": "Oh, if you're looking for Morwyn then you just have to continue to the south-east../You'll have to go through a water cave to get there.. but there's nothing dangerous in there!",
+            "name": "Where is Morwyn?",
+            "reward_message": " "
+        },
+        "115": {
+            "quest_message": "Honestly, I have no clue. I haven't seen him in a while./But I would start by looking for his secret lab. I know it's hidden somewhere on this island.",
+            "name": "Where is Ollghar?",
+            "reward_message": " "
+        },
+        "116": {
+            "quest_message": "You are in the lobby of the Lockwood Prison. Be kind and leave.. we don't have any visiting hours.",
+            "name": "Where am I?",
+            "reward_message": " "
+        },
+        "90": {
+            "quest_message": "I remember seeing one of these in Morwyn. That was back in the days when I travelled the world and I'm quite sure we're looking at a goblin skull.",
+            "name": "Goblin skull",
+            "reward_message": ""
+        },
+        "117": {
+            "quest_message": "Ha! Absolutely not!/And don't you think I would let anything pass.. I work here all day!",
+            "name": "May I visit the prison?",
+            "reward_message": " "
+        },
+        "118": {
+            "quest_message": "Psssst.. hey there!/I have the prison key! Look, look, look! The guard dropped it last night when he was heading back home!/The thing is.. I've wanted a root shield for quite some time.. But I'm not strong enough to fight in the maze. Bring me one and I'll give you the key to the prison.",
+            "name": "The Prison Key",
+            "description": "Find a root shield and give it to the fox Filou in exchange for the prison key.",
+            "reward_message": "Ah great! You found one! Here's the key! Now you just have to figure out how to get past the guard.."
+        },
+        "92": {
+            "quest_message": "What are you doing here?!/You better watch out! There is something strange going on down here. It seems as if this place can drive you mad../Something is messing with my mind down here and I'm sure you're just about to experience the same.",
+            "name": "Illusions",
+            "reward_message": ""
+        },
+        "119": {
+            "quest_message": "SILENCE!",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "93": {
+            "quest_message": "You've been given so many warnings!/This is your last chance to get out of here alive. I've created a portal back to the safehouse! You should use it..",
+            "name": "Last chance",
+            "reward_message": ""
+        },
+        "94": {
+            "quest_message": "I can show you the way of the Archer./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become an Archer?",
+            "name": "Become an Archer",
+            "reward_message": ""
+        },
+        "95": {
+            "quest_message": "I can show you the way of the Knight./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Knight?",
+            "name": "Become a Knight",
+            "reward_message": ""
+        },
+        "96": {
+            "quest_message": "I can show you the way of the Pyromancer./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Pyromancer?",
+            "name": "Become a Pyromancer",
+            "reward_message": ""
+        },
+        "97": {
+            "quest_message": "I can show you the way of the Druid./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Druid?",
+            "name": "Become a Druid",
+            "reward_message": ""
+        },
+        "10": {
+            "quest_message": "The legend says that the dark elf Sorkarh built an entire underground village for the one purpose of protecting his most precious treasure../Many brave adventurers have passed here over time and I'm afraid my eyes will never lay their sight on any of them again../No, I have no interest in being the owner of Sorkarh's artifact. I'm only asking for a glimpse of it so that all the questions haunting my troubled mind would go away../You really do seem strong. Bring me the artifact and I shall reward you with something very special. So, what do you say?",
+            "name": "Sorkarh's Artifact",
+            "description": "Head down to the heart of Sorkarhs underground nest and find his artifact.",
+            "reward_message": "Un.. be.. lievable! It's.. BEAUTIFUL!/I never thought I'd live to see this masterpiece.. I was not even sure it existed../Thank you for showing me this! It's really bringing peace to my soul! I shall remember you and I wish you all the luck in your future adventures!/Oh yes, I almost forgot../I promised you a reward../Here you go!This is all the copper that I've got!"
+        },
+        "98": {
+            "quest_message": "I can show you the way of the Coldbringer./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Coldbringer?",
+            "name": "Become a Coldbringer",
+            "reward_message": ""
+        },
+        "11": {
+            "quest_message": "No one believes me, no one.../I can feel deep vibrations in the earth, something is waking up.../They call me \"the worried\", but I prefer to see myself as \"the enlightened\".",
+            "name": "Am I the only one?",
+            "reward_message": " "
+        },
+        "99": {
+            "quest_message": "I can show you the way of the Sparker./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Sparker?",
+            "name": "Become a Sparker",
+            "reward_message": ""
+        },
+        "12": {
+            "quest_message": "How I long to feel the wind blow through the moss on my head again!/Alas I lost my ship... and my crew.../I don't remember what happened except a shadow that rose from beneath the surface./I think I will stay on this island a bit longer and collect my strength.../Maybe ask Ilgith for a boat when I'm ready.",
+            "name": "I want to travel the world",
+            "reward_message": ""
+        },
+        "14": {
+            "quest_message": "Just go down to the beach and step into the water and you will be able to travel the shallow waters./You can't venture out on the deep sea with a simple raft, but I am sure you will be able to find a better ship in west Lockwoods.",
+            "name": "How do I use the raft?",
+            "description": "",
+            "reward_message": ""
+        },
+        "15": {
+            "quest_message": "So Ilgith sent you with the message that I can help you?/I can't./Nimbul's mark is a powerful curse, not even us guardians have the powers to unbind it./Maybe I can weaken it so his armies of the undead will have a harder time finding you./In order to do this, we need something strong, something that weakens your soul, there is even a risk that it may kill you./South of here there is a cave inhabited by poisonous spiders, if you can venture into its depths and bring me some spider poison,\nmaybe I will be able to help you.",
+            "name": "A Cure",
+            "description": "South of Green Leaf there is a cave inhabited by poisonous spiders. Venture into its depths and bring back some poison from a toxic spider. Give it to the forest guardian Minai so she may be able to cure your curse.",
+            "reward_message": "Ah great! You found it!"
+        },
+        "16": {
+            "quest_message": "Bring the poison to my study behind the door in the back so I can start working on a cure.",
+            "name": "The study",
+            "description": "Go to Minai's study which lies behind the door in the back of the potion shop in Green Leaf.",
+            "reward_message": ""
+        },
+        "18": {
+            "quest_message": "Hey! Tell my nephew to not worry.. I just need some time on my own../Hmm.. so you came to ask me about the ingredients for a curse to your cure../That curse of yours looks bad.. so I can't promise you that I know exactly how to cure it../Tell Minai that I would try to mix the poison spider with bunny furs and flower petals!/You can use my portal over there! It will teleport you back to the Green Leaf Village!",
+            "name": "Recipe For My Curse",
+            "reward_message": ""
+        },
+        "19": {
+            "quest_message": "When me and my uncle Goulda bought this house, we didn't know about the cellar./My uncle started to explore it, at first he was gone for hours, then days and now he's been gone for two weeks and I still haven't seen him./Can you help me find him? I don't like dark places...",
+            "name": "My cellar",
+            "description": "Explore the cellar and see what happened to Goulda.",
+            "reward_message": ""
+        },
+        "120": {
+            "quest_message": "You know.. Sometimes you make the bad choices../After you've robbed a few Inns, you start to feel self-confident. At first it makes you even better at what you do.. but with time you'll get lost to it../All of a sudden I was too confident.. and look where it got me.",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "121": {
+            "quest_message": "Froggo? Well.. He's not too fond of people in general. But now that we've shared this little space for quite some time.. he's starting to like me./If you want him to talk to you, I could convince him. But, nothing comes for free. Give me 10 silvers and I'll make him talk.",
+            "name": "Froggo the Frog",
+            "description": "Collect 10 silvers and bring them to Finata and she will convince Froggo to talk to you.",
+            "reward_message": "Ah, thank you! I've talked to Froggo about you.. so I think he might have something to say now."
+        },
+        "122": {
+            "quest_message": "I've been fishing here for ages and I still haven't gotten one of those curly fishes. Bring me one and I'll reward you well.",
+            "name": "Rare fish",
+            "description": "Find a curly fish and bring it back to the old man in Calm Bay.",
+            "reward_message": "Wow, thank you! Here's 500 copper!"
+        },
+        "123": {
+            "quest_message": "Morwyn lies south-east of here.",
+            "name": "Where is Morwyn?",
+            "reward_message": " "
+        },
+        "3": {
+            "quest_message": "We just fed you the last larva soup in the house!! /Due to all people we've taken care of, food has been scarce lately. /If you want more food you need to help us get some. Larvas are well known for their delicious juice./To the west you will find a hole in the ground, that's their lair. Go and hunt down some and bring me their juice so I can prepare more larva-soup for you.",
+            "name": "I'm hungry!",
+            "description": "West of the tree house there is a hole in the ground leading down to a larva den. Kill larvas in order to get 1 specimen of larva juice and bring it back to the innkeeper Iglith.",
+            "reward_message": "You did it!/These larvas will give a real thick and good taste to the soup."
+        },
+        "124": {
+            "quest_message": "This is The Outlaw Harbor. A village that used to be a refuge to all those who didn't want to participate in any great war./This bay belongs to no family..",
+            "name": "What is this place?",
+            "reward_message": " "
+        },
+        "4": {
+            "quest_message": "Larva-soup tastes great! But you need REAL food if you are to get back your full strength. /Scarabs are rare creatures but rumor has it that some have been seen deep inside the cave to the west of here./Try to get some Scarab meat so I can prepare you a beatle burger./I will give you a health potion for this task./Just use it by right-clicking on it in your inventory or actionbar.",
+            "name": "Beatle Burger",
+            "description": "Find Scarabs deep within the Scarab cave and get one piece of meat from them. The scarab cave lies to the west of Ilgiths tree house.",
+            "reward_message": "Wow, you found a scarab! And you actually defeated it!/You have a gift for this kind of thing!/Let me prepare that burger for you!"
+        },
+        "125": {
+            "quest_message": "I've heard rumours saying the Goblin King has gone mad. I think I'm gonna avoid Morwyn for the time being..",
+            "name": "The Goblin King",
+            "reward_message": " "
+        },
+        "5": {
+            "quest_message": "The undead have grown stronger lately, maybe they've aquired a soul stone...",
+            "name": "The dark ones are powerful",
+            "reward_message": ""
+        },
+        "126": {
+            "quest_message": "Find my brother and tell him this tasty soup is ready! I think he went fishing in the water cave..",
+            "name": "Food is ready",
+            "description": "Find Gotie the Goats brother and tell him that the food is ready.",
+            "reward_message": ""
+        },
+        "6": {
+            "quest_message": "Now that your strength is fully restored and you've proven yourself, maybe you can help me with something more serious./Lately the undead has appeared on the northern side of our island. They are spreading like a plague./We used to have a cemetery there, but who would have thought the dead would come back to life and haunt us.../At night, you can hear a terrifying roar from deep within the big crypt, please, help us get rid of the threat that resides there!/I will give you a health potion to help you on your adventure./If you defeat whatever is living in there, I will reward you with a raft so you can leave this island.",
+            "name": "The undead threat",
+            "description": "Explore the crypt in the cemetery on the northern side of Chompa Island. Get rid of the beast that has its lair there.",
+            "reward_message": "I can't believe it! You did it!/Hopefully the undead will dissappear from this island, but... what is that on your chest?/So you've been marked as well.../To be honest with you, you aren't the only one I've sent to try and defeat the undead in the crypt./Sadly all of you have been cursed by one of the lords of Death./That is the mark of \"Nimbul\", a fearsome lord that works on its own. Even Death has no control over it./I'm sorry I tricked you, but I had no choice, we need warriors against this threat."
+        },
+        "127": {
+            "quest_message": "Ahh, noo! I don't wanna eat my brothers soup! It's disgusting! Leave me be!",
+            "name": "Goatie the goats food",
+            "reward_message": " "
+        },
+        "7": {
+            "quest_message": "Yes lord Nimbul has marked you... /This means creatures of the undead will hunt you for as long as you live. /If there is a cure, then the forest sage Minai may know something about it. /Travel to the Green Leaf village in west lockwoods and talk to her, she will help you./I've given you a raft so now you'll have to travel the seas south.",
+            "name": "My Curse",
+            "description": "Travel to Green Leaf by sea. You can reach the sea from the southern coast of Chompa Island. When you reach the village, find the forest sage Minai, she has a potion shop there. She may be able to help you with the curse.",
+            "reward_message": ""
+        },
+        "128": {
+            "quest_message": "So the Goblin King went down with the curse as well../The book you found contains some ancient text about curses and cures./This is beyond my knowledge./Travel to Outlaw Harbor and talk to my friend Gulhrug, he may be able help you.",
+            "name": "A Cursed King",
+            "reward_message": " "
+        },
+        "8": {
+            "quest_message": "Go down to the beach to the south east of here and talk to Captain Osamon./He will give you a simple raft, it is not much, but you will be able to travel the shallow waters./Travel to west Lockwoods, there you will be able to find Minai, one of the forest guardians. She may help you with the curse.",
+            "name": "Deleted quest",
+            "description": "Go down to the south east beach of Chompa Island and talk to captain Osamon. He will give you a raft so you can leave the island.",
+            "reward_message": ""
+        },
+        "129": {
+            "quest_message": "",
+            "name": "Find Gulhrug",
+            "description": "Since the king couldn't help you, find Minai's friend Gulhrug that lives in Outlaw Harbor.",
+            "reward_message": ""
+        },
+        "9": {
+            "quest_message": "Now that you know how to fight, you will need to know how to get food in order to restore health and mana after battles./As I told you food will give you health and mana regain that help you restore your health and mana when resting./I have some oranga bushes outside my house, I used to tend the garden myself but these days my jelly back has stiffened.../Would you please go outside and collect three juicy orangas from my garden?",
+            "name": "Pick fruits",
+            "description": "Go to the garden outside Iglith's Inn and collect three orangas by right-clicking on the oranga bushes.",
+            "reward_message": "Thank you so much! I'll keep these for the dish that I'm preparing for you. Now we just need some meat..\n"
+        },
+        "20": {
+            "quest_message": "Oh you found him!/He wants to stay there?/Oh well, as long as he's happy, maybe I can go down and visit him sometime.",
+            "name": "My uncle",
+            "reward_message": ""
+        },
+        "21": {
+            "quest_message": "I know his hidden lab is somewhere on this island. Will you help me find it?",
+            "name": "Deleted quest",
+            "description": "Locate the hidden cave that Ollghar mentioned.",
+            "reward_message": ""
+        },
+        "22": {
+            "quest_message": " ",
+            "name": "Return to Minai",
+            "description": "Return to Minai in the Green Leaf Village.",
+            "reward_message": ""
+        },
+        "23": {
+            "quest_message": "You survived your meeting with the Shroom King, congratulations! Few succeed this feat./Let me prepare the cure for you.../There! Drink this! Now you should be cured!",
+            "name": "Deleted quest",
+            "reward_message": ""
+        },
+        "24": {
+            "quest_message": "I sense great potential in you and I have decided to let you become a forest guardian, but in order for you to get that title you need to complete the forest trials./Go east past the the river, back to the botanical maze. There, deep within the maze you will find our temple, I cannot say more... the rest is up to you!",
+            "name": "The Forest Temple",
+            "description": "Go to East Lockwoods across the bridge to the east of Green Leaf village. There you will find the Botanical Maze, and inside it there is a Temple. Find the Temple and enter it.",
+            "reward_message": ""
+        },
+        "26": {
+            "quest_message": "I hate winter... / Why do we flowers need to die when the cold comes, I'm not accepting it! / Can you go and fetch me some Bear fur in East Lockwoods so that I can make myself a coat.",
+            "name": "Deleted quest",
+            "description": "Go and hunt down Brown Bears and collect 5 of their furs.",
+            "reward_message": "Oh thanks! Much appreciated!/Wait till my friends see this coat I will be wearing. So cool!"
+        },
+        "27": {
+            "quest_message": "Mushroom mushroom mushroom mushroom, NEED MUSHROOMS!/Needs THEM for MY POISONOUS DARTS!/Bring ME five toxic shroom CAPS and I will reward YOU!",
+            "name": "Dart Poison",
+            "description": "Collect 5 toxic mushroom caps in the Shroom Forest.",
+            "reward_message": "MUSHROOOOOOMS!!/THANK YOU!"
+        },
+        "28": {
+            "quest_message": "",
+            "name": "The Trials",
+            "description": "Complete the Trials in the Forest Temple.",
+            "reward_message": ""
+        },
+        "29": {
+            "quest_message": "",
+            "name": "Become a Guardian",
+            "description": "Return to Minai to show your success in clearing the Forest Temple.",
+            "reward_message": "So you made it through the trials! Congratulations!  You can hereby call yourself a forest guardian!/What? A giant monster in the temple? There is no giant monster in there.../... hmm so Nimbuls curse is still there... this has become more complicated than I thought./...I am afraid this is beyond my powers."
+        },
+        "130": {
+            "quest_message": "Ah, so there you are! Minai has told me a lot about you!/Hmm.. so the goblin king was cursed too. I must say that these are worrying news and to be honest../... I think.. there's only one way for you to get rid of that curse of yours. You need to locate the source../I know it sounds dangerous, and it surely is, but I'm afraid it's your only option! I'm talking about sending you to the dead kingdom. But just not yet, no no, just not yet../First you need to prove to me that I can entrust you with the key that, sadly, has become the last hope of many! My first challenge will be for you to make an ANCIENT GOBLIN SOUP! It's a lot harder to cook than one would think../Here's the recipe, now go and prove yourself worthy!",
+            "name": "Deleted quest",
+            "description": "Find the right ingrediences and make Gulhrug an Ancient Goblin Soup. The ingredients are: the ear of an ogre, blob behemoth moss and the tentacle of a giant octopus.",
+            "reward_message": "Minai was right about you.. a true guardian of the forest. Listen, I'll give you the key.. But I'm not sure of what door it might unlock. It certainly looks too small to fit the large gate on The Island of the Ancient Gates. But, ask the people in this village.. I'm sure someone can guide you to the right place."
+        },
+        "131": {
+            "quest_message": "I'm doing time here in Lockwoods Prison because I sold information concerning the Forest Family's Pirate ball strategy for the yearly tournament../I used to be a part of that team myself but I couldn't resist the bribes../I want you to go and talk to the coach and find out wheather he's mad at me or not../If you do that I'll reward you well.",
+            "name": "Coach Pala Pala",
+            "description": "Find Froggos former coach Pala Pala and talk to him.",
+            "reward_message": "Oh, so coach Pala Pala is not mad at me! Wow, he's letting me back in! Thank you for letting me know../Here you go! Just like I promised."
+        },
+        "132": {
+            "quest_message": "I'm not mad at Froggo! We all do mistakes at some point../He was one of our best players! Let him know that once he has done his time.. I'll let him back into the team!",
+            "name": "Froggo the Frog",
+            "reward_message": " "
+        },
+        "133": {
+            "quest_message": "Hey you! The food here in the prison is so disgusting!/Get me a few juicy orangas and I'll pay you more than they are worth!",
+            "name": "Disgusting Food",
+            "description": "Bring 5 orangas to the prisoner Foxan.",
+            "reward_message": "Yummy, thank you!"
+        },
+        "134": {
+            "quest_message": "Urrghh..",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "135": {
+            "quest_message": "Well, I tried to make a forbidden potion that would make me young and handsome..",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "136": {
+            "quest_message": "Mind your own business!",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "137": {
+            "quest_message": "The worst of criminals! Those who get to do their time up there are the bad ones!",
+            "name": "What is the guard guarding?",
+            "reward_message": " "
+        },
+        "138": {
+            "quest_message": "Ohhh, I wouldn't know where to start my dear! The list is greater than your patience..",
+            "name": "Why are you in prison?",
+            "reward_message": " "
+        },
+        "139": {
+            "quest_message": "Show me a sign of Sorkorh's greatness and I shall give you access to the depths of his sacred chambers.",
+            "name": "A Glimpse Of Lord Sorkorh",
+            "description": "Find an artifact forged by master Sorkorh himself and bring it to Urkarh the Prisoner.",
+            "reward_message": "Ahh, I can sense Sorkorh by just staring at that masterpiece!/It's funny how people believe he's been dealth with! MY LORD IS STRONGER THAN THAT!/He is more powerful than one could imagine. Are you eager to find out exactly how strong the lord is? Take this key../It might lead you to an answer to that question.. But such answer can only be found if one is willing to sacrifice everything! I think you understand what I'm trying to tell you. Off you go kid!"
+        },
+        "30": {
+            "quest_message": "",
+            "name": "Talk to the inn-keeper",
+            "description": "Talk to the inn-keeper on Chompa Island found on the first floor in the treehouse.",
+            "reward_message": ""
+        },
+        "31": {
+            "quest_message": "Oh, so you found Goulda! Ahh.. that's right! Bunny fur and flower petals are what we need to add to the spider poison!/I want you to start looking for some bunny fur. Bunnies can be found in the hidden archipelagio which can be accessed through the bat cave that lies east of the village./Hurry and get me some bunny fur before the curse strikes again! ",
+            "name": "Bunny Fur",
+            "description": "East of Green Leaf Village there is a cave where bats reside. Get through the cave to reach a hidden archipelago. On one of the small islands there, you will find rabbits. Collect fur from them, which is the last ingredient for the cure.",
+            "reward_message": "Great job! I will add this to the mixture."
+        },
+        "32": {
+            "quest_message": "There is a legend about a special liquid dropped by the spirits of the dead./It is so rare that merchants would pay anything for it./Another rumor says that there is a hidden archipelago that can only be accessed through a cave on this island./Somewhere there the spirits of the dead are walking.",
+            "name": "Spirit of the dead",
+            "description": "There is a rumor about a hidden archipelago where the spirits of the dead are walking. The only way to access it is through a cave on Lockwoods island.",
+            "reward_message": ""
+        },
+        "33": {
+            "quest_message": "Why did I buy this island...?/I knew it was called Oakstone, but.../I didn't know there would only be one oak and one stone on it. ",
+            "name": "My island",
+            "reward_message": ""
+        },
+        "34": {
+            "quest_message": "Feeling tired after tough battles? Well don't forget that you can rest whenever you are not in danger./Just press the thingie you call \"the spacebar\" and you will enter a peaceful sleep that will regenerate your health quicker./But beware! Your vision will be limited and monsters might attack you while you rest.",
+            "name": "Do not forget to rest",
+            "reward_message": ""
+        },
+        "35": {
+            "quest_message": "Pssst!/Yes over here! I am on an important mission to save this world!/Nobody seems to care, oblivious to the apocalptyptic threat that is approaching.../I am talking about the bunnies! KILLER BUNNIES!!/They keep cuddling and making more bunnies, and jumping around, ALWAYS JUMPING AROUND!!/You need to help me, I don't dare approach them, they will eat my branches./They can be found in the hidden archipelago./Go the cave to east of here, inside the cave you will find an exit to the archipelago.",
+            "name": "They keep coming",
+            "description": "Go the hidden archipelago and kill 20 killer rabbits. The archipelago can be found behind the cave to the east of Green Leaf village.",
+            "reward_message": "You survived!? Are they gone now?/Ok here is your reward, but they will keep coming I tell you!/So try and hunt them down if you see them in the future."
+        },
+        "36": {
+            "quest_message": "Oh so you're finally awake! You are at the Chompa Inn on Chompa Island. /We found you on the beach, barely alive. But don't worry, we took good care of you!/Let's see if your strength is back, go out and hit the practice target outside my house./Just walk up to it and right-click on it, I am sure you will smash it to pieces./When you've destroyed it, come back and talk to me!",
+            "name": "First quest",
+            "description": "Outside of Ilgith's inn there is a practice target. Right-click on it to target and attack it. The attack will be done automatically. When the target is destroyed, return to Ilgith in his tree house and talk to him.",
+            "reward_message": "Ah well done! You sure are strong!"
+        },
+        "37": {
+            "quest_message": "Have you visited the local barber shop yet?/Got my new moustache there and I loooooove it!",
+            "name": "Love my new moustache!",
+            "reward_message": ""
+        },
+        "38": {
+            "quest_message": "I have heard rumors about an abandoned cabin in the woods south-west of here./A stranger gave me this key telling me it could open it's door./You can have it, I don't care what is in there.",
+            "name": "An abandoned house",
+            "reward_message": ""
+        },
+        "39": {
+            "quest_message": "",
+            "name": "A Cabin In The Woods",
+            "description": "A rumor tells about an abandoned cabin in the woods south of Green Leaf Village. You've been given a key that might open its door.",
+            "reward_message": ""
+        },
+        "140": {
+            "quest_message": "I'm waiting for my brother Foxen to be released..",
+            "name": "Why Are You Standing Here?",
+            "reward_message": " "
+        },
+        "141": {
+            "quest_message": "Well.. First of all, I don't know. Second, I wouldn't tell you if I knew. Third, why would you be looking for someone that would most certainly kill you at first sight?/But, if ask me to guess than I would say that he's probably somewhere in the Dead Kingdom trying to recruit even greater and darker powers!/But why don't you go back and ask whoever gave you the key..",
+            "name": "Where Is Sorkorh?",
+            "description": "Return to Urkarh the Prisoner and ask him why he lied to you.",
+            "reward_message": ""
+        },
+        "142": {
+            "quest_message": "More alive than ever.. Now go away!",
+            "name": "Is Sorkorh Alive?",
+            "reward_message": " "
+        },
+        "143": {
+            "quest_message": "Me, a liar? No.. never. You just need to open up those eyes of yours./Maybe you didn't look hard enough../Those who are not afraid of stepping into the flame, are the ones always finding some answers..",
+            "name": "Liar",
+            "reward_message": " "
+        },
+        "144": {
+            "quest_message": "Psst.. let me tell you something that I overheard a few days ago! People were talking about some secret chamber here in Green Leaf Village where there is a treasure!/I'm not sure where.. But I heard them talk about some hole in the ground that is supposed to be located in-between two trees. Yes, that's it! Right here in this very village!",
+            "name": "A Secret Chamber",
+            "description": "Find the Secret Chamber that lies somewhere in the Green Leaf Village.",
+            "reward_message": ""
+        },
+        "145": {
+            "quest_message": "Wow, so you found the chamber in Green Leaf Village! Nice work!/Well, since you've proven yourself being good at this.. Maybe you could find the other one I've heard of! Rumor says it's located somewhere south of Goulda's hut..",
+            "name": "Another Secret Chamber",
+            "description": "Find the Secret Chamber situated somewhere south of Goulda's Hut.",
+            "reward_message": ""
+        },
+        "146": {
+            "quest_message": "I can't believe that one can be so good at finding secret chambers! I'll tell you the last rumor that I've heard about secret chambers../Once I heard about one that is hidden somewhere close to a bat cave. I guess we're talking about the one that lies east of Green Leaf./Please come back and tell me what you've found.. Well, if you ever find anything that is..",
+            "name": "Cucumbro's Last Secret",
+            "description": "Find the Secret Chamber situated somewhere close to a bat cave.",
+            "reward_message": "You truly are good at this! Oh, so you've found a lot of potions? They can come in handy whenever your health is in danger. I wish you all the luck in your future adventures!/By the way, here's a few copper that I want to give you for easing a troubled mind! I haven't been able to get a good nights sleep ever since I heard rumors of those secret chambers. I guess it's that curiousity which kept me awake.."
+        },
+        "147": {
+            "quest_message": "Hey! If you ever decide to visit that abandoned cabin.. Maybe you could find a rat tail for me!/I'm sure there place is infested with rats! Don't ask me why I need one, I do some witchcraft on the side you see.../If you find one, I'd be happy to buy one for 100 copper!",
+            "name": "Rat Tail",
+            "description": "Find a rat tail and bring it back to Ema that is waiting for you in the Green Leaf Village.",
+            "reward_message": "Thank you very much! Here's the 100 copper like promised!"
+        },
+        "148": {
+            "quest_message": "If you ever get to Morwyn, please tell Pala Pala that I really need to talk to him about the yearly tournament.",
+            "name": "The Yearly Tournament",
+            "description": "When you get to Morwyn, tell Pala Pala that Pila Pila needs to talk to him.",
+            "reward_message": ""
+        },
+        "149": {
+            "quest_message": "Oh, so he needs to talk to me? Well then, maybe he should consider travelling to Morwyn. Tell him that he should stop being so lazy! I've sailed all the way to Lockwoods every year! Now it's his turn! Would you please tell him that?",
+            "name": "Lazy Pila Pila",
+            "description": "When you get back to Lockwoods, tell Pila Pila that Pala Pala won't be the one travelling this year.",
+            "reward_message": ""
+        },
+        "40": {
+            "quest_message": "Aren't you tired of these stones blocking your paths.../They are always there conveniently blocking one area from another./\"But I can see a gap, maybe I can squeeze my way through?\" you ask yourself... but NO! You can't... you never can.",
+            "name": "So sick of these stones...",
+            "reward_message": ""
+        },
+        "41": {
+            "quest_message": "Ahoy lubber! You will need a boat if ye want to leave this island! Hahaha!",
+            "name": "Leave this island",
+            "description": "",
+            "reward_message": ""
+        },
+        "42": {
+            "quest_message": "Oh! How did you get in here?/Abandoned? No I live here with my uncle. We just don't go out much.",
+            "name": "Who are you?",
+            "reward_message": ""
+        },
+        "43": {
+            "quest_message": "",
+            "name": "Escape The Nightmare",
+            "description": "You've been transported to a strange place, how did you get here? Escape this nightmare as quick as possible!",
+            "reward_message": ""
+        },
+        "44": {
+            "quest_message": "You must be one of the cursed ones... I am sad for you.../They are many and they want your soul.../I like you... please try not to die.../Do not engage them, just escape through these woods.../...I saw something shiny down there.",
+            "name": "The dark ones are powerful",
+            "reward_message": ""
+        },
+        "45": {
+            "quest_message": "I love the forest guardians! They are sooo coool!/Some day I hope to become one.../I have heard rumors that the mountains have their guardians too, and so do the birds, but that sounds just silly!",
+            "name": "Guardian Fan",
+            "reward_message": ""
+        },
+        "46": {
+            "quest_message": "One last ingredient is needed for the cure to be completed, the flower petals! But.. it can only be found in a dangerous place./You will need to travel to the east Lockwoods and into the Botanical Maze./It is a twisted place where it is easy to get lost./You need to collect three flower petals from a plant known for its ferocity./You are close now to be cured, do not give up!",
+            "name": "Botanical Maze",
+            "description": "One last ingredient is needed for this cure to be completed! Far east of Green Leaf you will find a bridge going over to the east Lockwoods. There you will find the Botanical maze with its thick vegetation and inhabitants. Collect 3 petals from the ferocious angry flower. ",
+            "reward_message": "The last ingredient! Now we can make a cure!/Ok, let's see.../The curse is strong... but this should do it.../Thanks to the powerful spider poison, the bacterias in the bat blood and the oils from a ferocious plant.. it all seems to be working... there you're cured... for now./I cannot guarantee that the curse is completely gone, but at least it is weakened./I can sense some great potential in you, maybe you are ready for the trials..."
+        },
+        "47": {
+            "quest_message": "Oh, hello there!/I've seen many adventurers get past these traps but I'm trying to remember the pattern../Oh, yes! I remember! Counting from the left.. it's.. 2.. 3.. 4.. uhm.. 4.. 4!/Oh, no.. wait.. not that many 4's! The third and the last step should be 3's! Yes, that's it!",
+            "name": "Trap walk-through!",
+            "reward_message": ""
+        },
+        "48": {
+            "quest_message": "I'm going crazy! I can't figure out where I should jump down../I've been here for days and at night I hear voices../They keep repeating the same riddle over and over again. Maybe it might help you! Now listen../There are 100 copper coins scattered in a pitch black room. 90 of the copper coins have heads facing up and the remaining ones have tails up. You cannot distinguish which coins are which../How do you sort the copper coins into two piles that contain the same number of tails?/Jump down to the left is you believe that you simply have to split the copper coins into two equal piles./Jump down in the middle if you believe it's not possible to solve the task./Jump down to the right if you believe it's solved by choosing any 10 coins to make a pile and then flip these over.",
+            "name": "Riddle",
+            "reward_message": ""
+        },
+        "49": {
+            "quest_message": "Orangas are nice, but it doesn't beat the tasty meat of a fish!/Here, take this fishing rod and try to get a blue fish./Just equip the fishing rod and then use the ability \"Float fishing\".",
+            "name": "Fishing",
+            "description": "Equip the fishing rod and use the ability \"Float fishing\" on a water-tile. You will find the \"Float fishing\" ability in the ability window, you can click on it and place it in the actionbar for quicker access. When a fish appears, right-click on it to grab it. Catch a blue fish and return it to Grodo the fisherman.",
+            "reward_message": "Great work! You're a natural!/There are more advanced fishing rods available that can give you bigger fishes, so keep practicing!"
+        },
+        "150": {
+            "quest_message": "So I'm the lazy one? Pfft, what nonsense.. I've travelled a lot further than he ever has in order to attend these pointless meetings. Well, no meeting then!",
+            "name": "Pala Thinks You're Lazy",
+            "reward_message": " "
+        },
+        "151": {
+            "quest_message": "Oh, so you think you can find a way around this stone? I won't believe till I see it..  Go ahead, just prove it to me.",
+            "name": "The Unreachable Spot",
+            "description": "Find a way to get to the other side of the stone that is blocking Gorky's path.",
+            "reward_message": "Ohhh! Nicely done!"
+        },
+        "152": {
+            "quest_message": "Hey! Since you've proven yourself being smarter than me.. I figured I'd give you another challenge!/There is a treasure hidden among us trees. The treasure lies on a hidden path that can be reached from the hidden archipelagio east of the Green Leaf Village./Find it and I'll give you all the copper that I'm currently storing in my branches!",
+            "name": "A Hidden Treasure",
+            "description": "Find the hidden treasure that Gorky mentioned to you.",
+            "reward_message": "Ohhh! You surely are impressive! Here, take my 77 copper. Good job!"
+        },
+        "153": {
+            "quest_message": "Not every tree has something to say.. to someone like yourself..",
+            "name": "How Come Some Tree's Won't Talk?",
+            "reward_message": " "
+        },
+        "154": {
+            "quest_message": "Ahh, my sheet is really dirty! Find me a new one and I'll reward you!",
+            "name": "New Sheet",
+            "description": "Find a new sheet and give it to Gosie the Ghost.",
+            "reward_message": "Ooooh, thank you! Here you go! 100 copper!"
+        },
+        "155": {
+            "quest_message": "Ok, I admit! I admit! I'm a coward.. YES, I'm a coward and it's causing me trouble since Minai wants me to collect a few bat wings. She says it's a part of some Forest Guardian trial that I'm going trying to pass../Would you please help me? Well, if you got the time and enough courage that is../Bring me three bat wings and I'll pay you for the effort! Oh, by the way.. don't tell Minai that you're helping me!",
+            "name": "Scary Bats",
+            "description": "Find three bat wings and hand them over to Kuuyi.",
+            "reward_message": "Wow, this seems easy for you! You're truly inspiring! Here, take these 150 copper!"
+        },
+        "156": {
+            "quest_message": "It's on the other side of the river. Cross the bridge that lies east of here and then head south-east.. then you'll reach it in no time!",
+            "name": "Where Is The Botanical Maze?",
+            "reward_message": " "
+        },
+        "157": {
+            "quest_message": "Just keep walking south till you see an entrance, among some trees, leading you east.",
+            "name": "Where Is The Botanical Maze?",
+            "reward_message": " "
+        },
+        "158": {
+            "quest_message": "There are spiders in the cave that lies south-west of here. It's not far, just cross the village and you'll find it. ",
+            "name": "Where Can I Find Spiders?",
+            "reward_message": " "
+        },
+        "159": {
+            "quest_message": "The reason why you can't leave the village is probably because Minai hasn't given you permission yet. Go talk to her in the potion shop that lies west of here.",
+            "name": "I Can't Leave The Village",
+            "reward_message": " "
+        },
+        "50": {
+            "quest_message": "In order to restore health and mana you need to eat and rest./Here is some larva-soup, right click on it in order to eat it./When you've eaten the soup you can rest by pressing \"SPACE\" on your keyboard./Your health and mana will only restore if you've eaten first, remember that.",
+            "name": "Eating and Resting",
+            "description": "Open your inventory and right-click on the larva soup you just made. If you've eaten it already, then you can buy more from the innkeeper. Right-clicking on eatable items will consume the item and give you health and mana regain. In order to regain the actual health and mana you need to rest. To rest press the spacebar on your keyboard. You can stop resting by either moving your character or pressing space again. ",
+            "reward_message": "Great job! You seem to feel much better now that your stomach is full./I can sell you more soup if you want some./Remember to always bring some food with you on your adventures, and don't forget to rest!"
+        },
+        "51": {
+            "quest_message": "If battles get too rough you can always run back to the inn and rest./Your health and mana will be restored in safe zones.",
+            "name": "Are you hurt?",
+            "reward_message": ""
+        },
+        "52": {
+            "quest_message": "Help me.. I need help../Ever since my brother and I were killed in the Green Leaf village../.. I've been trying to figure out a way to feel alive once again./The life of a ghost is not always easy. Please find something that could nourish my soul so that I can feel like a true goblin once again... ",
+            "name": "A lost soul",
+            "description": "Find something that could strengthen Bullghur's soul.",
+            "reward_message": "Ohh! Thank you so much! It's bringing life back to my soul!/I'm gonna speak to the other ghosts and make sure that you're given permission to enter the depths of their home!\n"
+        },
+        "53": {
+            "quest_message": "Urghh.. I'm so angry! Our master abandoned us../Does he honestly think that a few stones will keep him safe? Grrrhh../There is a pasasge that would get you past these stones. I just can't remember where it is../Find me the secret passage that leads to master Oozemaw!",
+            "name": "The secret passage",
+            "description": "Locate the secret passage that leads to the depths of Oozemaw Fortress.",
+            "reward_message": "Arrrghh.. I knew it was possible to get past these stones! I will tell my brothers and then we shall confront master Oozemaw!/How.. could.. he.. leave us behind."
+        },
+        "54": {
+            "quest_message": "I hoped not to see you again.../I thought you got rid of the mark of the one that should not be mentioned.../This means you are still under his curse and you need to escape his claws once more./Try not to fight, I saw a portal up ahead, good luck!/My name?/... noone ever asked me that since I died... I... don't remember.../... I think my mom called me... Gomgom.../That's it! My name is Gomgom! Nice to meet you!/Please don't die!",
+            "name": "Oh it's you again...",
+            "reward_message": ""
+        },
+        "55": {
+            "quest_message": "So you made it through the trials! Congratulations! This means you are worthy to become a forest guardian./What? A giant monster in the temple? There is no giant monster in there.../... hmm so Nimbuls curse is still there... this has become more complicated than I thought./...I am afraid this is beyond my powers.",
+            "name": "The Curse Is Not Gone",
+            "reward_message": ""
+        },
+        "56": {
+            "quest_message": "I've been thinking of how to help you and I've sadly realized that I can't. But I know someone who might.../The goblins love to collect books and they have the largest collection in the world./It is called the Goblin Archives and is located somewhere deep in the mountains of Mount Morwyn./Now that you are a forest guardian you can travel there as an ambassador and try to get a meeting with the Goblin King./You will need a better boat, so let me give it to you as a final gift. Good luck!/Oh.. and by the way.. one last thing. If the king can't help you, neither can I. So, if you don't get any help from the king I suggest you go and talk to my friend Gulhrug in Outlaw Harbor.",
+            "name": "Goblin Archives",
+            "description": "Go to Mount Morwyn situated south east of Lockwoods. Minai has given you a better boat so you can travel deep waters. When you are there, enter the mountain caves and find the entrance to the Goblin Archives.",
+            "reward_message": ""
+        },
+        "57": {
+            "quest_message": "Yes, this is the entrance to the Goblin Archives, the largest library in the world, the pride of the Goblin race!/... but lately something strange is happening in there... I havn't dared to enter its gates lately, they look strange... I can't even call them goblins anymore...",
+            "name": "Something is wrong in there...",
+            "reward_message": ""
+        },
+        "58": {
+            "quest_message": "",
+            "name": "Find the goblin king",
+            "description": "Go deep into the Goblin Archives and find the Goblin King, only he might help you get rid of your curse.",
+            "reward_message": ""
+        },
+        "59": {
+            "quest_message": "",
+            "name": "Defeat the Goblin King",
+            "description": "The Goblin King seems to have been taken over by undead magic. Defeat him in order to access his treasury where he keeps his most precious books.",
+            "reward_message": ""
+        },
+        "160": {
+            "quest_message": "Because she's in charge around here and you won't be allowed to leave this village until she thinks your strong enough to survive out there.",
+            "name": "Deleted quest",
+            "reward_message": " "
+        },
+        "161": {
+            "quest_message": "Uhm.. Thanks for letting me know..",
+            "name": "You're A Very Big Panda",
+            "reward_message": " "
+        },
+        "162": {
+            "quest_message": "Hello! Do you like treasure hunting? If so, you've found the right person! I love hiding treasures and then challenge people../There is a hidden treasure room in the water cave beneath us.. Prove to me that you're worthy my treasures!",
+            "name": "A Hidden Water Cave",
+            "description": "Find the hidden treasure that Fiffilina has hidden in the water cave underneath Outlaw Harbor.",
+            "reward_message": "Good job! It was an easy one though.. I've got more treasures if you still enjoy treasure hunting.."
+        },
+        "163": {
+            "quest_message": "Alright then, let's get serious now../The next treasure is hidden on the island that lies just north-west of Outlaw Harbor. It's the island where the ancient gates are.. the ones leading to the Dead Kingdom. Go find it!",
+            "name": "A Well Hidden Treasure ",
+            "description": "Find the hidden treasure that Fiffilina has hidden in the water cave underneath Outlaw Harbor.",
+            "reward_message": "Nice, you're really starting to get my attention! So, I'm gonna be honest with you../The treasure isn't why I've been talking to you all this time. I've got something much more important for you to deal with. But only when you feel strong enough to change the outcome of the future./When you do, come and talk to me.. I'll tell you everything."
+        },
+        "164": {
+            "quest_message": "Well, I'm gonna be honest with you../The treasure hunting has never really caught my interest and, most of all, I wouldn't waste my time pleasing others by arranging treasure hunts../I simply used the treasure hunting as a test to measure your capability of finding things you desperately want./The thing is that.. I knew from the very moment I saw you.. that you.. were cursed../How? Well.. They say that people who are facing a certain obstacle are more likely to identify others in the same situation./I think you know what I'm about to say../I've.. been.. cursed.. too../Listen, we are not given many options here. We need to find the dark powers that are threatening us before they find all of us../I bet you saw that locked door in that hidden cave on Island of the Ancient Gates.. And I think you might have a clue on where this door leads../It's an entrance to the Dead Woods.. And underneath those dying woods lies the Dead Kingdom.. and that is where I think we can find answers for a cure./What I'm gonna ask you for is something a lot more dangerous than any task you've ever been handed. I would've done it myself if I believed I was strong enough.. but I know I'm not./I know that Gulhrug has the key to that door and now that I've shown you where it is.. I can do nothing but leave this realms faith in your hands../I'm sorry that I was playing these weird little treasure games with you.. I just needed to know that you were the right person to entrust with this dangerous task. Good luck, I'll be praying for your return!",
+            "name": "Nimbul's Curse",
+            "reward_message": " "
+        },
+        "165": {
+            "quest_message": "Oh, hello. Do you like hunting treasures?/If so, let me tell you a secret! In this very village.. hidden in the sand.. lies a secret chamber. Go find it!",
+            "name": "A Treasure Hidden In Sand",
+            "description": "Find the hidden treasure that Urgurh says is hidden in the sand of Morwyn.",
+            "reward_message": "Uurrghh, good boy! I've got a more tricky one if you're up for it.."
+        },
+        "166": {
+            "quest_message": "Alright, so this one is hidden somewhere west of the village. Go find it!",
+            "name": "Another Treasure Hidden In Sand",
+            "description": "Find the hidden treasure that Urgurh says is hidden in the sand west of Morwyn.",
+            "reward_message": "Uurrghh, veery good boy! Hmm.. come back when you think you can do better than this.."
+        },
+        "167": {
+            "quest_message": "Haven't you heard of me?! I'm Karkarh the bomber!/I'm one of the legendary founders of the pirate crew Blood Skulls..",
+            "name": "Who Are You?",
+            "reward_message": " "
+        },
+        "168": {
+            "quest_message": "Blood Skulls are not recruiting right now..",
+            "name": "How Do I Join Your Crew?",
+            "reward_message": " "
+        },
+        "169": {
+            "quest_message": "We are more than strong.. We've won many incredible battles../Have you heard of when I fought the Sea Bunnies all by myself?",
+            "name": "Is Your Crew Strong?",
+            "reward_message": " "
+        },
+        "60": {
+            "quest_message": "",
+            "name": "Get the Goblin Kings treasure",
+            "description": "When the Goblin King has been defeated, you can access his treasure chest. Get whatever is inside it. ",
+            "reward_message": ""
+        },
+        "61": {
+            "quest_message": "You know I'm the only one that understands all the different kinds of goblin dialects../But lately my memory has been failing me and I need to recover a few words that I can't seem to remember/Would you please bring me the goblin dictionaries? I think there are 3 and if I'm not mistaken they have a beautiful blue color.",
+            "name": "The blue books",
+            "description": "Find the three magic books that Pyckwyck is looking for.",
+            "reward_message": "Thank you! I knew I could count on you! Here you go!"
+        },
+        "62": {
+            "quest_message": "This is terrible! I can't stand living where nothing grows! I was not meant to be a mountain goat../I remember when I used to sail all the way to Lockwoods to in order to get ahold of my favorite fruit./If you bring me 100 orangas, I'll pay you 500 copper!",
+            "name": "Orangas!",
+            "description": "Collect 100 Orangas and bring them back to Edward in Morwyn Falls.",
+            "reward_message": "OH! THEY LOOK JUICY!/Thank you, thank you! You made my day! Here are the 500 copper we agreed on."
+        },
+        "63": {
+            "quest_message": "Pssst.. come over here!/Do you see that annoying goat over there? Yes, Edward../I can't stand him anymore! It's not that I don't like his juice shop.. it's just that he steals all my customers!/So.. I.. thought.. that maybe you could help me. I'm thinking of injecting some poison in his fruits!/I'm not an evil man, so I wouldn't risk any lives here! I just need a weaker poison that would make the customers feel dizzy! I guess that would stop them from coming back../Please bring me the poison of 10 spiders and I shall pay you more than Edward does!",
+            "name": "An evil plan",
+            "description": "Collect the poison of 10 spiders and bring it back to Bob in Morwyn Falls.",
+            "reward_message": "Psst... thanks! Here you go, 501 copper!"
+        },
+        "64": {
+            "quest_message": "The northern winds are telling me that you should sail back to where you came from..",
+            "name": "Be careful",
+            "reward_message": ""
+        },
+        "65": {
+            "quest_message": "I have to be honest with you../Me and my friend Hardleg have spent alot of time in the north and we can tell if something is changing../In the north, far from all kind of civilization, we can easily sense if something is not right./The snow absorbs the energy of those living in the north. So if you bring me some snow, I could tell you what's going on!",
+            "name": "The north is changing",
+            "description": "Collect 10 snowballs and bring them back to Algath.",
+            "reward_message": "This is not good../I don't know where this energy comes from.. But.. Something bad is residing in the north.."
+        },
+        "66": {
+            "quest_message": "Ollghar wanted to create the perfect conditions for spiders to grow strong./He bought this little island and paid a fortune for the transport of various spiders. He had to sail them all the way from Green Leaf../I always knew he had the potential to raise the most powerful spiders.. But now the problem is that they've grown too strong.. and I'm worried they might take control of things 'round here./Go ahead and prove to me that you can still retain those beasts!",
+            "name": "Perfect Conditions",
+            "description": "Enter the spider cave on Ollghar's island and kill 3 Spider Queens.",
+            "reward_message": "You are amazing! Thank you so much for giving me hope!/I promise you that I'll stop Ollghar from experimenting with these creatures!"
+        },
+        "67": {
+            "quest_message": "My name was removed from me when I joined the guild, it is not important anymore./I am a member of the assassins guild. We are a neutral force and our job is simply to maintain the balance between the great forces in this world./Lately, many of us assassins have been assigned to the north. We've gathered rumors that a new immense power is growing in these northern parts.",
+            "name": "Who are you?",
+            "reward_message": ""
+        },
+        "68": {
+            "quest_message": "You should not be here..",
+            "name": "Warning",
+            "reward_message": ""
+        },
+        "69": {
+            "quest_message": "You shouldn't be heading north! The Queen of the north has awaken!/Show me something that can prove that can atleast defeat the strongest creature in that water cave. If you can't,  you should not even be here.",
+            "name": "Dangerous cave",
+            "description": "Prove to Xin that you can beat whatever it is that's hiding in the depths of the water cave.",
+            "reward_message": "Oh, you did it. You surely are strong. I'm quite sure the queen has summoned that sea monster./I'm happy you made it but don't let this success fool you! The strength of the Queen is on a whole other level!"
+        },
+        "170": {
+            "quest_message": "",
+            "name": "Return to Minai",
+            "description": "Return to Minai to show your success in handling the shroom situation.",
+            "reward_message": "So it was Albo causing all of this?! It seems as if he was cursed just like you.. Anyways, you did a great job!/"
+        },
+        "171": {
+            "quest_message": "Woof woof WOOF/... woof? WOOF!!!!!/woof.",
+            "name": "Puppy Problems",
+            "description": "Find the puppy at Ilgith's inn a bone",
+            "reward_message": "WOOF WOOF WOOF WOOF!"
+        },
+        "172": {
+            "quest_message": "If you are planning to leave this island, then please try and bring back some squid for me, It is soo delicious!",
+            "name": "Tasty Squid",
+            "description": "Collect three pink squid tentacles and bring them to Ilgith on Chompa island.",
+            "reward_message": "Yummy, thank you!"
+        },
+        "173": {
+            "quest_message": "Oh, you found the spider poison! Great job!/I wish I could retain all the recipes but my memory has been failing me lately and we have to make sure that this cure is more than perfect!/I want you to find my friend Goulda the chemist../He is very talented and Im sure that he can confirm what ingredients we need for the cure! But he's always hiding somewhere.. He's one of those hermits../I am now giving you permission to leave the village so that you can find Goulda!/I'm sure that someone in this village knows where he is hiding nowadays..",
+            "name": "Goulda The Chemist",
+            "description": "Find Goulda the chemist and ask him what ingredients that are needed for a cure to your curse! Someone in the Green Leaf Village can certainly help you.",
+            "reward_message": ""
+        },
+        "174": {
+            "quest_message": "Goulda? Hmm.. Oh, yes! I met him a few weeks ago../He said something about hiding in a cabin somewhere in the woods..",
+            "name": "Where is Goulda?",
+            "reward_message": ""
+        },
+        "175": {
+            "quest_message": "Urghh.. I know.. it seems someone is trying to prevent others from entering the archives../But somewhere there is a magic portal that teleports you to the entrance of the archives! Talk to people in Morwyn, they might know where it is!",
+            "name": "Deleted quest",
+            "reward_message": ""
+        },
+        "176": {
+            "quest_message": "Uurghh.. It seems someone is trying to prevent others from entering the archives! These stones won't let you pass../But you can enter by opening the hatch that is situated to the east. But, I'm sorry to tell you that the owner of that key is Oozemaw.. The kings servant!/If you wanna enter the goblin archives you'll have to find Oozemaw and take his key!",
+            "name": "Oozemaws Key",
+            "description": "Locate Oozemaw and find out where he hides the key to the hatch.",
+            "reward_message": "Uurrrghh.. you found it!/Now you can enter the archives via the hatch!"
+        },
+        "177": {
+            "quest_message": "Ah, so there you are! Minai has told me a lot about you!/Hmm.. so the goblin king was cursed too. I must say that these are worrying news.../In the book you found, it mentions the three lords of the undead./The curse is strongly bound to there existence./Sadly the only way to get rid of it, is to defeat all three of them./You need to enter the dead kingdom./Old legends speaks of a Skeleton Key... but the last owner perished far to the north, in the cold lands of Frostvale/Travel there and meet my cousin Lubo, he must know more about it.",
+            "name": "Finding Frostvale",
+            "description": "Find a village called Frostvale far to the north.",
+            "reward_message": "Minai was right about you.. a true guardian of the forest. Listen, now you have the key.. But I'm not sure of where the door is located. It certainly looks too small to fit the large gate on The Island of the Ancient Gates. But, ask the people in this village.. I'm sure someone can guide you to the right place."
+        },
+        "178": {
+            "quest_message": "",
+            "name": "Talk to Lubo",
+            "description": "Talk to Lubo in the Frostvale Inn.",
+            "reward_message": ""
+        },
+        "179": {
+            "quest_message": "Ohhhhh, you! My cousin sent me a letter letting me know that you needed my help./The Skeleton Key? Yes, I have heard of it... why do you seek such a sinister object?/There is only one purpose with such an item, why the rush to go meet Death when Death will come to you soon enough?/Legends tell that Death lost the key when collecting the soul of a mighty pirate./The pirate was called Blackbeard, greatest pirate that ever lived./He was not ready to die, so a fierce battle took place!/In the chaos, the key got lost at the same time that Blackbeard lost his soul./The key was lost for a long time, till it was found by some poor soul. It had many owners, but never for long, it was cursed./Last time I heard about it, it was here in Frostvale./Rumors tell it lies deep within the crystal caves. ",
+            "name": "The Skeleton Key",
+            "description": "Go to the crystal caves that lies north of Frostvale and locate the Skeleton key.",
+            "reward_message": ""
+        },
+        "70": {
+            "quest_message": "I know his hidden lab is somewhere on this island. Will you help me find it?",
+            "name": "Deleted quest",
+            "description": "Locate the hidden cave that Ollghar mentioned.",
+            "reward_message": ""
+        },
+        "71": {
+            "quest_message": "There has been worrying reports coming from the North lately. If you don't believe me, go upstairs and look for yourself. We caught it last night.",
+            "name": "Pure Evil",
+            "reward_message": ""
+        },
+        "72": {
+            "quest_message": "Look at that monster! What is the witch of the north up to?",
+            "name": "Scary... isnt it?",
+            "reward_message": ""
+        },
+        "73": {
+            "quest_message": "You shouldn't go any further..",
+            "name": "Final Warning",
+            "reward_message": ""
+        },
+        "74": {
+            "quest_message": "We received a letter from the Assassin's Guild saying that something bad was happening in the North../So our king sent an entire army in order to find out what was happening.. including me../But something came visiting us in the middle of the night, while we were sleeping in this cave../She was tall, she was strong, she was.. pure evil../Now the colder winds are telling me that my friends have become my foes and I need to set them free from whatever is controlling them. Please help me!",
+            "name": "Frozen blobs",
+            "description": "Kill 3 of the blobs that are now controlled by the Queen of the North.",
+            "reward_message": "You're giving me hope! Don't let the Queen of the North get any stronger!"
+        },
+        "75": {
+            "quest_message": "It's very important that we, the forest family, win the yearly Pirate Ball Tournament! So you better start practicing!",
+            "name": "The Yearly Tournament",
+            "reward_message": ""
+        },
+        "76": {
+            "quest_message": "I've heard the Mountain family has recruited quite a few good players lately.. Honestly, I'm worried about this years tournament.. Especially now that we've lost Froggo../Froggo is such a unique talent. Too bad he had to end up in prison..",
+            "name": "Rumors",
+            "reward_message": ""
+        },
+        "77": {
+            "quest_message": "Ohhh, so you've been cursed too!/If you're looking for spider poison, you'll have to go deeper into this cave and fight the green ones.",
+            "name": "Spider Poison",
+            "reward_message": ""
+        },
+        "78": {
+            "quest_message": "I'm currently collecting samples of spiders for my brother Ollghar. He needs them for his experiments../He recently bought an island in the north where he is trying to breed spider mutants. One day, when you'll be strong enough, you should go there and visit him!",
+            "name": "My Brother!",
+            "reward_message": ""
+        },
+        "79": {
+            "quest_message": "Hey there! I'm just warning you.. This cave belongs to the shrooms..",
+            "name": "Shroom cave",
+            "reward_message": ""
+        },
+        "180": {
+            "quest_message": "Oh, so you found the key! Good job!/Good luck now.. you might need it!",
+            "name": "Good Luck!",
+            "reward_message": ""
+        },
+        "181": {
+            "quest_message": "",
+            "name": "Return to Outlaw Harbor",
+            "description": "Return to Outlaw Harbor and tell Gulhrag that you've found the crystal key.",
+            "reward_message": ""
+        },
+        "182": {
+            "quest_message": "You found the skeleton key! Minai was right about you.. a true guardian of the forest./I'm not sure of where the door is located. It certainly looks too small to fit the large gate on that sinister island./But, ask the people in this village.. I'm sure someone can guide you to the right door. Good luck now!",
+            "name": "Right key wrong door",
+            "reward_message": ""
+        },
+        "183": {
+            "quest_message": "There are a few potions in that chest over there! Take them!/Just right-click on a potion If you're running out of health. Also, you can store potions in your hotbar which allows you to heal by just pressing the number displayed in the chosen slot.",
+            "name": "Potions",
+            "reward_message": ""
+        },
+        "184": {
+            "quest_message": "The Green Leaf Village lies just south of here.",
+            "name": "Where can I find the Green Leaf Village?",
+            "reward_message": ""
+        },
+        "185": {
+            "quest_message": " ",
+            "name": "Return to Minai",
+            "description": "Get back to Green Leaf Village and talk to Minai about a cure for your curse.",
+            "reward_message": ""
+        },
+        "186": {
+            "quest_message": "If you're looking for the key to this cabin I suggest you talk to Ema in the Green Leaf Village.",
+            "name": "Key To The Wooden Cabin",
+            "reward_message": ""
+        },
+        "100": {
+            "quest_message": "I can show you the way of the Tank./If you are already specialized in two teachings then you will have to lose all knowledge of one them./Are you certain you want to become a Tank?",
+            "name": "Become a Tank",
+            "reward_message": ""
+        },
+        "101": {
+            "quest_message": "Where did you come from!? I was just standing here, minding my own business, when suddenly you materialized from thin air!/What? A giant slimey monster? Nope nope nope.../Now I won't be able to sleep =(",
+            "name": "Wow! You just came from nowhere!?",
+            "reward_message": ""
+        },
+        "102": {
+            "quest_message": "I need you to give me time to think of who could possibly help you with this curse. While I do that I need you to go on your first mission as a forest guardian../Lately, many Green Leaf citizens have reported that they've been ambushed by shrooms in the south of Lockwoods. Something has to be wrong.. Shrooms are a part of our family and they've always been friendly../Can you please go and talk to my shroom friend Maduna? I need to know what's going on down there..",
+            "name": "Odd behavior",
+            "description": "The shrooms have been acting weird lately. Locate Maduna somewhere in the Shroom Forest and try to find out what is going on.",
+            "reward_message": ""
+        },
+        "103": {
+            "quest_message": "Hi there! I'm Maduna. I'm so happy that Minai sent you../Something terrible is happening right here.. It all started some time ago when Albo the Shroom came back from his latest adventure../He had always been a kind soul.. but the night he came back.. he had changed./He started talking about how he served a new master and the weirder things got.. the more he grew taller../It felt as if some curse gave him these unnatural powers../After a few nights he had gotten so big and strong that he announced himself as the 'King of the Shrooms'.. and that's also when he started giving orders to all of us../He said: \"From now on we have no brothers and sisters. None shall call us family. We shall claim what is ours\"./Ofcourse, none of us wanted to cause any harm.. But you should see Albo's size, it's not like we had any choice but to obey./Would you please help us? Please deal with Albo before he becomes even worse.",
+            "name": "Albo the Shroom King",
+            "description": "Explore the Shroom Cave in Lockwoods and eliminate Albo the Shroom King",
+            "reward_message": ""
+        },
+        "104": {
+            "quest_message": "At night those scary creeps are not afraid of getting closer to the village..",
+            "name": "Be careful at night",
+            "reward_message": ""
+        },
+        "105": {
+            "quest_message": "The people in Lockwoods usually say that the luna flower is a rare one. But in the north we have the perfect conditions for them to grow./I've heard there's a cave filled with lunas flowers.. I wonder if it's true though../You could always go look for it..",
+            "name": "Luna cave",
+            "description": "Locate the luna flower cave in the north that Zean mentioned.",
+            "reward_message": ""
+        },
+        "106": {
+            "quest_message": "Hrsschh.. Don't be afraid! Come, come! Enter the portal! HRRSCH..",
+            "name": "Enter the portal!",
+            "reward_message": ""
+        },
+        "80": {
+            "quest_message": "There are many old legends that mention the magic luna flower. It's petals are always described as the most nutriotious ingredient in the world./I've spent years looking for it and all the clues lead here! Would you like to help me in my search?",
+            "name": "The luna flower",
+            "description": "Try to find a petal that belongs to the legendary luna flower that the Old Man is searching for.",
+            "reward_message": "A luna flower petal! I can't believe it! You actually found the legendary flower!/I'm sure there exists more of these.. I'll keep studying the old legends in order to locate them all! Thank you once again!"
+        },
+        "107": {
+            "quest_message": "Albo the King, please don't hurt me.. Albo the King, please don't hurt me.. Albo the King, please don't hurt me..",
+            "name": "Please don't hurt me..",
+            "reward_message": ""
+        },
+        "81": {
+            "quest_message": "Watch out! Don't push any of these boxes before you've solved this riddle I'm about to tell you! Ready? Ok./You are standing at a fork in the road where one road leads to paradise and the other road leads to hell./Infront of you there are two guards that know which way leads to paradise. One guard always tells the truth and the other is always lying. You can't tell which guard that can be trusted and you may only ask one question to one of them./Can you with certainty know which way leads to paradise? Here are your options../Push the box to the north if you believe that this riddle can't be solved unless more information is given./Push the box in the middle if you don't care about any of this./Push the box to the south if you believe that you can ask any of the guards and that they both can provide you with enough information.",
+            "name": "A riddle",
+            "reward_message": ""
+        },
+        "108": {
+            "quest_message": "Be sure to check in at the Landlubber inn, it looks like a giant snail./It is always good to check in at new locations, if you are planning to go on some dangerous adventures!  ",
+            "name": "Welcome to Green Leaf!",
+            "reward_message": ""
+        },
+        "82": {
+            "quest_message": "Head south if you're looking for the botanical maze.",
+            "name": "The Botanical Maze",
+            "reward_message": ""
+        },
+        "109": {
+            "quest_message": "It's important that you learn how to cook../It's not only for your own food consumtion. Many people earn fortunes by cooking dishes!",
+            "name": "Cooking!",
+            "reward_message": ""
+        }
+    },
+    "messages": {
+        "server": {
+            "restart_fifteen": "Server will do a quick restart in 15 min",
+            "has_problems": "Server has problems right now, can't login",
+            "restart_one": "Server will do a quick restart in 1 min"
+        },
+        "shop": {
+            "item_not_exist": "Item does not exist!",
+            "not_enough_silver": "Not enough silver to exchange!",
+            "not_have_requirements": "You do not have the requirements!",
+            "need_level_sell": "Need to be level 2 to sell items!",
+            "not_enough_copper": "Not enough copper to exchange!",
+            "no_money": "No money available to exchange!",
+            "not_enough_money": "Not enough money!",
+            "no_sell": "Can't be sold!",
+            "copper_removed": "cc removed from your inventory",
+            "ability_not_exist": "Ability does not exist!",
+            "ability_already_aquired": "Ability already aquired!"
+        },
+        "cards": {
+            "lost_card": "was lost due to inactivity",
+            "not_chest": "Can't place card in chests!"
         },
         "bounty": {
             "for_killing": "for killing",
-            "placed_bounty": "Bounty placed on",
-            "gained_bounty": "You gained a bounty of"
+            "gained_bounty": "You gained a bounty of",
+            "placed_bounty": "Bounty placed on"
+        },
+        "classes": {
+            "leveled_up": "leveled up!",
+            "learn_as_secondary": "But you can learn it as a secondary!",
+            "lost_level": "You lost a level in ",
+            "already_have": "You already have this class!",
+            "cant_learn": "You can't learn this class as your primary, since you are a "
+        },
+        "inventory": {
+            "have_recipe": "You already have this recipe",
+            "added_to_craftbook": "added to your craftbook!",
+            "have_key": "You already have this key",
+            "you_used": "You used",
+            "cant_equip_slot": "You can't equip this item in that slot!",
+            "dropped_on_ground": "dropped on the ground",
+            "added_to_keychain": "added to your keychain!",
+            "added_to_inventory": "added to your inventory!",
+            "full": "Your inventory is full!"
+        },
+        "gathering": {"need_higher_level": "You need a higher level in herbalism"},
+        "quest": {
+            "checked_in": "You've checked in at this inn",
+            "gained": "You've gained the",
+            "added": "quest added",
+            "missing_items": "You are missing the requested item(s)",
+            "already_have": "You already have the",
+            "ability": "ability!",
+            "completed": "completed!",
+            "need_eat_first": "You need to eat first in order to regain health and mana",
+            "travel_deep_water": "You can now travel on deep water",
+            "updated": "updated!",
+            "aquired_boat": "You've aquired a boat"
+        },
+        "friends": {
+            "cant_add_admins": "Can't add admins",
+            "cant_add_yourself": "You can't add yourself to the list",
+            "already_in_list": "Friend is already in your list",
+            "player_not_exist": "A player with that name does not exist, check your spelling",
+            "friend_added": "Friend added!"
         },
         "battle": {
             "low_level_players": "You cannot attack low level players",
             "least_level_pvp": "You must be at least level 10 to engage in PvP!",
             "cant_attack_party_member": "You can't attack your own party members!"
         },
-        "friends": {
-            "player_not_exist": "A player with that name does not exist, check your spelling",
-            "cant_add_yourself": "You can't add yourself to the list",
-            "already_in_list": "Friend is already in your list",
-            "friend_added": "Friend added!",
-            "cant_add_admins": "Can't add admins"
+        "chat": {
+            "wait_announce": "You must wait 1 minute to announce something again",
+            "muted": "You have been muted till next server restart"
         },
-        "inventory": {
-            "have_recipe": "You already have this recipe",
-            "have_key": "You already have this key",
-            "cant_equip_slot": "You can't equip this item in that slot!",
-            "full": "Your inventory is full!",
-            "you_used": "You used",
-            "dropped_on_ground": "dropped on the ground",
-            "added_to_craftbook": "added to your craftbook!",
-            "added_to_keychain": "added to your keychain!",
-            "added_to_inventory": "added to your inventory!"
+        "crafting": {
+            "missing_need": "Ingredients missing! You need:",
+            "successful": "Crafting successful!"
         },
-        "gathering": {"need_higher_level": "You need a higher level in herbalism"},
-        "server": {
-            "restart_one": "Server will do a quick restart in 1 min",
-            "restart_fifteen": "Server will do a quick restart in 15 min"
+        "walking": {
+            "you_lost": "You lost",
+            "need_better_boat": "You need a better boat to travel deep waters",
+            "need_key": "You need a key to enter!",
+            "need_boat": "You need a boat to travel the seas",
+            "no_enter_safe_zones": "Can't enter safe-zones while marked as Crusader",
+            "need_boat_ticket": "You need a boat ticket to use this ship"
         },
         "ability": {
             "not_enough_mana": "Not enough mana",
-            "cant_perform_action": "Can't perform action here",
-            "ability_not_ready": "Ability not ready"
+            "ability_not_ready": "Ability not ready",
+            "cant_perform_action": "Can't perform action here"
+        },
+        "party": {
+            "join_party": "You have been invited to join the",
+            "left_party": "left the party!",
+            "player_not_exist": "Player does not exist!",
+            "player_not_online": "Player is not online!",
+            "joined_party": "joined the party!",
+            "already_in_party": "Player is already in a party!",
+            "now_member": "You are now a member of a party! Press P to view party members",
+            "disbanded": "Party disbanded!",
+            "add_self": "No need to add yourself to the party!",
+            "created_party": "You have created a party!",
+            "party": "party",
+            "level_req": "Player level is either too high or low for party!"
+        },
+        "connect": {
+            "is_now_online": "is now online",
+            "talk_to_inn_keeper": "Talk to the inn-keeper on the first floor of Chompa Inn!"
         }
     }
 }

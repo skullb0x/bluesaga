@@ -14,6 +14,16 @@ public class BPserver {
 
 	public static void main(String args[]) throws Exception {
 		
+		for (int i = 0 ; i<args.length ; i ++) {
+			if ("-dev".equals(args[i])) {
+				ServerSettings.DEV_MODE = true;
+			}
+			else {
+				System.err.println("Unknown parameter: " + args[i]);
+				System.exit(1);
+			}
+		}
+		
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
