@@ -298,7 +298,7 @@ public class WalkHandler extends Handler {
 		int dirX = 0;
 		int dirY = 0;
 
-		String tilesData = "";
+		StringBuilder rowData = new StringBuilder(1000);
 
 		int doorId = Server.WORLD_MAP.getTile(PlayerX,PlayerY,PlayerZ).getDoorId();
 
@@ -382,7 +382,7 @@ public class WalkHandler extends Handler {
 					tileX = client.playerCharacter.getX() - ServerSettings.TILE_HALF_W - i;
 
 					for(tileY = client.playerCharacter.getY() - ServerSettings.TILE_HALF_H-1; tileY <= client.playerCharacter.getY() + ServerSettings.TILE_HALF_H+1; tileY++){
-						tilesData += MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData);
+						MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData, rowData);
 					}
 					//client.playerCharacter.setGotoRotation(270);
 
@@ -391,7 +391,7 @@ public class WalkHandler extends Handler {
 					tileX = client.playerCharacter.getX() + ServerSettings.TILE_HALF_W + i;
 
 					for(tileY = client.playerCharacter.getY() - ServerSettings.TILE_HALF_H-1; tileY <= client.playerCharacter.getY() + ServerSettings.TILE_HALF_H+1; tileY++){
-						tilesData += MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData);
+						MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData, rowData);
 					}
 					//client.playerCharacter.setGotoRotation(90);
 				}
@@ -403,7 +403,7 @@ public class WalkHandler extends Handler {
 					tileY = client.playerCharacter.getY() + ServerSettings.TILE_HALF_H + i;
 
 					for(tileX = client.playerCharacter.getX() - ServerSettings.TILE_HALF_W-1; tileX <= client.playerCharacter.getX() + ServerSettings.TILE_HALF_W +1; tileX++){
-						tilesData += MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData);
+						MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData, rowData);
 					}
 					//client.playerCharacter.setGotoRotation(180);
 
@@ -412,13 +412,13 @@ public class WalkHandler extends Handler {
 					tileY = client.playerCharacter.getY() - ServerSettings.TILE_HALF_H - i;
 
 					for(tileX = client.playerCharacter.getX() - ServerSettings.TILE_HALF_W-1; tileX <= client.playerCharacter.getX() + ServerSettings.TILE_HALF_W +1; tileX++){
-						tilesData += MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData);
+						MapHandler.getTileInfo(client,tileX, tileY, tileZ, tileData, rowData);
 					}
 					//client.playerCharacter.setGotoRotation(0);
 				}
 			}
 
-			addOutGoingMessage(client,"tilerow",tilesData);
+			addOutGoingMessage(client,"tilerow", rowData.toString());
 
 			// SET NEW POSITION OF PLAYER
 			client.playerCharacter.walkTo(PlayerX, PlayerY, PlayerZ);

@@ -135,16 +135,17 @@ public class LoginHandler extends Handler {
 		// SEND INFO ABOUT FAMILIES, CLASSES
 		if(message.startsWith("<newchar>")){
 
-			String newInfo = "1,Family Creatures";
+			StringBuilder newInfo = new StringBuilder(1000);
+			
+			newInfo.append("1,Family Creatures/");
 
 			// CreatureId, FamilyName; CreaureId2, FamilyName2 / ItemId; ItemId2
-
-			newInfo += "/";
 
 			ResultSet creatureInfo = Server.gameDB.askDB("select Id, Name, ClassId from creature where PlayerCreature = 1 and FamilyId = 1 and Level = 1");
 			try {
 				while(creatureInfo.next()){
-					newInfo += creatureInfo.getString("Id")+","+creatureInfo.getString("Name")+";";
+					newInfo.append(creatureInfo.getString("Id")).append(',')
+								 .append(creatureInfo.getString("Name")).append(';');
 				}
 				creatureInfo.close();
 			} catch (SQLException e) {
@@ -152,7 +153,7 @@ public class LoginHandler extends Handler {
 			}	
 
 
-			addOutGoingMessage(client,"newchar",newInfo);
+			addOutGoingMessage(client,"newchar",newInfo.toString());
 		}
 
 
@@ -190,7 +191,7 @@ public class LoginHandler extends Handler {
 				int charId = createCharacter(client,charName,creatureId, classId);
 
 				if(charId > 0){
-					addOutGoingMessage(client,"createchar",""+charId);
+					addOutGoingMessage(client,"createchar",String.valueOf(charId));
 				}else if(charId == 0){
 					addOutGoingMessage(client,"createchar","exists");
 				}else if(charId < 0){

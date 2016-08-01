@@ -15,7 +15,7 @@ public class SkinHandler extends Handler {
 	}
 	
 	public static String getClosetContent(Client client){
-		String content = "";
+		StringBuilder content = new StringBuilder(1000);
 		
 		// GET CONTENT OF CLOSET
 		ResultSet closetInfo = Server.userDB.askDB("select ItemId from character_skin where SkinType = 'Item' and CharacterId = "+client.playerCharacter.getDBId());
@@ -23,13 +23,17 @@ public class SkinHandler extends Handler {
 		int sizeW = 5;
 		int sizeH = 7;
 		
-		content = "Closet"+","+sizeW+","+sizeH+"/";
+		content.append("Closet,")
+		       .append(sizeW).append(',')
+		       .append(sizeH).append('/');
 		
 		try {
 			while(closetInfo.next()){
 				Item skinItem = new Item(ServerGameInfo.itemDef.get(closetInfo.getInt("ItemId")));
 				
-				content += skinItem.getId()+","+skinItem.getName()+","+skinItem.getSubType()+";";				    
+				content.append(skinItem.getId()).append(',')
+				       .append(skinItem.getName()).append(',')
+				       .append(skinItem.getSubType()).append(';');
 			}
 			closetInfo.close();
 		} catch (SQLException e) {
@@ -37,13 +41,13 @@ public class SkinHandler extends Handler {
 			e.printStackTrace();
 		}
 		
-		content += "184,Remove,All;";
+		content.append("184,Remove,All;");
 		
-		return content;
+		return content.toString();
 	}
 	
 	public static String getCharacterSkins(Client client){
-		String skins = "";
+		StringBuilder skins = new StringBuilder(1000);
 		ResultSet closetInfo = Server.userDB.askDB("select ItemId from character_skin where CharacterId = "+client.playerCharacter.getDBId()+" and SkinType = 'Character'");
 		
 		try {
@@ -51,19 +55,20 @@ public class SkinHandler extends Handler {
 				ResultSet skinInfo = Server.gameDB.askDB("select Name from creature where Id = "+closetInfo.getInt("ItemId"));
 				
 				if(skinInfo.next()){
-					skins += closetInfo.getInt("ItemId")+","+skinInfo.getString("Name")+";";
+					skins.append(closetInfo.getInt("ItemId")).append(',')
+					     .append(skinInfo.getString("Name")).append(';');
 				}
 				skinInfo.close();
 			}
 			if(skins.length() > 0){
-				skins = skins.substring(0, skins.length()-1);
+				skins.setLength(skins.length() - 1);
 			}
 			closetInfo.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return skins;
+		return skins.toString();
 	}
 	
 	public static void handleData(Client client, String message){

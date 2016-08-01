@@ -18,46 +18,71 @@ public class SkillHandler extends Handler {
 
 	public static void handleData(Client client, String message){
 		if(message.startsWith("<particledata>")){
-			String emitterData = "";
+			StringBuilder msg = new StringBuilder(1000);
 			ResultSet emitterInfo = Server.gameDB.askDB("select * from Emitter");
 			try {
 				while(emitterInfo.next()){
-					emitterData += emitterInfo.getInt("Id")+";"+emitterInfo.getString("Name")+";"+emitterInfo.getFloat("LifeTime")+";"+emitterInfo.getFloat("EmittionRate")+";"+emitterInfo.getFloat("RotationSpeed")+";"+emitterInfo.getString("MinPos")+";"+emitterInfo.getString("MaxPos")+";"+emitterInfo.getInt("ShowParticle")+";"+emitterInfo.getInt("ParticleId")+";"+emitterInfo.getInt("ShowStreak")+";"+emitterInfo.getInt("StreakId")+"/";
+					msg.append(emitterInfo.getInt("Id")).append(';')
+					   .append(emitterInfo.getString("Name")).append(';')
+					   .append(emitterInfo.getFloat("LifeTime")).append(';')
+					   .append(emitterInfo.getFloat("EmittionRate")).append(';')
+					   .append(emitterInfo.getFloat("RotationSpeed")).append(';')
+					   .append(emitterInfo.getString("MinPos")).append(';')
+					   .append(emitterInfo.getString("MaxPos")).append(';')
+					   .append(emitterInfo.getInt("ShowParticle")).append(';')
+					   .append(emitterInfo.getInt("ParticleId")).append(';')
+					   .append(emitterInfo.getInt("ShowStreak")).append(';')
+					   .append(emitterInfo.getInt("StreakId")).append('/');
 				}
 				emitterInfo.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			String particleData = "%";
+			msg.append('%');
 			ResultSet particleInfo = Server.gameDB.askDB("select * from Particle");
 			try {
 				while(particleInfo.next()){
-					particleData += particleInfo.getInt("Id")+";"+particleInfo.getString("Name")+";"+particleInfo.getString("MinDir")+";";
-					particleData += particleInfo.getString("MaxDir")+";"+particleInfo.getInt("MinAxisRotSpeed")+";"+particleInfo.getInt("MaxAxisRotSpeed")+";";
-					particleData += particleInfo.getFloat("MinScale")+";"+particleInfo.getFloat("MaxScale")+";"+particleInfo.getFloat("LifeTime")+";";
-					particleData += particleInfo.getString("ImageString")+";"+particleInfo.getFloat("VerticalGravity")+";"+particleInfo.getFloat("HorizontalGravity")+";";
-					particleData += particleInfo.getString("StartColor")+";"+particleInfo.getString("EndColor")+";"+particleInfo.getFloat("RotationSpeed")+";"+particleInfo.getFloat("FadeSpeed")+"/";
+					msg.append(particleInfo.getInt("Id")).append(';')
+					   .append(particleInfo.getString("Name")).append(';')
+					   .append(particleInfo.getString("MinDir")).append(';')
+					   .append(particleInfo.getString("MaxDir")).append(';')
+					   .append(particleInfo.getInt("MinAxisRotSpeed")).append(';')
+					   .append(particleInfo.getInt("MaxAxisRotSpeed")).append(';')
+					   .append(particleInfo.getFloat("MinScale")).append(';')
+					   .append(particleInfo.getFloat("MaxScale")).append(';')
+					   .append(particleInfo.getFloat("LifeTime")).append(';')
+					   .append(particleInfo.getString("ImageString")).append(';')
+					   .append(particleInfo.getFloat("VerticalGravity")).append(';')
+					   .append(particleInfo.getFloat("HorizontalGravity")).append(';')
+					   .append(particleInfo.getString("StartColor")).append(';')
+					   .append(particleInfo.getString("EndColor")).append(';')
+					   .append(particleInfo.getFloat("RotationSpeed")).append(';')
+					   .append(particleInfo.getFloat("FadeSpeed")).append('/');
 				}
 				particleInfo.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			String projectileData = "%";
+			msg.append('%');
 			ResultSet projectileInfo = Server.gameDB.askDB("select * from projectile");
 			try {
 				while(projectileInfo.next()){
-					projectileData += projectileInfo.getInt("Id")+";"+projectileInfo.getString("GfxName")+";"+projectileInfo.getInt("EmitterId")+";"+projectileInfo.getString("HitColor")+";"+projectileInfo.getString("Sfx")+"/";
+					msg.append(projectileInfo.getInt("Id")).append(';')
+					   .append(projectileInfo.getString("GfxName")).append(';')
+					   .append(projectileInfo.getInt("EmitterId")).append(';')
+					   .append(projectileInfo.getString("HitColor")).append(';')
+					   .append(projectileInfo.getString("Sfx")).append('/');
 				}
 				projectileInfo.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			addOutGoingMessage(client,"particledata",emitterData+particleData+projectileData);
+			addOutGoingMessage(client,"particledata",msg.toString());
 
 		}else if(message.startsWith("<skilldata>")){
 			if(client.playerCharacter != null){
-				String skillData = "";
+				StringBuilder skillData = new StringBuilder(1000);
 
 				// GET SKILL INFO
 				ResultSet skillInfo = Server.userDB.askDB("select SkillId, Level, SP from character_skill where CharacterId = "+client.playerCharacter.getDBId()+" order by SkillId asc");
@@ -72,7 +97,11 @@ public class SkillHandler extends Handler {
 				
 						if(skillDef != null){
 							nextSP = XPTables.nextLevelSP.get(skillInfo.getInt("Level") + 1);
-							skillData += skillInfo.getInt("SkillId")+","+skillDef.getName()+","+skillInfo.getInt("Level")+","+skillInfo.getInt("SP")+","+nextSP+";";	
+							skillData.append(skillInfo.getInt("SkillId")).append(',')
+					   .append(skillDef.getName()).append(',')
+					   .append(skillInfo.getInt("Level")).append(',')
+					   .append(skillInfo.getInt("SP")).append(',')
+					   .append(nextSP).append(';');
 						}
 						
 					}
@@ -80,7 +109,7 @@ public class SkillHandler extends Handler {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				addOutGoingMessage(client,"skilldata",skillData);
+				addOutGoingMessage(client,"skilldata",skillData.toString());
 			}
 		}
 	}
@@ -103,9 +132,9 @@ public class SkillHandler extends Handler {
 					if(skill.addSP(sp)){
 						// skillName, skillLevel, SP, SPnext
 						int nextSP = XPTables.nextLevelSP.get(skill.getLevel()+1);
-						addOutGoingMessage(client, "sp_levelup", skill.getName()+","+skill.getLevel()+","+skill.getSP()+","+nextSP);
+						addOutGoingMessage(client, "sp_levelup", skill.getName()+','+skill.getLevel()+','+skill.getSP()+','+nextSP);
 					}else {
-						addOutGoingMessage(client,"set_sp",skill.getId()+","+skill.getSP());	
+						addOutGoingMessage(client,"set_sp",skill.getId()+","+skill.getSP());
 					}	
 
 					Server.userDB.updateDB("update character_skill set SP = "+skill.getSP()+", Level = "+skill.getLevel()+" where CharacterId = "+client.playerCharacter.getDBId()+" and SkillId = "+skillId);
@@ -121,7 +150,7 @@ public class SkillHandler extends Handler {
 			if(skill.addSP(sp)){
 				// skillName, skillLevel, SP, SPnext
 				int nextSP = XPTables.nextLevelXP.get(skill.getLevel()+1);
-				addOutGoingMessage(client, "sp_levelup", skill.getName()+","+skill.getLevel()+","+skill.getSP()+","+nextSP);
+				addOutGoingMessage(client, "sp_levelup", skill.getName()+','+skill.getLevel()+','+skill.getSP()+','+nextSP);
 			}else {
 				addOutGoingMessage(client,"set_sp",skillId+","+skill.getSP());	
 			}	

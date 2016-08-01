@@ -242,53 +242,56 @@ public class PlayerCharacter extends Creature {
 
 	public String getInfo(){
 		// x, y, z, 
-		String info = X+","+Y+","+Z+","+Bounty+","+PlayerKillerTime;
+		StringBuilder info = new StringBuilder(1000);
+		info.append(X).append(',')
+		    .append(Y).append(',')
+		    .append(Z).append(',')
+		    .append(Bounty).append(',')
+		    .append(PlayerKillerTime)
+		
+		    .append(':')
+		
+		    .append(CreatureId).append(',')
+		    .append(Name).append(',')
+		    .append(Family).append(',')
+		    .append(AttackType).append(',')
+		    .append(Level).append(',')
+		    .append(XP).append(',')
 
+		    .append(Stats.getValue("STRENGTH")).append(',')
+		    .append(Stats.getValue("INTELLIGENCE")).append(',')
+		    .append(Stats.getValue("AGILITY")).append(',')
+		    .append(Stats.getValue("SPEED")).append(',')
+		
+		    .append(Stats.getValue("CRITICAL_HIT")).append(',')
+		    .append(Stats.getValue("EVASION")).append(',')
+		    .append(Stats.getValue("ACCURACY")).append(',')
 
-		info += ":";
+		    .append(Stats.getValue("MAX_HEALTH")).append(',')
+		    .append(Health).append(',')
+		    .append(Stats.getValue("MAX_MANA")).append(',')
+		    .append(Mana).append(',')
 
-		info += CreatureId+",";
-		info += Name+",";
-		info += Family+",";
+		    .append(Stats.getValue("FIRE_DEF")).append(',')
+		    .append(Stats.getValue("COLD_DEF")).append(',')
+		    .append(Stats.getValue("SHOCK_DEF")).append(',')
+		    .append(Stats.getValue("CHEMS_DEF")).append(',')
+		    .append(Stats.getValue("MIND_DEF")).append(',')
+		    .append(Stats.getValue("MAGIC_DEF")).append(',')
 
-		info += AttackType+",";
-		info += Level+",";
-		info += XP+",";
+		    .append(Stats.getValue("ARMOR")).append(',')
 
-		info += Stats.getValue("STRENGTH")+",";
-		info += Stats.getValue("INTELLIGENCE")+",";
-		info += Stats.getValue("AGILITY")+",";
-		info += Stats.getValue("SPEED")+",";
+		    .append(nextXP).append(',')
 
-		info += Stats.getValue("CRITICAL_HIT")+",";
-		info += Stats.getValue("EVASION")+",";
-		info += Stats.getValue("ACCURACY")+",";
+		    .append(dbId).append(',')
 
-		info += Stats.getValue("MAX_HEALTH")+",";
-		info += Health+",";
-		info += Stats.getValue("MAX_MANA")+",";
-		info += Mana+",";
-
-		info += Stats.getValue("FIRE_DEF")+",";
-		info += Stats.getValue("COLD_DEF")+",";
-		info += Stats.getValue("SHOCK_DEF")+",";
-		info += Stats.getValue("CHEMS_DEF")+",";
-		info += Stats.getValue("MIND_DEF")+",";
-		info += Stats.getValue("MAGIC_DEF")+",";
-
-		info += Stats.getValue("ARMOR")+",";
-
-		info += nextXP+",";
-
-		info += dbId+",";
-
-		info += getAttackRange()+",";
-		info += getHealthStatus()+",";
+		    .append(getAttackRange()).append(',')
+		    .append(getHealthStatus()).append(',')
 
 		// CREW INFO
-		info += Crew.getId()+",";
-		info += Crew.getName()+",";
-		info += Crew.getMemberState()+",";
+		    .append(Crew.getId()).append(',')
+		    .append(Crew.getName()).append(',')
+		    .append(Crew.getMemberState()).append(',');
 
 		// SHIP INFO
 		int shipId = 0;
@@ -296,30 +299,30 @@ public class PlayerCharacter extends Creature {
 		if(getShip() != null){
 			shipId = getShip().getShipId();
 		}
-		info += shipId+",";
-
-		info += getPkMarker()+",";
+		info.append(shipId).append(',')
+		
+		    .append(getPkMarker()).append(',')
 		
 		// Classes info
-		info += baseClass.id+",";
+		    .append(baseClass.id).append(',');
 		
 		for(BaseClass baseClass: ServerGameInfo.classDef.values()){
 			if(baseClass.available){
 				BaseClass playerClass = playerClasses.get(baseClass.id);
-				info += playerClass.level+","+playerClass.getXp()+","+playerClass.nextXP;
+				info.append(playerClass.level).append(',')
+				    .append(playerClass.getXp()).append(',')
+				    .append(playerClass.nextXP);
 				if(primaryClass != null && primaryClass.id == playerClass.id){
-					info += ",1,";
+					info.append(",1,");
 				}else if(secondaryClass != null && secondaryClass.id == playerClass.id){
-					info += ",2,";
+					info.append(",2,");
 				}else{
-					info += ",0,";
+					info.append(",0,");
 				}
 			}
 		}
 		
-		info += getAdminLevel();
-
-		info += "/";
+		info.append(getAdminLevel()).append('/');
 
 		// SEND EQUIPMENT INFO
 
@@ -330,42 +333,60 @@ public class PlayerCharacter extends Creature {
 		Item ArtifactItem = getEquipment("Artifact");
 
 		if(HeadItem != null){
-			info += HeadItem.getId()+","+getCustomization().getHeadSkinId()+","+HeadItem.getClassId()+",";
+			info.append(HeadItem.getId()).append(',')
+					.append(getCustomization().getHeadSkinId()).append(',')
+					.append(HeadItem.getClassId()).append(',');
 		}else{
-			info += "0,"+getCustomization().getHeadSkinId()+",0,";
+			info.append("0,")
+			    .append(getCustomization().getHeadSkinId())
+			    .append(",0,");
 		}
 
 		if(WeaponItem != null){
-			info += WeaponItem.getId()+","+getCustomization().getWeaponSkinId()+","+WeaponItem.getClassId()+",";
+			info.append(WeaponItem.getId()).append(',')
+					.append(getCustomization().getWeaponSkinId()).append(',')
+					.append(WeaponItem.getClassId()).append(',');
 		}else{
-			info += "0,"+getCustomization().getWeaponSkinId()+",0,";
+			info.append("0,")
+			    .append(getCustomization().getWeaponSkinId())
+			    .append(",0,");
 		}
 
 		if(OffHandItem != null){
-			info += OffHandItem.getId()+","+getCustomization().getOffHandSkinId()+","+OffHandItem.getClassId()+",";
+			info.append(OffHandItem.getId()).append(',')
+					.append(getCustomization().getOffHandSkinId()).append(',')
+					.append(OffHandItem.getClassId()).append(',');
 		}else{
-			info += "0,"+getCustomization().getOffHandSkinId()+",0,";
+			info.append("0,")
+			    .append(getCustomization().getOffHandSkinId())
+			    .append(",0,");
 		}
 
 		if(AmuletItem != null){
-			info += AmuletItem.getId()+","+getCustomization().getAmuletSkinId()+","+AmuletItem.getClassId()+",";
+			info.append(AmuletItem.getId()).append(',')
+					.append(getCustomization().getAmuletSkinId()).append(',')
+					.append(AmuletItem.getClassId()).append(',');
 		}else{
-			info += "0,"+getCustomization().getAmuletSkinId()+",0,";
+			info.append("0,")
+			    .append(getCustomization().getAmuletSkinId())
+			    .append(",0,");
 		}
 
 		if(ArtifactItem != null){
-			info += ArtifactItem.getId()+","+getCustomization().getArtifactSkinId()+","+ArtifactItem.getClassId()+",";
+			info.append(ArtifactItem.getId()).append(',')
+					.append(getCustomization().getArtifactSkinId()).append(',')
+					.append(ArtifactItem.getClassId()).append(',');
 		}else{
-			info += "0,"+getCustomization().getArtifactSkinId()+",0,";
+			info.append("0,")
+			    .append(getCustomization().getArtifactSkinId())
+			    .append(",0,");
 		}
 
+		info.append(getCustomization().getMouthFeatureId()).append(',')
+		    .append(getCustomization().getAccessoriesId()).append(',')
+		    .append(getCustomization().getSkinFeatureId());
 
-		info += getCustomization().getMouthFeatureId()+",";
-		info += getCustomization().getAccessoriesId()+",";
-		info += getCustomization().getSkinFeatureId();
-
-
-		return info;
+		return info.toString();
 	}
 
 	// INFO TO SEND TO OTHER CLIENTS

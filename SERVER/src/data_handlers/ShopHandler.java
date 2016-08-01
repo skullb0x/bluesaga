@@ -24,7 +24,7 @@ public class ShopHandler extends Handler {
 				int shopId = Integer.parseInt(message.substring(6));
 
 				String shopItemInfo = "None";
-				String shopAbilitiesInfo = "";
+				StringBuilder shopAbilitiesInfo = new StringBuilder();
 
 				// CHECK IF SHOP EXIST AND HAS ITEMS
 				boolean foundShop = false;
@@ -63,12 +63,14 @@ public class ShopHandler extends Handler {
 									if(abilityInfo.getInt("ClassId") > 0){
 										color = ServerGameInfo.classDef.get(abilityInfo.getInt("ClassId")).bgColor;
 									}
-									shopAbilitiesInfo += aId+","+color+","+abilityInfo.getInt("GraphicsNr")+":";
+									shopAbilitiesInfo.append(aId).append(',')
+									                 .append(color).append(',')
+									                 .append(abilityInfo.getInt("GraphicsNr")).append(':');
 								}
 								abilityInfo.close();
 							}
 						}else{
-							shopAbilitiesInfo = "None";
+							shopAbilitiesInfo.append("None");
 						}
 
 
@@ -80,7 +82,7 @@ public class ShopHandler extends Handler {
 				}
 
 				if(foundShop){
-					addOutGoingMessage(client,"shop",npcName+";"+shopItemInfo+";"+shopAbilitiesInfo);
+					addOutGoingMessage(client,"shop",npcName+";"+shopItemInfo+";"+shopAbilitiesInfo.toString());
 					InventoryHandler.sendInventoryInfo(client);
 				}
 			}
@@ -242,8 +244,13 @@ public class ShopHandler extends Handler {
 
 								Ability A = client.playerCharacter.getAbilityById(abilityId);
 								if(A != null){
-									String AbilityInfo = A.getAbilityId()+"="+A.getName()+"="+A.getClassId()+"="+A.getColor().getRed()+"="+A.getColor().getGreen()+"="+A.getColor().getBlue()+"="+A.getManaCost()+"="+A.getCooldown()+"="+A.getCooldownLeft()+"="+A.getRange()+"="+A.getPrice()+"="+A.isTargetSelf()+"="+A.isInstant()+"="+A.getEquipReq()+"="+A.getGraphicsNr()+"="+A.getAoE();
-									addOutGoingMessage(client,"buy","ability/"+A.getName()+"/"+shopAbility.getPrice()+"/"+AbilityInfo);
+									String msg = "ability/"+A.getName()+'/'+shopAbility.getPrice()+'/'
+									    +A.getAbilityId()+'='+A.getName()+'='+A.getClassId()+'='
+									    +A.getColor().getRed()+'='+A.getColor().getGreen()+'='+A.getColor().getBlue()
+									    +'='+A.getManaCost()+'='+A.getCooldown()+'='+A.getCooldownLeft()
+									    +'='+A.getRange()+'='+A.getPrice()+'='+A.isTargetSelf()+'='
+									    +A.isInstant()+'='+A.getEquipReq()+'='+A.getGraphicsNr()+'='+A.getAoE();
+									addOutGoingMessage(client,"buy",msg);
 								}
 							}else{
 								addOutGoingMessage(client,"shoperror","noreq");

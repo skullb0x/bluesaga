@@ -2,84 +2,66 @@ package utils;
 
 public class TextFormater {
 
-	
-	
-	public static String formatStatInfo(String label, int statValue){
-		String formatedInfo = "";
+	public static void formatStatInfo(StringBuilder sb, String label, int statValue){
 		if(statValue != 0){
 			if(statValue < 0){
-				formatedInfo += "190,60,60;";
+				sb.append("190,60,60;");
 			}else{
-				formatedInfo += "255,255,255;";
+				sb.append("255,255,255;");
 			}
-			
-			formatedInfo += label+statValue+"/";
+			sb.append(label).append(statValue).append('/');
 		}
-		return formatedInfo;
 	}
 
 	
-	public static String formatBonusInfo(String label, int statValue){
-		String formatedInfo = "";
+	public static void formatBonusInfo(StringBuilder sb, String label, int statValue){
 		if(statValue != 0){
 			if(statValue < 0){
-				formatedInfo += "190,60,60;";
-				formatedInfo += label+""+statValue+"/";
+				sb.append("190,60,60;")
+				  .append(label)
+				  .append(statValue).append('/');
 			}else{
-				formatedInfo += "0,180,0;";
-				formatedInfo += label+"+"+statValue+"/";
+				sb.append("0,180,0;")
+				  .append(label).append('+')
+				  .append(statValue).append('/');
 			}
 		}
-		return formatedInfo;
 	}
 	
-	public static String formatReqInfo(String label, int statValue, int characterValue){
-		String formatedInfo = "";
+	public static void formatReqInfo(StringBuilder sb, String label, int statValue, int characterValue){
 		if(statValue != 0){
 			if(statValue <= characterValue){
-				formatedInfo += "0,180,0;";
+				sb.append("0,180,0;");
 			}else{
-				formatedInfo += "190,60,60;";
+				sb.append("190,60,60;");
 			}
-			formatedInfo += label+statValue+"/";
+			sb.append(label).append(statValue).append('/');
 		}
-		return formatedInfo;
 	}
 
-	public static String formatConditionInfo(String label, boolean hasReq){
-		String formatedInfo = "";
-		if(!hasReq){
-			formatedInfo += "190,60,60;";
+	public static void formatConditionInfo(StringBuilder sb, String label, boolean hasReq){
+		if(hasReq){
+			sb.append("0,180,0;");
 		}else{
-			formatedInfo += "0,180,0;";
+			sb.append("190,60,60;");
 		}
-		formatedInfo += label+"/";
-		return formatedInfo;
+		sb.append(label).append('/');
 	}
 	
-	public static String formatValueInfo(String label, int value){
-		String formatedInfo = "";
-		formatedInfo += "255,234,116;";
-		formatedInfo += label+value+"c/";
-		return formatedInfo;
+	public static void formatValueInfo(StringBuilder sb, String label, int value){
+		sb.append("255,234,116;").append(label).append(value).append("c/");
 	}
 	
-	public static String formatPriceInfo(String label, int price, boolean canAfford){
-		String formatedInfo = "";
-			if(canAfford){
-				formatedInfo += "255,234,116;";
-			}else{
-				formatedInfo += "190,60,60;";
-			}
-			formatedInfo += label+price+"c/";
-		return formatedInfo;
+	public static void formatPriceInfo(StringBuilder sb, String label, int price, boolean canAfford){
+		if(canAfford){
+			sb.append("255,234,116;");
+		}else{
+			sb.append("190,60,60;");
+		}
+		sb.append(label).append(price).append("c/");
 	}
 	
-	public static String formatInfo(String label){
-		String formatedInfo = "";
-		formatedInfo += "255,255,255;";
-		formatedInfo += label+"/";
-		
-		return formatedInfo;
+	public static void formatInfo(StringBuilder sb, String label){
+		sb.append("255,255,255;").append(label).append('/');
 	}
 }
