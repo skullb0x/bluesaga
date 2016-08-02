@@ -135,7 +135,7 @@ public class MapHandler extends Handler {
 			addOutGoingMessage(client,"canwalk",client.playerCharacter.getX()+","+client.playerCharacter.getY()+","+client.playerCharacter.getZ()+","+client.playerCharacter.getStat("SPEED"));
 
 			// Gather tile data
-			StringBuilder screenData = new StringBuilder(1000);
+			StringBuilder screenData = new StringBuilder(40000);
 
 			for(int j = client.playerCharacter.getY() - ServerSettings.TILE_HALF_H - 1; j < client.playerCharacter.getY() + ServerSettings.TILE_HALF_H+2; j++){
 				for(int i = client.playerCharacter.getX() - ServerSettings.TILE_HALF_W - 1; i < client.playerCharacter.getX() + ServerSettings.TILE_HALF_W+2; i++){

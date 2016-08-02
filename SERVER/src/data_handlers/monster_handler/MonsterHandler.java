@@ -103,20 +103,37 @@ public class MonsterHandler extends Handler {
 
 	public static void handleData(Client client, String message){
 		if(message.startsWith("<mobinfo>")){
-			String mobinfo = "";
+			StringBuilder mobinfo = new StringBuilder(5500);
 			ResultSet mobdata = Server.gameDB.askDB("select Id, Name, SizeW, SizeH, HeadX, HeadY, WeaponX, WeaponY, OffHandX, OffHandY, AmuletX, AmuletY, ArtifactX, ArtifactY, MouthFeatureX, MouthFeatureY, AccessoriesX, AccessoriesY, SkinFeatureX, SkinFeatureY from creature");
 
 			try {
 				while(mobdata.next()){
-					mobinfo += mobdata.getInt("Id")+","+mobdata.getString("Name")+","+mobdata.getInt("SizeW")+","+mobdata.getInt("SizeH")+",";
-					mobinfo += mobdata.getInt("HeadX")+","+mobdata.getInt("HeadY")+","+mobdata.getInt("WeaponX")+","+mobdata.getInt("WeaponY")+","+mobdata.getInt("OffHandX")+","+mobdata.getInt("OffHandY")+","+mobdata.getInt("AmuletX")+","+mobdata.getInt("AmuletY")+","+mobdata.getInt("ArtifactX")+","+mobdata.getInt("ArtifactY")+",";
-					mobinfo += mobdata.getInt("MouthFeatureX")+","+mobdata.getInt("MouthFeatureY")+","+mobdata.getInt("AccessoriesX")+","+mobdata.getInt("AccessoriesY")+","+mobdata.getInt("SkinFeatureX")+","+mobdata.getInt("SkinFeatureY")+";";
+					mobinfo.append(mobdata.getInt("Id")).append(',')
+					       .append(mobdata.getString("Name")).append(',')
+					       .append(mobdata.getInt("SizeW")).append(',')
+					       .append(mobdata.getInt("SizeH")).append(',')
+					       .append(mobdata.getInt("HeadX")).append(',')
+					       .append(mobdata.getInt("HeadY")).append(',')
+					       .append(mobdata.getInt("WeaponX")).append(',')
+					       .append(mobdata.getInt("WeaponY")).append(',')
+					       .append(mobdata.getInt("OffHandX")).append(',')
+					       .append(mobdata.getInt("OffHandY")).append(',')
+					       .append(mobdata.getInt("AmuletX")).append(',')
+					       .append(mobdata.getInt("AmuletY")).append(',')
+					       .append(mobdata.getInt("ArtifactX")).append(',')
+					       .append(mobdata.getInt("ArtifactY")).append(',')
+					       .append(mobdata.getInt("MouthFeatureX")).append(',')
+					       .append(mobdata.getInt("MouthFeatureY")).append(',')
+					       .append(mobdata.getInt("AccessoriesX")).append(',')
+					       .append(mobdata.getInt("AccessoriesY")).append(',')
+					       .append(mobdata.getInt("SkinFeatureX")).append(',')
+					       .append(mobdata.getInt("SkinFeatureY")).append(';');
 				}
 				mobdata.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			addOutGoingMessage(client, "mobinfo", mobinfo);
+			addOutGoingMessage(client, "mobinfo", mobinfo.toString());
 		}
 	}
 
@@ -165,16 +182,28 @@ public class MonsterHandler extends Handler {
 						alertNearMonsters(s.playerCharacter, s.playerCharacter.getX(), s.playerCharacter.getY(), s.playerCharacter.getZ(), false);
 					}
 
-					String monsterData = "";
+					StringBuilder monsterData = new StringBuilder(1000);
 					
 					for(Iterator<Npc> iter2 = monsterMoved.iterator();iter2.hasNext();){  
 						Npc m = iter2.next();
 						if(isVisibleForPlayer(s.playerCharacter, m.getX(), m.getY(), m.getZ())){
-							monsterData += "Monster,"+m.getDBId()+","+m.getCreatureId()+","+m.getOldX()+","+m.getOldY()+","+m.getOldZ()+","+m.getRotation()+"/"+m.getX()+","+m.getY()+","+m.getZ()+","+m.getStat("SPEED")+","+m.getGotoRotation()+";";
+							monsterData.append("Monster,")
+					               .append(m.getDBId()).append(',')
+					               .append(m.getCreatureId()).append(',')
+					               .append(m.getOldX()).append(',')
+					               .append(m.getOldY()).append(',')
+					               .append(m.getOldZ()).append(',')
+					               .append(m.getRotation()).append('/')
+					
+					               .append(m.getX()).append(',')
+					               .append(m.getY()).append(',')
+					               .append(m.getZ()).append(',')
+					               .append(m.getStat("SPEED")).append(',')
+					               .append(m.getGotoRotation()).append(';');
 						}
 					}
-					if(!monsterData.equals("")){
-						addOutGoingMessage(s,"creaturepos",monsterData);
+					if(monsterData.length()>0){
+						addOutGoingMessage(s,"creaturepos",monsterData.toString());
 					}
 				}
 			}
@@ -229,27 +258,41 @@ public class MonsterHandler extends Handler {
 			Client s = entry.getValue();
 
 			if(s.Ready){
-				String monsterInfoToSend = "";
-				String monsterAggroToSend = "";
+				StringBuilder monsterInfoToSend = new StringBuilder(1000);
+				StringBuilder monsterAggroToSend = new StringBuilder(1000);
 
 				for(Npc m: monsterMoved){
 					if(isVisibleForPlayer(s.playerCharacter,m.getX(),m.getY(),m.getZ())){
-						monsterInfoToSend += "Monster,"+m.getDBId()+","+m.getCreatureId()+","+m.getOldX()+","+m.getOldY()+","+m.getOldZ()+","+m.getRotation()+"/"+m.getX()+","+m.getY()+","+m.getZ()+","+m.getStat("SPEED")+","+m.getGotoRotation()+";";
+						monsterInfoToSend.append("Monster,")
+					                   .append(m.getDBId()).append(',')
+					                   .append(m.getCreatureId()).append(',')
+					                   .append(m.getOldX()).append(',')
+					                   .append(m.getOldY()).append(',')
+					                   .append(m.getOldZ()).append(',')
+					                   .append(m.getRotation()).append('/')
+					                   .append(m.getX()).append(',')
+					                   .append(m.getY()).append(',')
+					                   .append(m.getZ()).append(',')
+					                   .append(m.getStat("SPEED")).append(',')
+					                   .append(m.getGotoRotation()).append(';');
 					}
 				}
 				for(Npc m: monsterLostAggro){
 					int aggroStatus = 0;
 
-					monsterAggroToSend += m.getSmallData()+"/"+aggroStatus+","+m.getAggroType()+","+m.getHealthStatus()+";";
+					monsterAggroToSend.append(m.getSmallData()).append('/')
+					               .append(aggroStatus).append(',')
+					               .append(m.getAggroType()).append(',')
+					               .append(m.getHealthStatus()).append(';');
 				}
 
 
-				if(!monsterInfoToSend.equals("")){
-					addOutGoingMessage(s,"creaturepos",monsterInfoToSend);
+				if(monsterInfoToSend.length()>0){
+					addOutGoingMessage(s,"creaturepos",monsterInfoToSend.toString());
 				}
 
-				if(!monsterAggroToSend.equals("")){
-					addOutGoingMessage(s,"aggroinfo", monsterAggroToSend);
+				if(monsterAggroToSend.length()>0){
+					addOutGoingMessage(s,"aggroinfo", monsterAggroToSend.toString());
 				}
 				
 			}
@@ -349,7 +392,7 @@ public class MonsterHandler extends Handler {
 				Client s = entry.getValue();
 		 
 				if(s.Ready && isVisibleForPlayer(s.playerCharacter,tileX,tileY,tileZ)){
-					addOutGoingMessage(s,"droploot","container/smallbag,"+tileX+","+tileY+","+tileZ);
+					addOutGoingMessage(s,"droploot","container/smallbag,"+tileX+','+tileY+','+tileZ);
 				}
 			}
 		}
@@ -513,17 +556,20 @@ public class MonsterHandler extends Handler {
 				Client c = entry.getValue();
  	
 				if(c.Ready){
-					String aggroData = "";
+					StringBuilder aggroData = new StringBuilder(1000);
 					
 					for(Iterator<Npc> iter3 = aggroMonsters.iterator();iter3.hasNext();){ 
 						Npc m = iter3.next();
 						if(Handler.isVisibleForPlayer(c.playerCharacter,m.getX(),m.getY(),m.getZ())){
 							int aggroStatus = 1;
-							aggroData += m.getSmallData()+"/"+aggroStatus+","+m.getAggroType()+","+m.getHealthStatus()+";";
-						}	
+							aggroData.append(m.getSmallData()).append('/')
+							         .append(aggroStatus).append(',')
+							         .append(m.getAggroType()).append(',')
+							         .append(m.getHealthStatus()).append(';');
+						}
 					}
-					if(!aggroData.equals("")){
-						Handler.addOutGoingMessage(c,"aggroinfo",aggroData);
+					if(aggroData.length()>0){
+						Handler.addOutGoingMessage(c,"aggroinfo",aggroData.toString());
 					}
 				}
 			}

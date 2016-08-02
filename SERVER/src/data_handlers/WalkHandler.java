@@ -298,7 +298,7 @@ public class WalkHandler extends Handler {
 		int dirX = 0;
 		int dirY = 0;
 
-		StringBuilder rowData = new StringBuilder(1000);
+		StringBuilder rowData = new StringBuilder(2500);
 
 		int doorId = Server.WORLD_MAP.getTile(PlayerX,PlayerY,PlayerZ).getDoorId();
 
