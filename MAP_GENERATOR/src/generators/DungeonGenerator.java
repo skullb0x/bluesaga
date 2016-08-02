@@ -268,8 +268,7 @@ public class DungeonGenerator {
 	private static int getRand(int min, int max) {
 
 		//the seed is based on current date and the old, already used seed
-		Date now = new Date();
-		long seed = now.getTime() + oldseed;
+		long seed = System.currentTimeMillis() + oldseed;
 		oldseed = seed;
 
 		Random randomizer = new Random(seed);

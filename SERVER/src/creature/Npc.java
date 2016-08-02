@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import components.Stats;
 import creature.Creature.CreatureType;
@@ -27,8 +27,6 @@ import network.Server;
  */
 
 public class Npc extends Creature {
-
-	private Random randomGenerator;
 
 	private int respawnTime;
 	private int respawnTimeItr;
@@ -103,8 +101,6 @@ public class Npc extends Creature {
 		super(creatureId,newX,newY,newZ);
 
 		
-		randomGenerator = new Random();
-		
 		//generateLoot(gameDB);
 
 		SpawnX = newX;
@@ -170,8 +166,6 @@ public class Npc extends Creature {
 		setElite(false);
 		setTitan(false);
 		
-		randomGenerator = new Random();
-		
 		SpawnX = npcX;
 		SpawnY = npcY;
 		SpawnZ = npcZ;
@@ -219,7 +213,7 @@ public class Npc extends Creature {
 
 						Item newLoot = new Item(itemId);
 
-						int chanceToEquip = Server.randomGenerator.nextInt(100);
+						int chanceToEquip = Server.ThreadLocalRandom.current().nextInt(100);
 
 						if(canEquip(newLoot)){
 							equipItem(newLoot);
@@ -412,7 +406,7 @@ public class Npc extends Creature {
 		}
 
 		if(ActiveAbilities.size() > 0){
-			int random = randomGenerator.nextInt() % ActiveAbilities.size();
+			int random = ThreadLocalRandom.current().nextInt() % ActiveAbilities.size();
 			return ActiveAbilities.get(random);
 		}
 		return null;
@@ -592,7 +586,7 @@ public class Npc extends Creature {
 		if(!getMonsterWeaponIds().equals("None")){
 			String weapons[] = getMonsterWeaponIds().split(",");
 			
-			int randomWeaponId = randomGenerator.nextInt(weapons.length);
+			int randomWeaponId = ThreadLocalRandom.current().nextInt(weapons.length);
 			
 			int weaponId = Integer.parseInt(weapons[randomWeaponId]);
 			equipItem(new Item(ServerGameInfo.itemDef.get(weaponId)));
@@ -602,7 +596,7 @@ public class Npc extends Creature {
 		if(!getMonsterOffHandIds().equals("None")){
 			String offhands[] = getMonsterOffHandIds().split(",");
 			
-			int randomWeaponId = randomGenerator.nextInt(offhands.length);
+			int randomWeaponId = ThreadLocalRandom.current().nextInt(offhands.length);
 			
 			int offhandId = Integer.parseInt(offhands[randomWeaponId]);
 			equipItem(new Item(ServerGameInfo.itemDef.get(offhandId)));
@@ -611,7 +605,7 @@ public class Npc extends Creature {
 		if(!getMonsterHeadIds().equals("None")){
 			String heads[] = getMonsterHeadIds().split(",");
 			
-			int randomWeaponId = randomGenerator.nextInt(heads.length);
+			int randomWeaponId = ThreadLocalRandom.current().nextInt(heads.length);
 			
 			int headId = Integer.parseInt(heads[randomWeaponId]);
 			equipItem(new Item(ServerGameInfo.itemDef.get(headId)));
