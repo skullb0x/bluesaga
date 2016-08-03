@@ -17,12 +17,16 @@ import data_handlers.AbilityHandler;
 
 public class ActionBar {
 
+	public final static int ROW_BOXES = 5;
+	public final static int TOTAL_BOXES = ROW_BOXES * 2;
+	
 	private int X;
 	private int Y;
+	private int on_top = 1;
 
-	private DropBox[] Boxes = new DropBox[8];
+	private DropBox[] Boxes = new DropBox[TOTAL_BOXES];
 
-	private int SelectedAction = 10;
+	private int SelectedAction = -1;
 
 	private boolean Visible;
 
@@ -31,16 +35,20 @@ public class ActionBar {
 		Y = y;
 
 		setVisible(true);
-
-		for(int i = 0; i < 8; i++){
-			Boxes[i] = new DropBox(X+i*50,Y);
-		}
+		init();
 	}
 
-	public void clear(){
-		for(int i = 0; i < 8; i++){
+	private void init() {
+		for(int i = 0; i < ROW_BOXES; i++){
 			Boxes[i] = new DropBox(X+i*50,Y);
 		}
+		for(int i = 0; i < ROW_BOXES; i++){
+			Boxes[i + ROW_BOXES] = new DropBox(X+i*50 + 15,Y + 15);
+		}
+	}
+	
+	public void clear(){
+		init();
 	}
 
 	public void load(String data){
@@ -65,7 +73,7 @@ public class ActionBar {
 	}
 
 	public void update(){
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < TOTAL_BOXES; i++){
 			DropBox b = Boxes[i];
 			if(b.getAbility() != null){
 				boolean canUse = true;
@@ -129,7 +137,7 @@ public class ActionBar {
 	}
 
 	public void updateSoulstone(){
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < TOTAL_BOXES; i++){
 			DropBox b = Boxes[i];
 			if(b.getAbility() != null){
 				// SOUL STONE
@@ -147,23 +155,59 @@ public class ActionBar {
 	public void draw(Graphics g, int MouseX, int MouseY){
 		if(isVisible()){
 			g.setFont(Font.size10);
-
-			for(int i = 0; i < 8; i++){
-				Boxes[i].draw(g, MouseX, MouseY,0,0);
-				if(SelectedAction == i){
-					g.setColor(new Color(255,255,255,100));
-					g.fillRect(X + i*50, Y, 50, 50);
+			
+		if (on_top == 2 || on_top == -1) {
+				for(int i = 0; i < ROW_BOXES; i++){
+					DropBox db = Boxes[i];
+					int xi = db.getX();
+					int yi = db.getY();
+					db.draw(g, -1, -1,0,0);
 				}
-				/*
-				if(Boxes[i].getItem() != null){
-					g.setColor(BP_CLIENT.COLORS.WHITE);
-					g.drawString(""+BP_CLIENT.playerCharacter.countItems(Boxes[i].getItem().getId()), X+i*50 + 40, Y);
+				g.setColor(new Color(0,0,0,100));
+				g.fillRect(X, Y, 50 * ROW_BOXES, 50);
+				
+				for(int i = ROW_BOXES; i < TOTAL_BOXES; i++){
+					DropBox db = Boxes[i];
+					int xi = db.getX();
+					int yi = db.getY();
+					db.draw(g, MouseX, MouseY,0,0);
+					if(SelectedAction == i){
+						g.setColor(new Color(255,255,255,100));
+						g.fillRect(xi, yi, 50, 50);
+					}
+	
+					String num = String.valueOf(i+1 - ROW_BOXES);
+					g.setColor(BlueSagaColors.BLACK);
+					g.drawString(num, xi + 23, yi + 35);
+					g.setColor(BlueSagaColors.WHITE);
+					g.drawString(num, xi + 24, yi + 34);
 				}
-				 */
-				g.setColor(BlueSagaColors.BLACK);
-				g.drawString((i+1)+"", X+i*50 + 23, Y + 35);
-				g.setColor(BlueSagaColors.WHITE);
-				g.drawString((i+1)+"", X+i*50 + 24, Y + 34);
+			} else {
+				for(int i = ROW_BOXES; i < TOTAL_BOXES; i++){
+					DropBox db = Boxes[i];
+					int xi = db.getX();
+					int yi = db.getY();
+					db.draw(g, -1, -1,0,0);
+				}
+				g.setColor(new Color(0,0,0,100));
+				g.fillRect(X+ 15, Y+ 15, 50 * ROW_BOXES , 50 );
+				
+				for(int i = 0; i < ROW_BOXES; i++){
+					DropBox db = Boxes[i];
+					int xi = db.getX();
+					int yi = db.getY();
+					db.draw(g, MouseX, MouseY,0,0);
+					if(SelectedAction == i){
+						g.setColor(new Color(255,255,255,100));
+						g.fillRect(xi, yi, 50, 50);
+					}
+	
+					String num = String.valueOf(i+1);
+					g.setColor(BlueSagaColors.BLACK);
+					g.drawString(num, xi + 23, yi + 35);
+					g.setColor(BlueSagaColors.WHITE);
+					g.drawString(num, xi + 24, yi + 34);
+				}
 			}
 		}
 	}
@@ -171,6 +215,19 @@ public class ActionBar {
 
 	public int keyLogic(Input INPUT){
 
+		if (INPUT.isKeyPressed(Input.KEY_LCONTROL)) {
+			if (on_top>0) {
+				on_top = on_top - 3;  // 1 -> -2 ; 2 -> -1
+				if (SelectedAction>=0) {
+					Gui.cancelUseAbility();
+					SelectedAction = -1;
+				}
+				return -1;
+			}
+		} else if (on_top<0) {
+			on_top = -on_top; // -2 -> 2 ; -1 -> 1
+		}
+		
 		if(INPUT.isKeyPressed(Input.KEY_1)){
 			SelectedAction = 0;	
 		}
@@ -186,17 +243,10 @@ public class ActionBar {
 		if(INPUT.isKeyPressed(Input.KEY_5)){
 			SelectedAction = 4;	
 		}
-		if(INPUT.isKeyPressed(Input.KEY_6)){
-			SelectedAction = 5;	
-		}
-		if(INPUT.isKeyPressed(Input.KEY_7)){
-			SelectedAction = 6;	
-		}
-		if(INPUT.isKeyPressed(Input.KEY_8)){
-			SelectedAction = 7;	
-		}
-
-		if(SelectedAction < 8){
+		if(SelectedAction >= 0){
+			if (on_top == 2 && SelectedAction < ROW_BOXES) {
+				SelectedAction += ROW_BOXES;
+			}
 			DropBox b = Boxes[SelectedAction];
 
 			if(b.getAbility() != null){
@@ -204,7 +254,7 @@ public class ActionBar {
 					// SELECT ABILITY
 					if(b.getAbility().isTargetSelf() || b.getAbility().isInstant()){
 						BlueSaga.client.sendMessage("use_ability", BlueSaga.playerCharacter.getX()+","+BlueSaga.playerCharacter.getY()+","+b.getAbility().getAbilityId());
-						SelectedAction = 10;
+						SelectedAction = -1;
 					}else if(!Gui.USE_ABILITY){
 						Gui.USE_ABILITY = true;
 						// Show AoE
@@ -217,11 +267,11 @@ public class ActionBar {
 				if(!BlueSaga.actionServerWait && b.isReady()){
 					BlueSaga.client.sendMessage("useitem", "actionbar;"+b.getItem().getId());
 					BlueSaga.actionServerWait = true;
-					SelectedAction = 10;
+					SelectedAction = -1;
 				}
 			}else{
 				Gui.cancelUseAbility();
-				SelectedAction = 10;
+				SelectedAction = -1;
 			}
 		}
 		
@@ -231,7 +281,7 @@ public class ActionBar {
 	
 	public boolean isClicked(int mouseX, int mouseY){
 		boolean clicked = false;
-		if(mouseX > X && mouseX < X + 50*8 && mouseY > Y && mouseY < Y + 50){
+		if(mouseX > X && mouseX < X + 50*ROW_BOXES +15 && mouseY > Y && mouseY < Y + 50 + 15){
 			clicked = true;
 		}
 		return clicked;
@@ -242,20 +292,26 @@ public class ActionBar {
 		boolean clickedWindow = false;
 
 		if(Visible){
-			int i = 0;
-
 			if(!BlueSaga.actionServerWait){
 				if(Gui.MouseItem.isEmpty()){
 					// IF MOUSE HAS ITEM
 					
 					// CHECK WHICH BOX IS CLICKED
-					for(DropBox b: Boxes){
+					for (int j=0 ; j<TOTAL_BOXES ; j++) {
+						int i = j;
+						if (on_top == 2 || on_top == -1) {
+							if (j<ROW_BOXES) {
+								i = j + ROW_BOXES;
+							} else {
+								i = j - ROW_BOXES;
+							}
+						}
+						DropBox b = Boxes[i];
 						if(b.isSelected(mouseX, mouseY, 0, 0)){
 							clickedWindow = true;
 
 							if(b.getAbility() != null && Gui.AbilitiesWindow.isOpen()){
 								BlueSaga.actionServerWait = true;
-
 								Gui.MouseItem.clear();
 								Gui.MouseItem.setAbility(b.getAbility());
 								BlueSaga.client.sendMessage("remove_actionbar", ""+i);
@@ -266,12 +322,20 @@ public class ActionBar {
 							}
 							break;
 						}
-						i++;
 					}
 				}else{
 					// ADD ITEM TO ACTIONBAR
 					// CHECK WHICH BOX IS CLICKED
-					for(DropBox b: Boxes){
+					for (int j=0 ; j<TOTAL_BOXES ; j++) {
+						int i = j;
+						if (on_top == 2 || on_top == -1) {
+							if (j<ROW_BOXES) {
+								i = j + ROW_BOXES;
+							} else {
+								i = j - ROW_BOXES;
+							}
+						}
+						DropBox b = Boxes[i];
 						if(b.isSelected(mouseX, mouseY, 0, 0)){
 							clickedWindow = true;
 							if(Gui.MouseItem.getAbility() != null){
@@ -289,7 +353,6 @@ public class ActionBar {
 							}
 							break;
 						}
-						i++;
 					}
 				}
 			}	
@@ -300,10 +363,17 @@ public class ActionBar {
 	public boolean rightMouseClick(int mouseX, int mouseY){
 		boolean clickedWindow = false;
 
-		int i = 0;
-
 		// CHECK WHICH BOX IS CLICKED
-		for(DropBox b: Boxes){
+		for (int j=0 ; j<TOTAL_BOXES ; j++) {
+			int i = j;
+			if (on_top == 2 || on_top == -1) {
+				if (j<ROW_BOXES) {
+					i = j + ROW_BOXES;
+				} else {
+					i = j - ROW_BOXES;
+				}
+			}
+			DropBox b = Boxes[i];
 			if(b.isSelected(mouseX, mouseY, 0, 0)){
 				clickedWindow = true;
 
@@ -326,8 +396,8 @@ public class ActionBar {
 						BlueSaga.actionServerWait = true;
 					}
 				}
+				break;
 			}
-			i++;
 		}
 
 		if(!clickedWindow && Gui.MouseItem.getAbility() != null){
@@ -368,13 +438,13 @@ public class ActionBar {
 	}
 
 	public Ability getSelectedAbility(){
-		if(SelectedAction < 9){
+		if(SelectedAction >= 0){
 			return Boxes[SelectedAction].getAbility();
 		}
 		return null;
 	}
 
 	public void cancelSelection(){
-		SelectedAction = 10;
+		SelectedAction = -1;
 	}
 }
