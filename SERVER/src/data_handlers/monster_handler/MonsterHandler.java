@@ -200,17 +200,8 @@ public class MonsterHandler extends Handler {
 				// IF MONSTER ISN'T DEAD AND IS AGGRO
 				if (aggroMonster.isReadyToMove()) {
 	
-					Creature target = aggroMonster.getAggroTarget();
-					
-					if(aggroMonster.getZ() == target.getZ()){
-						// Process aggro behaviour depending on aggro type
-						if(aggroMonster.getAiTypes().contains("Ranged")){
-							Ranged.doAggroBehaviour(aggroMonster, target, monsterMoved,monsterLostAggro);
-						}else if(aggroMonster.getAiTypes().contains("Melee")){
-							Melee.doAggroBehaviour(aggroMonster, target, monsterMoved,monsterLostAggro);
-						}else if(aggroMonster.getAiTypes().contains("Shy")){
-							Shy.doAggroBehaviour(aggroMonster, target, monsterMoved,monsterLostAggro);
-						}
+					if(aggroMonster.getZ() == aggroMonster.getAggroTarget().getZ()){
+						aggroMonster.doAggroBehaviour(monsterMoved);
 					}else{
 						monsterLostAggro.add(aggroMonster);
 					}
@@ -221,7 +212,6 @@ public class MonsterHandler extends Handler {
 		// Remove non-aggro monsters from aggroMonsters
 		for(Npc m: monsterLostAggro){
 			m.setAggro(null);
-			aggroMonsters.remove(m);
 		}
 		
 		// LOOP THROUGH THREADS AND SEND MONSTER DATA
@@ -422,7 +412,6 @@ public class MonsterHandler extends Handler {
 											AGGRO_RANGE = 40;
 											if (distToMob <= AGGRO_RANGE) {
 												m.setAggro(attacker);
-												aggroMonsters.add(m);
 											}
 										}
 									}
@@ -484,11 +473,6 @@ public class MonsterHandler extends Handler {
 												
 												if(turnAggro){
 													m.setAggro(attacker);
-													aggroMonsters.add(m);
-												
-													if(m.getAiTypes().contains("Swarmer")){
-														aggroMonsters = swarmAlert(m,aggroMonsters);
-													}
 												}
 											}
 										}
@@ -531,29 +515,4 @@ public class MonsterHandler extends Handler {
 		
 		return aggroMonsters.size();
 	}
-	
-	public static Vector<Npc> swarmAlert(Npc m, Vector<Npc> aggroMonsters){
-		int rangeTiles = 2;
-		
-		for(int tileX = m.getX()-rangeTiles; tileX < m.getX() + rangeTiles; tileX++){
-			for(int tileY = m.getY()-rangeTiles; tileY < m.getY()+rangeTiles; tileY++){
-				Tile t = Server.WORLD_MAP.getTile(tileX, tileY, m.getZ());
-				
-				if(t != null){
-					if(t.getOccupant() != null){
-						if(t.getOccupant().getCreatureType() == CreatureType.Monster && t.getOccupant().getCreatureId() == m.getCreatureId() && m.getOriginalAggroType() != 3){
-							Npc ally = (Npc) t.getOccupant();
-							
-							if(!ally.isAggro() && !ally.isTitan()){
-								ally.setAggro(m.getAggroTarget());
-								aggroMonsters.add(ally);
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return aggroMonsters;
-	}	
 }
