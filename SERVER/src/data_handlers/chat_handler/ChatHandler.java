@@ -2,10 +2,7 @@ package data_handlers.chat_handler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 import utils.RandomUtils;
 import data_handlers.Handler;
@@ -18,16 +15,18 @@ import network.Server;
 public class ChatHandler extends Handler {
 
 
-	private static Vector<String> Emoticons = new Vector<String>();
-	public static Vector<String> BadWords = new Vector<String>();
-	private static Vector<String> CuteWords = new Vector<String>();
+	private static Set<String> Emoticons = new TreeSet<String>();
+	private static String emoHelp = "To show emoticon type '/emo name'.";
+	public static Collection<String> BadWords = new ArrayList<String>();
+	public static Collection<String> BadSubWords = new ArrayList<String>();
+	private static List<String> CuteWords = new ArrayList<String>();
 
-	private static Vector<Integer> mutedUsers = new Vector<Integer>();
+	private static Set<Integer> mutedUsers = new HashSet<Integer>();
 	
 	
 	public static void init() {
 
-		mutedUsers = new Vector<Integer>();
+		mutedUsers.clear();
 		
 		Emoticons.add("angry");
 		Emoticons.add("fail");
@@ -38,10 +37,22 @@ public class ChatHandler extends Handler {
 		Emoticons.add("smile");
 		Emoticons.add("weird");
 
+		StringBuilder sb = new StringBuilder(1000);
+		sb.append(emoHelp).append(" Available emoticons are: ");
+		for(String emo: Emoticons){
+			sb.append(emo).append(", ");
+		}
+		sb.setLength(sb.length()-2);
+		emoHelp = sb.toString();
+		
 		ResultSet badWordsInfo = Server.gameDB.askDB("select Word from bad_words");
 		try {
 			while(badWordsInfo.next()){
-				BadWords.add(badWordsInfo.getString("Word").toLowerCase());
+				String bw = badWordsInfo.getString("Word").toLowerCase();
+				BadWords.add(bw);
+				BadSubWords.add(bw + " ");
+				BadSubWords.add(" " + bw);
+				BadSubWords.add(" " + bw + " ");
 			}
 			badWordsInfo.close();
 		} catch (SQLException e) {
@@ -72,13 +83,14 @@ public class ChatHandler extends Handler {
 					String chatText = chatInfo[1];
 
 					chatText = chatText.replace("'", "");
+					String chatLower = chatText.toLowerCase();
 					
 					if(chatText.startsWith("/")){
 						specialCommand = true;
 					}
 					
 					// SPECIAL REFRESH
-					if(chatText.toLowerCase().equals("/r")){
+					if(chatLower.equals("/r")){
 						specialCommand = true;
 						MapHandler.sendScreenData(client);
 					}
@@ -98,18 +110,13 @@ public class ChatHandler extends Handler {
 					}
 
 					// Emoticons
-					if(chatText.toLowerCase().startsWith("/emo")){
+					if(chatLower.startsWith("/emo")){
 						specialCommand = true;
 
-						if(chatText.toLowerCase().equals("/emo")){
-							String emoHelp = "To show emoticon type '/emo name'. Available emoticons are: ";
-							for(String emo: Emoticons){
-								emoHelp += emo+", ";
-							}
-							emoHelp = emoHelp.substring(0,emoHelp.length()-2);
+						if(chatLower.equals("/emo")){
 							addOutGoingMessage(client,"message",emoHelp);
 						}else{
-							String emoticon = chatText.toLowerCase().substring(5);
+							String emoticon = chatLower.substring(5);
 
 							if(Emoticons.contains(emoticon)){
 								// IF RESTING, ABORT RESTING
@@ -132,7 +139,7 @@ public class ChatHandler extends Handler {
 						}
 					}
 
-					if(chatText.toLowerCase().startsWith("/channels")){
+					if(chatLower.startsWith("/channels")){
 						// Go through all chat channels and count their subscribers
 						specialCommand = true;
 						
@@ -166,7 +173,7 @@ public class ChatHandler extends Handler {
 						}
 					}
 					
-					if(chatText.toLowerCase().startsWith("/rolldice")){
+					if(chatLower.startsWith("/rolldice")){
 						specialCommand = true;
 						int diceResult = RandomUtils.getInt(1, 6);
 						
@@ -183,7 +190,7 @@ public class ChatHandler extends Handler {
 					}
 					
 					
-					if(chatText.toLowerCase().startsWith("/quit")){
+					if(chatLower.startsWith("/quit")){
 						specialCommand = true;
 						if(chatChannel.contains("@") || chatChannel.contains("#")){
 							client.playerCharacter.removeChatChannel(chatChannel);
@@ -199,11 +206,31 @@ public class ChatHandler extends Handler {
 						String chatMessage = "";
 
 						chatMessage = chatText;
+						chatLower = chatMessage.toLowerCase();
 
 						for(String badword: BadWords){
-							if(chatMessage.toLowerCase().equals(badword) || chatMessage.toLowerCase().contains(" "+badword) || chatMessage.toLowerCase().contains(" "+badword+" ") || chatMessage.toLowerCase().contains(badword+" ")){
-								String randomCuteWord = CuteWords.get(RandomUtils.getInt(0,CuteWords.size()-1));
-								chatMessage = chatMessage.toLowerCase().replace(badword, randomCuteWord);
+							if(chatLower.equals(badword)){
+								chatMessage = RandomUtils.getAny(CuteWords);
+							}else if(chatLower.startsWith(badword)){
+								String randomCuteWord = RandomUtils.getAny(CuteWords);
+								chatMessage = randomCuteWord + chatMessage.substring(badword.length());
+							}else if(chatLower.endsWith(badword)){
+								String randomCuteWord = RandomUtils.getAny(CuteWords);
+								chatMessage = chatMessage.substring(0,chatMessage.length()-badword.length()) + randomCuteWord;
+							}
+						}
+						for(String badword: BadSubWords){
+							int found = chatLower.indexOf(badword);
+							if(found>=0){
+								String randomCuteWord = RandomUtils.getAny(CuteWords);
+								int end = found + badword.length();
+								if(badword.startsWith(" ")){
+									++ found;
+								}
+								if(badword.endsWith(" ")){
+									-- end;
+								}
+								chatMessage = chatMessage.substring(0,found) + randomCuteWord + chatMessage.substring(end);
 							}
 						}
 					

@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
 public class RandomUtils {
 	public static int getInt(int min, int max) {
@@ -15,4 +16,8 @@ public class RandomUtils {
 		return ThreadLocalRandom.current().nextGaussian();
 	}
 
+	public static <T> T getAny(List<T> things){
+		int pick = ThreadLocalRandom.current().nextInt(things.size());
+		return things.get(pick);
+	}
 }
