@@ -253,13 +253,13 @@ public class ActionBar {
 						if(b.isSelected(mouseX, mouseY, 0, 0)){
 							clickedWindow = true;
 
-							if(b.getAbility() != null){
+							if(b.getAbility() != null && Gui.AbilitiesWindow.isOpen()){
 								BlueSaga.actionServerWait = true;
 
 								Gui.MouseItem.clear();
 								Gui.MouseItem.setAbility(b.getAbility());
 								BlueSaga.client.sendMessage("remove_actionbar", ""+i);
-							}else if(b.getItem() != null){
+							}else if(b.getItem() != null && Gui.InventoryWindow.isOpen()){
 								BlueSaga.actionServerWait = true;
 								Gui.MouseItem.clear();
 								BlueSaga.client.sendMessage("remove_actionbar", ""+i);
