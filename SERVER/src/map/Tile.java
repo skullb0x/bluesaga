@@ -1,7 +1,6 @@
 package map;
 
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 import creature.Creature;
 import creature.Creature.CreatureType;
@@ -10,6 +9,7 @@ import data_handlers.ability_handler.StatusEffect;
 import data_handlers.item_handler.Item;
 
 public class Tile {
+	
 	private String Type;
 	private String Name;
 	private boolean Passable;
@@ -48,7 +48,7 @@ public class Tile {
 	// OVERLAY OBJECT
 	
 	// STATUSEFFCT
-	private Vector<StatusEffect> statusEffects;
+	private List<StatusEffect> statusEffects = new ArrayList(4);
 	
 	
 	private boolean damaged = false;
@@ -63,8 +63,6 @@ public class Tile {
 		LootBag = new Vector<Item>();
 	//	healTimer = new Timer();
 		setMonsterLocked(false);
-		
-		statusEffects = new Vector<StatusEffect>();
 	}
 	
 	
@@ -233,7 +231,7 @@ public class Tile {
 		 */
 	}
 
-	public synchronized void addStatusEffects(Vector<StatusEffect> newStatusEffects){
+	public synchronized void addStatusEffects(List<StatusEffect> newStatusEffects){
 		for(Iterator<StatusEffect> iter = newStatusEffects.iterator();iter.hasNext();){  
 			StatusEffect s = iter.next();
 			StatusEffect mySE = getStatusEffect(s.getId());
@@ -247,18 +245,18 @@ public class Tile {
 				newSE.setCaster(s.getCaster());
 				newSE.setAbility(s.getAbility());
 				newSE.start();
-				getStatusEffects().add(newSE);
+				statusEffects.add(newSE);
 			}
 		}
 	}
 	
-	public synchronized Vector<StatusEffect> getStatusEffects(){
+	public synchronized List<StatusEffect> getStatusEffects(){
 		return statusEffects;
 	}
 	
 	public StatusEffect getStatusEffect(int sId){
 		
-		for(Iterator<StatusEffect> iter = getStatusEffects().iterator();iter.hasNext();){  
+		for(Iterator<StatusEffect> iter = getStatusEffects().iterator();iter.hasNext();){
 			StatusEffect s = iter.next();
 			if(s.getId() == sId){
 				return s;
@@ -269,17 +267,20 @@ public class Tile {
 	
 	
 	public synchronized String updateStatusEffect(){
-		String sToRemove = "";
+		if (statusEffects.isEmpty()) {
+			return "";
+		}
+		StringBuilder sToRemove = new StringBuilder(100);
 		
-		for(Iterator<StatusEffect> iter = getStatusEffects().iterator();iter.hasNext();){  
+		for(Iterator<StatusEffect> iter = statusEffects.iterator();iter.hasNext();){  
 			StatusEffect s = iter.next();
 			
 			if(!s.isActive()){
-				sToRemove += s.getId()+",";
+				sToRemove.append(s.getId()).append(',');
 				iter.remove();
 			}
 		}
-		return sToRemove;
+		return sToRemove.toString();
 	}
 	
 

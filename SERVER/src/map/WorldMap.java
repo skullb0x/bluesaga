@@ -97,8 +97,8 @@ public class WorldMap implements TileBasedMap {
 			while(tileInfo.next()){
 				Tile newTile =  new Tile(tileInfo.getInt("X"),tileInfo.getInt("Y"),tileInfo.getInt("Z"));
 				newTile.setZ(tileInfo.getInt("Z"));
-				newTile.setType(tileInfo.getString("Type"), tileInfo.getString("Name"), tileInfo.getInt("Passable"));
-				newTile.setObjectId(tileInfo.getString("ObjectId"));
+				newTile.setType(tileInfo.getString("Type").intern(), tileInfo.getString("Name").intern(), tileInfo.getInt("Passable"));
+				newTile.setObjectId(tileInfo.getString("ObjectId").intern());
 				newTile.setDoorId(tileInfo.getInt("DoorId"));
 				newTile.setAreaEffectId(tileInfo.getInt("AreaEffectId"));
 
@@ -202,9 +202,10 @@ public class WorldMap implements TileBasedMap {
 
 		try {
 			while(containerInfo.next()){
-				if(MapTiles.get(containerInfo.getInt("X")+","+containerInfo.getInt("Y")+","+containerInfo.getInt("Z")) != null){
-					MapTiles.get(containerInfo.getInt("X")+","+containerInfo.getInt("Y")+","+containerInfo.getInt("Z")).setObjectId(containerInfo.getString("Type"));
-					MapTiles.get(containerInfo.getInt("X")+","+containerInfo.getInt("Y")+","+containerInfo.getInt("Z")).setContainerId(containerInfo.getInt("Id"));
+				String coordStr = containerInfo.getInt("X")+","+containerInfo.getInt("Y")+","+containerInfo.getInt("Z");
+				if(MapTiles.get(coordStr) != null){
+					MapTiles.get(coordStr).setObjectId(containerInfo.getString("Type").intern());
+					MapTiles.get(coordStr).setContainerId(containerInfo.getInt("Id"));
 				}
 			}
 			containerInfo.close();
@@ -253,14 +254,14 @@ public class WorldMap implements TileBasedMap {
 				tempNpc.setAggroType(creatureInfo.getInt("AggroType"));
 				tempNpc.setOriginalAggroType(creatureInfo.getInt("AggroType"));
 
-				if(!creatureInfo.getString("Name").equals("")){
-					tempNpc.setName(creatureInfo.getString("Name"));
+				if(!creatureInfo.getString("Name").isEmpty()){
+					tempNpc.setName(creatureInfo.getString("Name").intern());
 				}
 
 				tempNpc.setCreatureType(CreatureType.Monster);
 				
 				// Sets eventual equipment
-				String equipmentInfo = creatureInfo.getString("Equipment");
+				String equipmentInfo = creatureInfo.getString("Equipment").intern();
 				if(!equipmentInfo.equals("None")){
 					String equipment[] = equipmentInfo.split(",");
 					

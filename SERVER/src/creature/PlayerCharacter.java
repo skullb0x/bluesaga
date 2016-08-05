@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -518,9 +519,9 @@ public class PlayerCharacter extends Creature {
 	public void loadAbilities(){
 		ResultSet rs = Server.userDB.askDB("select * from character_ability where CharacterId = "+dbId);
 
-		abilities.clear();
+		abilities = null;
 
-		Vector<Integer> abilitiesToRemove = new Vector<Integer>();
+		List<Integer> abilitiesToRemove = new ArrayList<Integer>();
 		
 		boolean hasSoulStone = false;
 		
@@ -536,7 +537,7 @@ public class PlayerCharacter extends Creature {
 						newAB.setDbId(rs.getInt("Id"));
 						newAB.setCooldownLeft(rs.getInt("CooldownLeft"));
 						newAB.setCaster(CreatureType.Player,this);
-						abilities.add(newAB);
+						addAbility(newAB);
 					}else{
 						abilitiesToRemove.add(newAB.getAbilityId());
 					}
@@ -548,11 +549,11 @@ public class PlayerCharacter extends Creature {
 		}
 		
 		if(getAdminLevel() == 5){
-			abilities.add(AbilityHandler.getAbility(31));
-			abilities.add(AbilityHandler.getAbility(39));
-			abilities.add(AbilityHandler.getAbility(83));
-			abilities.add(AbilityHandler.getAbility(84));
-			abilities.add(AbilityHandler.getAbility(54));
+			addAbility(AbilityHandler.getAbility(31));
+			addAbility(AbilityHandler.getAbility(39));
+			addAbility(AbilityHandler.getAbility(83));
+			addAbility(AbilityHandler.getAbility(84));
+			addAbility(AbilityHandler.getAbility(54));
 		}
 		
 		// Check if soul stone should be added
@@ -563,7 +564,7 @@ public class PlayerCharacter extends Creature {
 					if(shopCheck.getInt("SoulStone") == 1){
 						// Add soul stone!
 						Server.userDB.updateDB("insert into character_ability (CharacterId,AbilityId,CooldownLeft) values ("+getDBId()+",31,0)");
-						abilities.add(AbilityHandler.getAbility(31));
+						addAbility(AbilityHandler.getAbility(31));
 					}
 				}
 				shopCheck.close();
