@@ -1,6 +1,6 @@
 package generators;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -31,8 +31,6 @@ public class CaveGenerator {
         private GenerationParams[] params_set;
         private int generations = 3; // 3
  
-        private Random rand = new Random();
- 
         public int[][] generate(int sizeX, int sizeY){
         	size_x = sizeX;
         	size_y = sizeY;
@@ -41,7 +39,7 @@ public class CaveGenerator {
         }
         
         private int randpick() {
-                if (rand.nextInt(100) < fillprob)
+                if (ThreadLocalRandom.current().nextInt(100) < fillprob)
                         return TILE_WALL;
                 else
                         return TILE_FLOOR;

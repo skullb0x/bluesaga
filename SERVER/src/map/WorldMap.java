@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.newdawn.slick.util.pathfinding.Mover;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
@@ -56,8 +56,6 @@ public class WorldMap implements TileBasedMap {
 	private String MapType;
 
 	private int NrPlayers;
-
-	private Random randomGenerator = new Random();
 
 	private ConcurrentHashMap<Integer,Npc> Monsters;
 
@@ -411,7 +409,7 @@ public class WorldMap implements TileBasedMap {
 
 								boolean monsterMoved = false;
 
-								int randomDir = randomGenerator.nextInt(8);
+								int randomDir = ThreadLocalRandom.current().nextInt(8);
 
 								monsterMoved = true;
 

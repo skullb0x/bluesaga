@@ -7,7 +7,6 @@ import screens.ScreenHandler;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Timer;
 import java.util.Vector;
 
@@ -39,8 +38,6 @@ public class WorldMap implements TileBasedMap {
 	
 	private String MapType;
 	
-	Random randomGenerator = new Random();
-    
 	HashMap<Integer,Npc> Npcs = new HashMap<Integer,Npc>();
 	HashMap<Integer,Npc> OtherPlayers = new HashMap<Integer,Npc>();
 	
