@@ -18,7 +18,7 @@ public class SkillHandler extends Handler {
 
 	public static void handleData(Client client, String message){
 		if(message.startsWith("<particledata>")){
-			StringBuilder msg = new StringBuilder(1000);
+			StringBuilder msg = new StringBuilder(4400);
 			ResultSet emitterInfo = Server.gameDB.askDB("select * from Emitter");
 			try {
 				while(emitterInfo.next()){

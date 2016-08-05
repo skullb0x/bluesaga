@@ -191,31 +191,26 @@ public class PlayerCharacter extends Creature {
 		}
 	}
 
-	public void saveInfo() {
+  public void saveInfo() {
 
-		String statement = "update user_character set ";
+    StringBuilder statement = new StringBuilder(1000);
 
-		statement += "Bounty= " + Bounty;
-		statement += ", PlayerKiller = " + pkMarker;
+    statement.append("update user_character set ")
+             .append("Bounty= ").append(Bounty)
+             .append(", PlayerKiller = ").append(pkMarker)
+             .append(", Level = ").append(Level)
+             .append(", XP = ").append(XP)
+             .append(", HEALTH = ").append(Health)
+             .append(", MANA = ").append(Mana)
+             .append(", HeadSkinId = ").append(getCustomization().getHeadSkinId())
+             .append(", WeaponSkinId = ").append(getCustomization().getWeaponSkinId())
+             .append(", OffHandSkinId = ").append(getCustomization().getOffHandSkinId())
+             .append(", AmuletSkinId = ").append(getCustomization().getAmuletSkinId())
+             .append(", ArtifactSkinId = ").append(getCustomization().getArtifactSkinId())
+             .append(" where Id = ").append(dbId);
 
-		statement += ", Level = " + Level;
-		statement += ", XP = " + XP;
-
-		statement += ", HEALTH = "+Health;
-		statement += ", MANA = "+Mana;
-
-		statement += ", HeadSkinId = "+getCustomization().getHeadSkinId();
-		statement += ", WeaponSkinId = "+getCustomization().getWeaponSkinId();
-		statement += ", OffHandSkinId = "+getCustomization().getOffHandSkinId();
-		statement += ", AmuletSkinId = "+getCustomization().getAmuletSkinId();
-		statement += ", ArtifactSkinId = "+getCustomization().getArtifactSkinId();
-
-		statement += " where Id = "+dbId;
-
-		Server.userDB.updateDB(statement);
-
-
-	}
+    Server.userDB.updateDB(statement.toString());
+  }
 
 
 	public String getFullData(){
@@ -391,24 +386,13 @@ public class PlayerCharacter extends Creature {
 
 	// INFO TO SEND TO OTHER CLIENTS
 	public String getSmallInfo(){
-		String info = X+","+Y+",";
-		info += getEquipmentInfo();
-		info += ","+dbId+","+Bounty;
-
-		if(PlayerKillerTime > 0){
-			info += ",1";
-		}else{
-			info += ",0";
-		}
-		return info;
+		return X + "," + Y + ',' + getEquipmentInfo() + ',' + dbId + ','
+		     + Bounty + ((PlayerKillerTime > 0) ? ",1" : ",0");
 	}
-
-
 
 	// POSITION INFO
 	public String getPosition() {
-		String info = X+","+Y;
-		return info;
+		return X+","+Y;
 	}
 
 	

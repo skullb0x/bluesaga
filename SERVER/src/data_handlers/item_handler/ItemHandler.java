@@ -140,8 +140,9 @@ public class ItemHandler extends Handler {
 				
 				StringBuilder sb = new StringBuilder(1000);
 				sb.append(infoType)
-					.append('@')
-					.append(infoToSend);
+					.append('@');
+				int sb_empty = sb.length();
+				sb.append(infoToSend);
 
 				if(infoItem != null){
 					if(infoItem.getMagicId() > 0){
@@ -259,7 +260,7 @@ public class ItemHandler extends Handler {
 
 				}
 
-				if(sb.length()!=0){
+				if(sb.length()!=sb_empty){
 					addOutGoingMessage(client,"item_info",sb.toString());
 				}
 			}

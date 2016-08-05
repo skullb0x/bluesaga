@@ -117,13 +117,13 @@ public class CraftingHandler extends Handler {
 			if(itemRecipe != null){
 				// Check if player has ingredients for recipe
 				boolean hasIngredients = true;
-				String ingredients = "";
+				StringBuilder ingredients = new StringBuilder(1000);
 				int nrIngredients = 0;
 				for(Item ingredient: itemRecipe.getMaterials()){
 					if(nrIngredients > 0){
-						ingredients += ", ";
+						ingredients.append(", ");
 					}
-					ingredients += ingredient.getStacked()+" "+ingredient.getName();
+					ingredients.append(ingredient.getStacked()).append(' ').append(ingredient.getName());
 					if(!client.playerCharacter.hasItem(ingredient.getId(), ingredient.getStacked())){
 						hasIngredients = false;
 					}
@@ -133,7 +133,7 @@ public class CraftingHandler extends Handler {
 				if(hasIngredients){
 					// Remove ingredients from inventory
 					for(Item ingredient: itemRecipe.getMaterials()){
-						InventoryHandler.removeNumberOfItems(client, ingredient.getId(), ingredient.getStacked());					
+						InventoryHandler.removeNumberOfItems(client, ingredient.getId(), ingredient.getStacked());
 					}
 					// Add crafted product in inventory
 					InventoryHandler.addItemToInventory(client, itemRecipe.getProduct());
@@ -145,7 +145,7 @@ public class CraftingHandler extends Handler {
 					
 					addOutGoingMessage(client,"crafting_done","");
 				}else{
-					addOutGoingMessage(client,"nocraftitem",ingredients);
+					addOutGoingMessage(client,"nocraftitem",ingredients.toString());
 				}
 			}
 		}
