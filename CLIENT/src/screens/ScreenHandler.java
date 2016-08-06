@@ -8,8 +8,7 @@ import graphics.Font;
 import graphics.ImageResource;
 import gui.Gui;
 
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.*;
 
 import map.AreaEffect;
 import map.NightEffect;
@@ -60,10 +59,10 @@ public class ScreenHandler {
 
 	// SCREEN DATA
 	public static HashMap<String, Tile> SCREEN_TILES = new HashMap<String, Tile>();
-	public static Vector<Tile> SCREEN_TILES_B = new Vector<Tile>();
+	public static List<Tile> SCREEN_TILES_B = new ArrayList<Tile>();
 
 	public static HashMap<String, ScreenObject> SCREEN_OBJECTS_WITH_ID = new HashMap<String, ScreenObject>();
-	public static Vector<ScreenObject> SCREEN_OBJECTS_DRAW = new Vector<ScreenObject>();
+	public static List<ScreenObject> SCREEN_OBJECTS_DRAW = new ArrayList<ScreenObject>();
 
 	// PROJECTILES
 	public static ProjectileManager ProjectileManager;
@@ -385,8 +384,9 @@ public class ScreenHandler {
 						int tileY = Integer.parseInt(mousePos[1]);
 
 						// Check containers
-						if(SCREEN_OBJECTS_WITH_ID.get(tileX+","+tileY+","+BlueSaga.playerCharacter.getZ()) != null){
-							TileObject Container = SCREEN_OBJECTS_WITH_ID.get(tileX+","+tileY+","+BlueSaga.playerCharacter.getZ()).getObject();
+						ScreenObject so = SCREEN_OBJECTS_WITH_ID.get(tileX+","+tileY+","+BlueSaga.playerCharacter.getZ());
+						if(so != null){
+							TileObject Container = so.getObject();
 
 							// WALK UP TO CONTAINER
 							if(Container != null){
