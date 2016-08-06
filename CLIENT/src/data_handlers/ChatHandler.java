@@ -17,7 +17,7 @@ public class ChatHandler extends Handler {
 	public static void handleData(String serverData){
 		// CHAT DATA
 		if(serverData.startsWith("<newchat>")){
-			String chatinfo[] = serverData.substring(9).split(";");
+			String chatinfo[] = serverData.substring(9).split(";",3);
 			String chatChannel = chatinfo[0].toLowerCase();
 			String sender = chatinfo[1];
 			
