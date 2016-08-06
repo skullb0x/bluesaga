@@ -57,7 +57,7 @@ public class ItemSplitterWindow extends Window {
 
 	public void keyLogic(Input INPUT, Client client){
 		if(isOpen()){
-			if(INPUT.isKeyPressed(Input.KEY_ENTER)){
+			if(INPUT.isKeyPressed(Input.KEY_RETURN) || INPUT.isKeyPressed(Input.KEY_NUMPADENTER)){
 				if(!number_field.getText().equals("")){
 					if(isIntNumber(number_field.getText())){
 						BlueSaga.client.sendMessage("splitmouse",getInventoryPos()+";"+number_field.getText());

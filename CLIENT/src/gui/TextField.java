@@ -474,7 +474,7 @@ public class TextField extends AbstractComponent {
                     value = value.substring(0, cursorPos) + c;
                 }
                 cursorPos++;
-            } else if (key == Input.KEY_RETURN) {
+            } else if (key == Input.KEY_RETURN || key == Input.KEY_NUMPADENTER) {
                 notifyListeners();
             }
             
