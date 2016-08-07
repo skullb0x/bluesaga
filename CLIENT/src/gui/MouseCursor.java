@@ -44,11 +44,11 @@ public class MouseCursor {
 	
 	public void draw(int mouseX, int mouseY, int alpha){
 		if(type.equals("Pointer")){
-			pointImage.draw(mouseX-10,mouseY-10, new Color(255,255,255,alpha));
+			pointImage.draw(mouseX-5,mouseY-5, new Color(255,255,255,alpha));
 		}else if(type.equals("Attack")){
 			attackAnimation.draw(mouseX-25,mouseY-25, new Color(255,255,255,alpha));
 		}else if(type.equals("Pickup")){
-			pickupAnimation.draw(mouseX-25,mouseY-25, new Color(255,255,255,alpha));
+			pickupAnimation.draw(mouseX-15,mouseY-25, new Color(255,255,255,alpha));
 		}else if(type.equals("Ability")){
 			abilityAnimation.draw(mouseX-25,mouseY-25, new Color(255,255,255,alpha));
 		}else if(type.equals("Talk")){
