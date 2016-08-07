@@ -523,26 +523,25 @@ public class MapHandler extends Handler {
 	    	int o1y = o1.getY();
 	    	int o2y = o2.getY();
 	    	
-	    	if(o1.getType().equals("Creature")){
+	    	boolean o1c = "Creature".equals(o1.getType());
+	    	boolean o2c = "Creature".equals(o2.getType());
+	    	
+	    	if(o1c){
     			if(o1.getCreature().isDead()){
     				o1y-=3;
     			}
-	    	}else{
-	    		o1y--;
 	    	}
-    		if(o2.getType().equals("Creature")){
+    		if(o2c){
     			if(o2.getCreature().isDead()){
 	    			o2y-=3;
     			}
-	    	}else{
-	    		o2y--;
 	    	}
     	
     		if(o1y == o2y){
-    			if(o1.getType().equals("Creature") && !o2.getType().equals("Creature")){
+    			if(o1c && !o2c){
     				o2y++;
     			}
-    			if(o2.getType().equals("Creature") && !o1.getType().equals("Creature")){
+    			if(o2c && !o1c){
     				o1y++;
     			}
     		}
