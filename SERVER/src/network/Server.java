@@ -7,6 +7,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
+import java.lang.management.ManagementFactory;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MalformedObjectNameException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import components.md5;
 import map.WorldMap;
 import utils.CrashLogger;
@@ -69,7 +76,7 @@ public abstract class Server {
 	public static int newClientIndex = 0;
 	public static ConcurrentHashMap<Integer, Client> clients;
 	
-	
+  private Timers mb_timers;
 	
 	/**
 	 * Constructor
@@ -88,6 +95,18 @@ public abstract class Server {
 	
 	// Start the server
 	public synchronized void start() {
+		mb_timers = new Timers();  // Timers implements TimersMBean
+		mb_timers.setInitBeginTime(System.currentTimeMillis());
+
+		try {
+			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+			ObjectName name = new ObjectName("BlueSaga:type=Server,name=Timers");
+			mbs.registerMBean(mb_timers, name);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
 		clients = new ConcurrentHashMap<Integer, Client>();
 		
 		if(ServerSettings.DEV_MODE){
@@ -98,6 +117,7 @@ public abstract class Server {
 		
 		ServerMessage.printMessage("Starting server v0."+ServerSettings.CLIENT_VERSION,false);
 
+		
 		// Initialize all databases
 		try {
 			gameDB = new Database("game");
@@ -199,7 +219,13 @@ public abstract class Server {
 
 		// Initialize the live tick counter for TPS monitoring
 		int ticksCount = 0;
+		
+		long t_incoming = 0L;
+		long t_update = 0L;
+		long t_outgoing = 0L;
+		long t_cleanup = 0L;
 
+		mb_timers.setRunningBeginTime(System.currentTimeMillis());
 		while (running) {
 
 			// Current time
@@ -215,18 +241,30 @@ public abstract class Server {
 				tick++;
 
 				if(!SERVER_RESTARTING){
+					long t0 = System.currentTimeMillis();
+					
 					// 1. Process queued requests
 					DataHandlers.processIncomingData();
-	
+					long t1 = System.currentTimeMillis();
+					t_incoming += t1 - t0;
+					t0 = t1;
+					
 					// 2. Update the models
 					DataHandlers.update(tick);
+					t1 = System.currentTimeMillis();
+					t_update += t1 - t0;
+					t0 = t1;
 					
 					// 3. Notify clients of queued relevant changes
 					DataHandlers.processOutgoingData();
+					t1 = System.currentTimeMillis();
+					t_outgoing += t1 - t0;
+					t0 = t1;
 					
 					// 4. Remove deleted clients
 					removeClients();
-				
+					t1 = System.currentTimeMillis();
+					t_cleanup += t1 - t0;
 				}
 			} 
 
@@ -235,7 +273,8 @@ public abstract class Server {
 				lastSecondTime = nowTime;
 				actualTPS = ticksCount;
 				ticksCount = 0;
-				//ServerMessage.printMessage("Ticks/Second: " + actualTPS);				
+				mb_timers.updateLoopTime(System.currentTimeMillis(), t_incoming, t_update, t_outgoing, t_cleanup);
+				mb_timers.updateTicksPerSecond(actualTPS);
 			}
 			
 			try {

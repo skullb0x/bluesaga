@@ -26,8 +26,7 @@ public class CrashLogger {
 			}
 			System.out.println("Error written to file: "+filename);
 		} catch (FileNotFoundException | UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 			System.out.println("Error writing exception to file!");
 		}
 	}
