@@ -15,6 +15,7 @@ import utils.RandomUtils;
 import data_handlers.ability_handler.Ability;
 import data_handlers.ability_handler.AbilityHandler;
 import data_handlers.item_handler.Item;
+import data_handlers.monster_handler.ai_types.BaseAI;
 import data_handlers.monster_handler.MonsterHandler;
 import network.Server;
 
@@ -54,8 +55,6 @@ public class Npc extends Creature {
 	 * Boss
 	 * 
 	 */
-	private Vector<String> aiTypes = new Vector<String>();
-	
 	
 	/**
 	 * 0 = not moving and no aggro
@@ -97,6 +96,8 @@ public class Npc extends Creature {
 	
 	private Vector<String> states = new Vector<String>();
 	
+	private final BaseAI ai;
+	
 	public Npc(int creatureId, int newX, int newY, int newZ) {
 		super(creatureId,newX,newY,newZ);
 
@@ -131,33 +132,18 @@ public class Npc extends Creature {
 		
 		loadEquipment();
 
-		if(getAttackRange() > 2){
-			// Range behaviour
-			getAiTypes().add("Ranged");
-			setStat("STRENGTH",getStat("STRENGTH")-4);
-			setStat("AGILITY",getStat("STRENGTH")-4);
-			setStat("STRENGTH",getStat("STRENGTH")-4);
-			
-		}else if(getCreatureId() == 63 || getCreatureId() == 77){
-			// Shy behaviour
-			getAiTypes().add("Shy");
-		}else{
-			// Melee behaviour
-			getAiTypes().add("Melee");
-		}
-		
-		
 		// Hide name of non-aggro creatures (ex: chicken, kitten)
 		if(getAggroType() == 4){
 			setName("");
 		}
 		setOriginalAggroType(getAggroType());
 		
-		
 		elite = false;
 		titan = false;
 		
 		respawnTimeItr = 0;
+		
+		ai = BaseAI.newAi(this);
 	}
 
 	public Npc(Npc copy, int npcX, int npcY, int npcZ){
@@ -188,12 +174,12 @@ public class Npc extends Creature {
 
 		setOriginalAggroType(copy.getOriginalAggroType());
 		
-		aiTypes = copy.getAiTypes();
-		
 		elite = false;
 		titan = false;
 		
 		respawnTimeItr = 0;
+		
+		ai = BaseAI.newAi(this);
 	}
 	
 
@@ -230,6 +216,9 @@ public class Npc extends Creature {
 		 */
 	}
 
+  public void doAggroBehaviour(Vector<Npc> monsterMoved) {
+    ai.doAggroBehaviour(monsterMoved);
+  }
 	
 	public String getFullData(){
 		String npcData = super.getFullData()+","+getAggroType()+","+getSpecialType();
@@ -520,11 +509,10 @@ public class Npc extends Creature {
 		return GiveXP;
 	}
 
-
 	public void setGiveXP(int giveXP) {
 		GiveXP = giveXP;
 	}
-
+	
 	@Override
 	public void revive(){
 		SpecialType = 0;
@@ -862,14 +850,17 @@ public class Npc extends Creature {
 	 * Getters and setters
 	 */
 
-	public void setAggro(Creature target){
+	public void setAggro(Creature target) {
 		super.setAggro(target);
 		
 		// Update aggroMonster list in MonsterHandler
 		if(target != null){
 			if(!MonsterHandler.aggroMonsters.contains(this)){
 				MonsterHandler.aggroMonsters.add(this);
+				ai.becomeAggro();
 			}
+		} else {
+			MonsterHandler.aggroMonsters.remove(this);
 		}
 	}
 	
@@ -963,11 +954,6 @@ public class Npc extends Creature {
 	
 	public int getSpecialType(){
 		return SpecialType;
-	}
-
-
-	public Vector<String> getAiTypes() {
-		return aiTypes;
 	}
 
 
