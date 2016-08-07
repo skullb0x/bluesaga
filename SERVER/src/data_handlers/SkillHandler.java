@@ -13,104 +13,106 @@ import network.Server;
 public class SkillHandler extends Handler {
 
 	public static void init() {
+		DataHandlers.register("particledata", m -> handleParticleData(m));
+		DataHandlers.register("skilldata", m -> handleSkillData(m));
+	}
+	
+	public static void handleParticleData(Message m) {
+		Client client = m.client;
+		StringBuilder msg = new StringBuilder(4400);
+		ResultSet emitterInfo = Server.gameDB.askDB("select * from Emitter");
+		try {
+			while(emitterInfo.next()){
+				msg.append(emitterInfo.getInt("Id")).append(';')
+					 .append(emitterInfo.getString("Name")).append(';')
+					 .append(emitterInfo.getFloat("LifeTime")).append(';')
+					 .append(emitterInfo.getFloat("EmittionRate")).append(';')
+					 .append(emitterInfo.getFloat("RotationSpeed")).append(';')
+					 .append(emitterInfo.getString("MinPos")).append(';')
+					 .append(emitterInfo.getString("MaxPos")).append(';')
+					 .append(emitterInfo.getInt("ShowParticle")).append(';')
+					 .append(emitterInfo.getInt("ParticleId")).append(';')
+					 .append(emitterInfo.getInt("ShowStreak")).append(';')
+					 .append(emitterInfo.getInt("StreakId")).append('/');
+			}
+			emitterInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		msg.append('%');
+		ResultSet particleInfo = Server.gameDB.askDB("select * from Particle");
+		try {
+			while(particleInfo.next()){
+				msg.append(particleInfo.getInt("Id")).append(';')
+					 .append(particleInfo.getString("Name")).append(';')
+					 .append(particleInfo.getString("MinDir")).append(';')
+					 .append(particleInfo.getString("MaxDir")).append(';')
+					 .append(particleInfo.getInt("MinAxisRotSpeed")).append(';')
+					 .append(particleInfo.getInt("MaxAxisRotSpeed")).append(';')
+					 .append(particleInfo.getFloat("MinScale")).append(';')
+					 .append(particleInfo.getFloat("MaxScale")).append(';')
+					 .append(particleInfo.getFloat("LifeTime")).append(';')
+					 .append(particleInfo.getString("ImageString")).append(';')
+					 .append(particleInfo.getFloat("VerticalGravity")).append(';')
+					 .append(particleInfo.getFloat("HorizontalGravity")).append(';')
+					 .append(particleInfo.getString("StartColor")).append(';')
+					 .append(particleInfo.getString("EndColor")).append(';')
+					 .append(particleInfo.getFloat("RotationSpeed")).append(';')
+					 .append(particleInfo.getFloat("FadeSpeed")).append('/');
+			}
+			particleInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		msg.append('%');
+		ResultSet projectileInfo = Server.gameDB.askDB("select * from projectile");
+		try {
+			while(projectileInfo.next()){
+				msg.append(projectileInfo.getInt("Id")).append(';')
+					 .append(projectileInfo.getString("GfxName")).append(';')
+					 .append(projectileInfo.getInt("EmitterId")).append(';')
+					 .append(projectileInfo.getString("HitColor")).append(';')
+					 .append(projectileInfo.getString("Sfx")).append('/');
+			}
+			projectileInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
+		addOutGoingMessage(client,"particledata",msg.toString());
 	}
 
-	public static void handleData(Client client, String message){
-		if(message.startsWith("<particledata>")){
-			StringBuilder msg = new StringBuilder(4400);
-			ResultSet emitterInfo = Server.gameDB.askDB("select * from Emitter");
+	public static void handleSkillData(Message m) {
+		Client client = m.client;
+		if(client.playerCharacter != null){
+			StringBuilder skillData = new StringBuilder(1000);
+
+			// GET SKILL INFO
+			ResultSet skillInfo = Server.userDB.askDB("select SkillId, Level, SP from character_skill where CharacterId = "+client.playerCharacter.getDBId()+" order by SkillId asc");
+
+			// SkillId, SkillName, SkillLevel, SkillSP, SkillSPnext ; ...
+
+			int nextSP = 0;
+
 			try {
-				while(emitterInfo.next()){
-					msg.append(emitterInfo.getInt("Id")).append(';')
-					   .append(emitterInfo.getString("Name")).append(';')
-					   .append(emitterInfo.getFloat("LifeTime")).append(';')
-					   .append(emitterInfo.getFloat("EmittionRate")).append(';')
-					   .append(emitterInfo.getFloat("RotationSpeed")).append(';')
-					   .append(emitterInfo.getString("MinPos")).append(';')
-					   .append(emitterInfo.getString("MaxPos")).append(';')
-					   .append(emitterInfo.getInt("ShowParticle")).append(';')
-					   .append(emitterInfo.getInt("ParticleId")).append(';')
-					   .append(emitterInfo.getInt("ShowStreak")).append(';')
-					   .append(emitterInfo.getInt("StreakId")).append('/');
-				}
-				emitterInfo.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			msg.append('%');
-			ResultSet particleInfo = Server.gameDB.askDB("select * from Particle");
-			try {
-				while(particleInfo.next()){
-					msg.append(particleInfo.getInt("Id")).append(';')
-					   .append(particleInfo.getString("Name")).append(';')
-					   .append(particleInfo.getString("MinDir")).append(';')
-					   .append(particleInfo.getString("MaxDir")).append(';')
-					   .append(particleInfo.getInt("MinAxisRotSpeed")).append(';')
-					   .append(particleInfo.getInt("MaxAxisRotSpeed")).append(';')
-					   .append(particleInfo.getFloat("MinScale")).append(';')
-					   .append(particleInfo.getFloat("MaxScale")).append(';')
-					   .append(particleInfo.getFloat("LifeTime")).append(';')
-					   .append(particleInfo.getString("ImageString")).append(';')
-					   .append(particleInfo.getFloat("VerticalGravity")).append(';')
-					   .append(particleInfo.getFloat("HorizontalGravity")).append(';')
-					   .append(particleInfo.getString("StartColor")).append(';')
-					   .append(particleInfo.getString("EndColor")).append(';')
-					   .append(particleInfo.getFloat("RotationSpeed")).append(';')
-					   .append(particleInfo.getFloat("FadeSpeed")).append('/');
-				}
-				particleInfo.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			msg.append('%');
-			ResultSet projectileInfo = Server.gameDB.askDB("select * from projectile");
-			try {
-				while(projectileInfo.next()){
-					msg.append(projectileInfo.getInt("Id")).append(';')
-					   .append(projectileInfo.getString("GfxName")).append(';')
-					   .append(projectileInfo.getInt("EmitterId")).append(';')
-					   .append(projectileInfo.getString("HitColor")).append(';')
-					   .append(projectileInfo.getString("Sfx")).append('/');
-				}
-				projectileInfo.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-			addOutGoingMessage(client,"particledata",msg.toString());
-
-		}else if(message.startsWith("<skilldata>")){
-			if(client.playerCharacter != null){
-				StringBuilder skillData = new StringBuilder(1000);
-
-				// GET SKILL INFO
-				ResultSet skillInfo = Server.userDB.askDB("select SkillId, Level, SP from character_skill where CharacterId = "+client.playerCharacter.getDBId()+" order by SkillId asc");
-
-				// SkillId, SkillName, SkillLevel, SkillSP, SkillSPnext ; ...
-
-				int nextSP = 0;
-
-				try {
-					while(skillInfo.next()){
-						JobSkill skillDef = ServerGameInfo.skillDef.get(skillInfo.getInt("SkillId"));
-				
-						if(skillDef != null){
-							nextSP = XPTables.nextLevelSP.get(skillInfo.getInt("Level") + 1);
-							skillData.append(skillInfo.getInt("SkillId")).append(',')
-					   .append(skillDef.getName()).append(',')
-					   .append(skillInfo.getInt("Level")).append(',')
-					   .append(skillInfo.getInt("SP")).append(',')
-					   .append(nextSP).append(';');
-						}
-						
+				while(skillInfo.next()){
+					JobSkill skillDef = ServerGameInfo.skillDef.get(skillInfo.getInt("SkillId"));
+			
+					if(skillDef != null){
+						nextSP = XPTables.nextLevelSP.get(skillInfo.getInt("Level") + 1);
+						skillData.append(skillInfo.getInt("SkillId")).append(',')
+					 .append(skillDef.getName()).append(',')
+					 .append(skillInfo.getInt("Level")).append(',')
+					 .append(skillInfo.getInt("SP")).append(',')
+					 .append(nextSP).append(';');
 					}
-					skillInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
+					
 				}
-				addOutGoingMessage(client,"skilldata",skillData.toString());
+				skillInfo.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
+			addOutGoingMessage(client,"skilldata",skillData.toString());
 		}
 	}
 

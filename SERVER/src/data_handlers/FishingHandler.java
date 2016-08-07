@@ -33,17 +33,18 @@ public class FishingHandler extends Handler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
-	public static void handleData(Client client, String message){
-		if(message.startsWith("<fishgamecatch>")){
-			// CHECK IF THERE IS A CATCH
-			if(Catches.containsKey(client.playerCharacter.getDBId())){
-				// ADD FISH TO INVENTORY
-				InventoryHandler.addItemToInventory(client, Catches.get(client.playerCharacter.getDBId()));
-				
-				Catches.remove(client.playerCharacter.getDBId());
-			}
+		DataHandlers.register("fishgamecatch", m -> handleFishCatch(m));
+	}
+	
+	public static void handleFishCatch(Message m) {
+		Client client = m.client;
+		// CHECK IF THERE IS A CATCH
+		if(Catches.containsKey(client.playerCharacter.getDBId())){
+			// ADD FISH TO INVENTORY
+			InventoryHandler.addItemToInventory(client, Catches.get(client.playerCharacter.getDBId()));
+			
+			Catches.remove(client.playerCharacter.getDBId());
 		}
 	}
 	

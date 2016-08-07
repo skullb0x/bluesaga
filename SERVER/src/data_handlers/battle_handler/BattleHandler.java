@@ -19,7 +19,9 @@ import creature.Npc;
 import creature.PlayerCharacter;
 import creature.Creature.CreatureType;
 import data_handlers.ClassHandler;
+import data_handlers.DataHandlers;
 import data_handlers.Handler;
+import data_handlers.Message;
 import data_handlers.QuestHandler;
 import data_handlers.TutorialHandler;
 import data_handlers.item_handler.ItemHandler;
@@ -32,150 +34,151 @@ public class BattleHandler extends Handler {
 
 	public static void init() {
 		//updatePkTime();
+		
+		DataHandlers.register("rest", m -> handleRest(m));
+		DataHandlers.register("player_respawn", m -> handlePlayerRespawn(m));
+		DataHandlers.register("settarget", m -> handleSetTarget(m));
+	}
+	
+	public static void handleRest(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+	
+		if("start".equals(m.message)){
+			MonsterHandler.changeMonsterSleepState(client.playerCharacter, true);
+		}else{
+			MonsterHandler.changeMonsterSleepState(client.playerCharacter, false);
+		}
 	}
 
-	public static void handleData(Client client, String message) {
-		if(client.playerCharacter != null){
-			if(message.startsWith("<rest>")){
-				String restInfo = message.substring(6);
-			
-				if(restInfo.equals("start")){
-					MonsterHandler.changeMonsterSleepState(client.playerCharacter, true);
-				}else{
-					MonsterHandler.changeMonsterSleepState(client.playerCharacter, false);
-				}
-			}
+	public static void handlePlayerRespawn(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		respawnPlayer(client.playerCharacter);
 
-			if (message.startsWith("<player_respawn>")) {
+		client.Ready = true;
 
-				// RESPAWN PLAYER AT CHECKPOINT LOCATION
-				
-				respawnPlayer(client.playerCharacter);
+		int playerX = client.playerCharacter.getX();
+		int playerY = client.playerCharacter.getY();
+		int playerZ = client.playerCharacter.getZ();
 
-				client.Ready = true;
+		client.playerCharacter.getShip().setShow(false);
 
-				int playerX = client.playerCharacter.getX();
-				int playerY = client.playerCharacter.getY();
-				int playerZ = client.playerCharacter.getZ();
-
-				client.playerCharacter.getShip().setShow(false);
-
-				client.playerCharacter.revive();
-				addOutGoingMessage(client,"revive","");
-				
-				addOutGoingMessage(client,"update_bonusstats",client.playerCharacter.getBonusStatsAsString());
-
-				Tile respawnTile = Server.WORLD_MAP.getTile(playerX, playerY, playerZ);
-
-				if(respawnTile != null){
-					respawnTile.setOccupant(CreatureType.Player, client.playerCharacter);
-				}
-				
-				addOutGoingMessage(client, "respawn", playerX+","+playerY+","+playerZ);
-			
-				// Send death tutorial
-				if(client.playerCharacter.getTutorialNr() == 7){
-					TutorialHandler.updateTutorials(7,client);
-				}
-			}
-
-
-			if (message.startsWith("<settarget>")) {
-				String targetInfo[] = message.substring(11).split(";");
-				int targetX = Integer.parseInt(targetInfo[0]);
-				int targetY = Integer.parseInt(targetInfo[1]);
-
-				CreatureType targetType = CreatureType.None;
-				boolean safeZone = false;
+		client.playerCharacter.revive();
+		addOutGoingMessage(client,"revive","");
 		
-				Creature Target = null;
-				
-				boolean clickedObject = false;
+		addOutGoingMessage(client,"update_bonusstats",client.playerCharacter.getBonusStatsAsString());
 
-				// Check for target or object on clicked tile
-				if(Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()) != null){
-					// If object then not look for nearby targets
-					if(!Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()).getObjectId().equals("None")){
-						clickedObject = true;
-					}
-					Target = Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()).getOccupant();
-				}
+		Tile respawnTile = Server.WORLD_MAP.getTile(playerX, playerY, playerZ);
 
-				// If no target and no object
-				if(Target == null && !clickedObject){
-					for(int nearbyX = targetX-1; nearbyX <= targetX+1; nearbyX++){
-						for(int nearbyY = targetY-1; nearbyY <= targetY+1; nearbyY++){
-							if(Server.WORLD_MAP.getTile(nearbyX, nearbyY, client.playerCharacter.getZ()) != null){
-								Target = Server.WORLD_MAP.getTile(nearbyX, nearbyY, client.playerCharacter.getZ()).getOccupant();
+		if(respawnTile != null){
+			respawnTile.setOccupant(CreatureType.Player, client.playerCharacter);
+		}
+		
+		addOutGoingMessage(client, "respawn", playerX+","+playerY+","+playerZ);
+	
+		// Send death tutorial
+		if(client.playerCharacter.getTutorialNr() == 7){
+			TutorialHandler.updateTutorials(7,client);
+		}
+	}
 
-								if(Target != null){
-									if(Target.getCreatureType() == CreatureType.Monster){
-										Npc targetMonster = (Npc) Target;
-										// Only target monsters with aggro type 2
-										if(targetMonster.getOriginalAggroType() == 2){
-											targetX = nearbyX;
-											targetY = nearbyY;
-											break;
-										}
-									}
+	public static void handleSetTarget(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		String targetInfo[] = m.message.split(";");
+		int targetX = Integer.parseInt(targetInfo[0]);
+		int targetY = Integer.parseInt(targetInfo[1]);
+
+		CreatureType targetType = CreatureType.None;
+		boolean safeZone = false;
+
+		Creature Target = null;
+		
+		boolean clickedObject = false;
+
+		// Check for target or object on clicked tile
+		if(Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()) != null){
+			// If object then not look for nearby targets
+			if(!Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()).getObjectId().equals("None")){
+				clickedObject = true;
+			}
+			Target = Server.WORLD_MAP.getTile(targetX, targetY, client.playerCharacter.getZ()).getOccupant();
+		}
+
+		// If no target and no object
+		if(Target == null && !clickedObject){
+			for(int nearbyX = targetX-1; nearbyX <= targetX+1; nearbyX++){
+				for(int nearbyY = targetY-1; nearbyY <= targetY+1; nearbyY++){
+					if(Server.WORLD_MAP.getTile(nearbyX, nearbyY, client.playerCharacter.getZ()) != null){
+						Target = Server.WORLD_MAP.getTile(nearbyX, nearbyY, client.playerCharacter.getZ()).getOccupant();
+
+						if(Target != null){
+							if(Target.getCreatureType() == CreatureType.Monster){
+								Npc targetMonster = (Npc) Target;
+								// Only target monsters with aggro type 2
+								if(targetMonster.getOriginalAggroType() == 2){
+									targetX = nearbyX;
+									targetY = nearbyY;
+									break;
 								}
 							}
 						}
-						if(Target != null){
-							break;
-						}
+					}
+				}
+				if(Target != null){
+					break;
+				}
+			}
+		}
+
+
+		if(Target != null){
+			if(Target.getCreatureType() == CreatureType.Player && Target.getDBId() == client.playerCharacter.getDBId()){
+				client.playerCharacter.setAggro(null);
+				addOutGoingMessage(client, "settarget", "None,0");
+			}else{
+				targetType = Target.getCreatureType();
+
+				// PVP - CHECK IF IN A SAFE ZONE OR CAN ATTACK TARGET
+				if(targetType == CreatureType.Player){
+					PlayerCharacter targetPlayer = (PlayerCharacter) Target;
+						
+					if(!PvpHandler.canAttackPlayer(client.playerCharacter,targetPlayer)){
+						safeZone = true;
 					}
 				}
 
 
-				if(Target != null){
-					if(Target.getCreatureType() == CreatureType.Player && Target.getDBId() == client.playerCharacter.getDBId()){
+				// If Target is a NPC
+				if(targetType == CreatureType.Monster){
+					Npc npcTarget = (Npc) Target;
+
+					if(npcTarget.getAggroType() == 3){
+						// Get Quest dialog
+						safeZone = true;
+						QuestHandler.getNpcDialog(client, targetX,targetY,client.playerCharacter.getZ());
 						client.playerCharacter.setAggro(null);
 						addOutGoingMessage(client, "settarget", "None,0");
-					}else{
-						targetType = Target.getCreatureType();
-
-						// PVP - CHECK IF IN A SAFE ZONE OR CAN ATTACK TARGET
-						if(targetType == CreatureType.Player){
-							PlayerCharacter targetPlayer = (PlayerCharacter) Target;
-								
-							if(!PvpHandler.canAttackPlayer(client.playerCharacter,targetPlayer)){
-								safeZone = true;
-							}
-						}
-
-
-						// If Target is a NPC
-						if(targetType == CreatureType.Monster){
-							Npc npcTarget = (Npc) Target;
-
-							if(npcTarget.getAggroType() == 3){
-								// Get Quest dialog
-								safeZone = true;
-								QuestHandler.getNpcDialog(client, targetX,targetY,client.playerCharacter.getZ());
-								client.playerCharacter.setAggro(null);
-								addOutGoingMessage(client, "settarget", "None,0");
-							}else if(!safeZone){
-								// Update TARGET Tutorial
-								TutorialHandler.updateTutorials(4, client);
-							}
-						}
-
-						// IF NOT SAFEZONE AND TARGET LEGIT, PROCEED WITH ATTACK
-						if(!safeZone){
-							client.playerCharacter.setAggro(Target);
-							addOutGoingMessage(client, "settarget", targetType+","+Target.getDBId());
-						}else{
-							client.playerCharacter.setAggro(null);
-							addOutGoingMessage(client, "settarget", "None,0");
-						}
-
+					}else if(!safeZone){
+						// Update TARGET Tutorial
+						TutorialHandler.updateTutorials(4, client);
 					}
+				}
+
+				// IF NOT SAFEZONE AND TARGET LEGIT, PROCEED WITH ATTACK
+				if(!safeZone){
+					client.playerCharacter.setAggro(Target);
+					addOutGoingMessage(client, "settarget", targetType+","+Target.getDBId());
 				}else{
 					client.playerCharacter.setAggro(null);
 					addOutGoingMessage(client, "settarget", "None,0");
 				}
+
 			}
+		}else{
+			client.playerCharacter.setAggro(null);
+			addOutGoingMessage(client, "settarget", "None,0");
 		}
 	}
 

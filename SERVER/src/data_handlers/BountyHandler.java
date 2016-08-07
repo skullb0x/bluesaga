@@ -14,28 +14,29 @@ public class BountyHandler extends Handler {
 	private static int baseGain = 10;
 	
 	public static void init() {
+		DataHandlers.register("getmostwanted", m -> handleMostWanted(m));
 	}
-
-	public static void handleData(Client client, String message) {
-
-		if (message.startsWith("<getmostwanted>")) {
-			ResultSet rs = Server.userDB.askDB("select Name, Bounty from user_character where Bounty > 0 order by Bounty desc limit 10");
+	
+	public static void handleMostWanted(Message m) {
+		Client client = m.client;
+		ResultSet rs = Server.userDB.askDB("select Name, Bounty from user_character where Bounty > 0 order by Bounty desc limit 10");
+	
+		String wantedData = "none";
 		
-			String wantedData = "none";
-			
-			try {
-				while(rs.next()){
-					if(wantedData.equals("none")){
-						wantedData = "";
-					}
-					wantedData += rs.getString("Name")+","+rs.getInt("Bounty")+";";
+		try {
+			while(rs.next()){
+				if(wantedData.equals("none")){
+					wantedData = "";
 				}
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
+				wantedData += rs.getString("Name")+","+rs.getInt("Bounty")+";";
 			}
-			addOutGoingMessage(client,"mostwanted",wantedData);
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		addOutGoingMessage(client,"mostwanted",wantedData);
+	}
+	
 		/*
 		if(message.startsWith("<placebounty>")){
 			String bountyInfo[] = message.substring(13).split(";");
@@ -87,7 +88,6 @@ public class BountyHandler extends Handler {
 			}
 		}
 		 */
-	}
 	
 	public static void changeBounty(PlayerCharacter victim, PlayerCharacter killer){
 		int victimBounty = victim.getBounty();

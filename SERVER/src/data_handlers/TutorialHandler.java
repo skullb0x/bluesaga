@@ -5,14 +5,6 @@ import network.Server;
 
 public class TutorialHandler extends Handler {
 
-	public static void init() {
-
-	}
-
-	public static void handleData(Client client, String message){
-
-	}
-
 	public static void updateTutorials(int tutorialNr, Client client){
 		if(client.playerCharacter.getTutorialNr() == tutorialNr){
 			boolean saveTutorialProgress = true;
@@ -60,8 +52,6 @@ public class TutorialHandler extends Handler {
 				client.playerCharacter.setTutorialNr(tutorialNr+1);
 				Server.userDB.updateDB("update user_character set TutorialNr = "+(tutorialNr+1)+" where Id = "+client.playerCharacter.getDBId());
 			}
-			
 		}
-		
 	}
 }

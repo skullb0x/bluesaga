@@ -26,57 +26,59 @@ import map.Trap;
 
 public class WalkHandler extends Handler {
 
+	public static void init() {
+		DataHandlers.register("canwalk", m -> handleCanWalk(m));
+		DataHandlers.register("changedir", m -> handleChangeDirection(m));
+	}
+	
+	public static void handleCanWalk(Message m) {
+		Client client = m.client;
+		if (client.playerCharacter == null) return;
 
-	public static void handleData(Client client, String message){
-		if(client.playerCharacter != null){
+		String[] coords = m.message.split(":");
 
-			if(message.startsWith("<canwalk>")){
-				String newCoords = message.substring(9,message.length());
-				String[] coords = newCoords.split(":");
-
-				int changeX = Integer.parseInt(coords[0]);
-				int changeY = Integer.parseInt(coords[1]);
+		int changeX = Integer.parseInt(coords[0]);
+		int changeY = Integer.parseInt(coords[1]);
 
 
-				int gotoX = client.playerCharacter.getX() + changeX;
-				int gotoY = client.playerCharacter.getY() + changeY;
-				int gotoZ = client.playerCharacter.getZ();
+		int gotoX = client.playerCharacter.getX() + changeX;
+		int gotoY = client.playerCharacter.getY() + changeY;
+		int gotoZ = client.playerCharacter.getZ();
 
-				if(client.playerCharacter.hasStatusEffect(27)){
-					gotoX = client.playerCharacter.getX() - changeX;
-					gotoY = client.playerCharacter.getY() - changeY;
-				}
+		if(client.playerCharacter.hasStatusEffect(27)){
+			gotoX = client.playerCharacter.getX() - changeX;
+			gotoY = client.playerCharacter.getY() - changeY;
+		}
 
-				if(canWalk(client,gotoX,gotoY, gotoZ)){
-					TutorialHandler.updateTutorials(0,client);
-					
-					// Reset ranged attack cooldown, longer depending on diagonal move or not
-					boolean diagonalMove = false;
-					if(changeX != 0 && changeY != 0){
-						diagonalMove = true;
-					}
-					client.playerCharacter.resetRangedAttackCooldown(diagonalMove);
+		if(canWalk(client,gotoX,gotoY, gotoZ)){
+			TutorialHandler.updateTutorials(0,client);
+			
+			// Reset ranged attack cooldown, longer depending on diagonal move or not
+			boolean diagonalMove = false;
+			if(changeX != 0 && changeY != 0){
+				diagonalMove = true;
+			}
+			client.playerCharacter.resetRangedAttackCooldown(diagonalMove);
 
-					movePlayer(client, gotoX, gotoY, gotoZ);
-				}else{
-					addOutGoingMessage(client,"nowalk",client.playerCharacter.getX()+","+client.playerCharacter.getY()+","+client.playerCharacter.getZ());
-				}
+			movePlayer(client, gotoX, gotoY, gotoZ);
+		}else{
+			addOutGoingMessage(client,"nowalk",client.playerCharacter.getX()+","+client.playerCharacter.getY()+","+client.playerCharacter.getZ());
+		}
+	}
 
-			}else if(message.startsWith("<changedir>")){
-				String newDir = message.substring(11,message.length());
-				Float newAngle = Float.parseFloat(newDir);
+	public static void handleChangeDirection(Message m) {
+		Client client = m.client;
+		if (client.playerCharacter == null) return;
+		Float newAngle = Float.parseFloat(m.message);
 
-				client.playerCharacter.setGotoRotation(newAngle);
+		client.playerCharacter.setGotoRotation(newAngle);
 
-				// Send new direction to all players
-				for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
-					Client s = entry.getValue();
+		// Send new direction to all players
+		for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
+			Client s = entry.getValue();
 
-					if(s.Ready && isVisibleForPlayer(s.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
-						addOutGoingMessage(s,"change_dir",client.playerCharacter.getSmallData()+";"+newAngle);
-					}
-				}
-
+			if(s.Ready && isVisibleForPlayer(s.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
+				addOutGoingMessage(s,"change_dir",client.playerCharacter.getSmallData()+";"+newAngle);
 			}
 		}
 	}

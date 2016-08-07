@@ -14,54 +14,53 @@ import network.Server;
 public class GatheringHandler extends Handler {
 
 	public static void init() {
+		DataHandlers.register("gathering", m -> handleGathering(m));
 	}
 	
-	public static void handleData(Client client, String serverData){
-		if(serverData.startsWith("<gathering>")){
-			if(client.playerCharacter != null){
-				String gatheringInfo[] = serverData.substring(11).split(",");
-				
-				int tileX = Integer.parseInt(gatheringInfo[0]);
-				int tileY = Integer.parseInt(gatheringInfo[1]);
-				int tileZ = Integer.parseInt(gatheringInfo[2]);
-				
-				// CHECK TILE
-				Tile SourceTile = Server.WORLD_MAP.getTile(tileX, tileY, tileZ);
-				
-				if(SourceTile != null){
-					// CHECK IF TILE IS A RESOURCE
-					if(SourceTile.getObjectId().contains("gathering")){
-						// CHECK THAT RESOURCE ISNT USED
-						if(!SourceTile.getObjectId().contains("_open")){
-							// CHECK IF PLAYER IS NEXT TO IT
-							if(client.playerCharacter.getZ() == tileZ){
-								int dist = (int) Math.floor(Math.sqrt(Math.pow(tileX - client.playerCharacter.getX(),2) + Math.pow(tileY - client.playerCharacter.getY(),2)));
-								if(dist < 2){
-									
-									// GET RESOURCE NAME
-									String resourceName = SourceTile.getObjectId().substring(10);
-									
-									// ORANGA BUSH
-									if(resourceName.equals("oranga")){
-										generateHarvest(client, "Oranga Bush", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 178);
-									}else if(resourceName.equals("piccoberries")){
-										generateHarvest(client, "Picco Berries", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 203);
-									}else if(resourceName.equals("flowerluna")){
-										generateHarvest(client, "Luna Petal", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 212);
-									}else if(resourceName.equals("soulbush")){
-										generateHarvest(client, "Soul Bush", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 313);
-									}
-								}
+	public static void handleGathering(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		String gatheringInfo[] = m.message.split(",");
+		
+		int tileX = Integer.parseInt(gatheringInfo[0]);
+		int tileY = Integer.parseInt(gatheringInfo[1]);
+		int tileZ = Integer.parseInt(gatheringInfo[2]);
+		
+		// CHECK TILE
+		Tile SourceTile = Server.WORLD_MAP.getTile(tileX, tileY, tileZ);
+		
+		if(SourceTile != null){
+			// CHECK IF TILE IS A RESOURCE
+			if(SourceTile.getObjectId().contains("gathering")){
+				// CHECK THAT RESOURCE ISNT USED
+				if(!SourceTile.getObjectId().contains("_open")){
+					// CHECK IF PLAYER IS NEXT TO IT
+					if(client.playerCharacter.getZ() == tileZ){
+						int dist = (int) Math.floor(Math.sqrt(Math.pow(tileX - client.playerCharacter.getX(),2) + Math.pow(tileY - client.playerCharacter.getY(),2)));
+						if(dist < 2){
+							
+							// GET RESOURCE NAME
+							String resourceName = SourceTile.getObjectId().substring(10);
+							
+							// ORANGA BUSH
+							if(resourceName.equals("oranga")){
+								generateHarvest(client, "Oranga Bush", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 178);
+							}else if(resourceName.equals("piccoberries")){
+								generateHarvest(client, "Picco Berries", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 203);
+							}else if(resourceName.equals("flowerluna")){
+								generateHarvest(client, "Luna Petal", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 212);
+							}else if(resourceName.equals("soulbush")){
+								generateHarvest(client, "Soul Bush", SourceTile.getObjectId(), tileX, tileY, tileZ, 102, 313);
 							}
-						}else{
-							//IF USED GET HARVEST THAT MAY BE LEFT
-							if(ContainerHandler.CONTAINERS.get(tileX+","+tileY+","+tileZ) != null){
-								// GET CONTENT IN CONTAINER
-								String content = ContainerHandler.getContainerContent(tileX,tileY,tileZ);
-								addOutGoingMessage(client, "container_content",content);
-							}				
 						}
 					}
+				}else{
+					//IF USED GET HARVEST THAT MAY BE LEFT
+					if(ContainerHandler.CONTAINERS.get(tileX+","+tileY+","+tileZ) != null){
+						// GET CONTENT IN CONTAINER
+						String content = ContainerHandler.getContainerContent(tileX,tileY,tileZ);
+						addOutGoingMessage(client, "container_content",content);
+					}				
 				}
 			}
 		}
