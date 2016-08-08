@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/COMMON"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/slick.jar"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/sqlitejdbc-v056.jar"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/mollemac/Documents/blue-saga/JARS"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/bs_user.jar"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="/Users/mollemac/Documents/blue-saga/JARS/grandcentral.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
