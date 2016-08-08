@@ -20,224 +20,226 @@ import network.Server;
 public class LoginHandler extends Handler {
 
 	public static void init() {
+		DataHandlers.register("login", m -> handleLogin(m));
+		DataHandlers.register("logout", m -> handleLogout(m));
+		DataHandlers.register("newchar", m -> handleNewCharacter(m));
+		DataHandlers.register("createchar", m -> handleCreateCharacter(m));
+		DataHandlers.register("deletechar", m -> handleDeleteCharacter(m));
+		DataHandlers.register("changepassword", m -> handleChangePassword(m));
 	}
+	
+	public static void handleLogin(Message m) {
+		Client client = m.client;
+		String[] loginInfo = m.message.split(";");
 
-	public static void handleData(Client client, String message){
-
-		if(message.startsWith("<login>")){
-			String userinfo = message.substring(7,message.length());
-			String[] loginInfo = userinfo.split(";");
-
-			int newUserId = 0;
-			
-			if(ServerSettings.DEV_MODE){
-				if(Server.clients.size() == 1){
-					newUserId = 2;
-				}else if(Server.clients.size() == 2){
-					newUserId = 1;
-				}
-				
-				client.ConfirmAccount = true;
-			}else{
-				String mail = loginInfo[0];
-				String password = loginInfo[1];
-				
-				newUserId = WebsiteLogin.Login(mail, password, client.IP);
-				
-				// If not correct
-				if(newUserId <= 0){
-					if(newUserId == 0){
-						Handler.addOutGoingMessage(client, "login", "wrong");
-					}else if(newUserId == -1){
-						ServerMessage.printMessage("Can't connect to bluesaga.org!",false);
-					    Handler.addOutGoingMessage(client, "login", "error,#messages.server.has_problems");
-					}else if(newUserId == -2){
-						addOutGoingMessage(client,"login","needconfirm");
-					}
-					client.RemoveMe = true;
-				}
+		int newUserId = 0;
+		
+		if(ServerSettings.DEV_MODE){
+			if(Server.clients.size() == 1){
+				newUserId = 2;
+			}else if(Server.clients.size() == 2){
+				newUserId = 1;
 			}
 			
-			if(newUserId > 0){
-				client.ConfirmAccount = true;
-				boolean hasPKChar = false;
-				int pkCharId = 0;
-				
-				// CHECK IF USER ALREADY LOGGED IN
-				for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
-					Client s = entry.getValue();
-
-					if(newUserId == s.UserId){
-
-						// CHECK IF PLAYER IS PK
-						if(s.playerCharacter != null){
-							if(s.playerCharacter.getPkMarker() > 0){
-								hasPKChar = true;
-								pkCharId = s.playerCharacter.getDBId();
-							}
-						}
-
-						addOutGoingMessage(s,"backtologin","Account used on another computer");
-
-						// LOGOUT OTHER USER
-						s.RemoveMe = true;
-
-						break;
-					}
-				}
-
-				client.UserId = newUserId;
-				client.UserMail = loginInfo[0];
-
-				// GET CHEST SIZE
-				// IF NOT SET, CREATE A 4x4 CHEST
-				ResultSet chestInfo = Server.userDB.askDB("select ChestSize from user_settings where UserId = "+client.UserId);
-				try {
-					if(chestInfo.next()){
-						client.chestSize = chestInfo.getInt("ChestSize");
-					}else{
-						client.chestSize = 6;
-						Server.userDB.updateDB("insert into user_settings (UserId,ChestSize) values("+client.UserId+","+client.chestSize+")"); 
-					}
-					chestInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-				ServerMessage.printMessage(TimeUtils.now()+": " + client.UserMail+ " logged in successfully!",false);
-
-				// SKICKA NAMN, RAS, EQUIP, LEVEL
-				// FOR ALLA KARAKTARER TILL SPELAREN
-				String character_info = getCharacterInfo(client);
-
-				addOutGoingMessage(client,"login",client.UserId+";"+client.UserMail+":"+character_info);
-
-				
-				if(hasPKChar){
-					// IF ACCOUNT HAS PK CHAR
-					// LOGIN TO PK CHAR DIRECTLY
-
-					ServerMessage.printMessage("Player has a PK char logged in already! Sending that char...",false);
-
-					if(pkCharId > 0){
-						ConnectHandler.sendPlayerCharacterInfo(client, pkCharId);
-					}
-				}
+			client.ConfirmAccount = true;
+		}else{
+			String mail = loginInfo[0];
+			String password = loginInfo[1];
 			
+			newUserId = WebsiteLogin.Login(mail, password, client.IP);
+			
+			// If not correct
+			if(newUserId <= 0){
+				if(newUserId == 0){
+					Handler.addOutGoingMessage(client, "login", "wrong");
+				}else if(newUserId == -1){
+					ServerMessage.printMessage("Can't connect to bluesaga.org!",false);
+						Handler.addOutGoingMessage(client, "login", "error,#messages.server.has_problems");
+				}else if(newUserId == -2){
+					addOutGoingMessage(client,"login","needconfirm");
+				}
+				client.RemoveMe = true;
 			}
-
-		}else if(message.startsWith("<logout>")){
-			ConnectHandler.logoutCharacter(client);
-			client.UserId = 0;
-			client.UserMail = "";
 		}
-
-		// SEND INFO ABOUT FAMILIES, CLASSES
-		if(message.startsWith("<newchar>")){
-
-			StringBuilder newInfo = new StringBuilder(1000);
+		
+		if(newUserId > 0){
+			client.ConfirmAccount = true;
+			boolean hasPKChar = false;
+			int pkCharId = 0;
 			
-			newInfo.append("1,Family Creatures/");
+			// CHECK IF USER ALREADY LOGGED IN
+			for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
+				Client s = entry.getValue();
 
-			// CreatureId, FamilyName; CreaureId2, FamilyName2 / ItemId; ItemId2
+				if(newUserId == s.UserId){
 
-			ResultSet creatureInfo = Server.gameDB.askDB("select Id, Name, ClassId from creature where PlayerCreature = 1 and FamilyId = 1 and Level = 1");
-			try {
-				while(creatureInfo.next()){
-					newInfo.append(creatureInfo.getString("Id")).append(',')
-								 .append(creatureInfo.getString("Name")).append(';');
+					// CHECK IF PLAYER IS PK
+					if(s.playerCharacter != null){
+						if(s.playerCharacter.getPkMarker() > 0){
+							hasPKChar = true;
+							pkCharId = s.playerCharacter.getDBId();
+						}
+					}
+
+					addOutGoingMessage(s,"backtologin","Account used on another computer");
+
+					// LOGOUT OTHER USER
+					s.RemoveMe = true;
+
+					break;
 				}
-				creatureInfo.close();
+			}
+
+			client.UserId = newUserId;
+			client.UserMail = loginInfo[0];
+
+			// GET CHEST SIZE
+			// IF NOT SET, CREATE A 4x4 CHEST
+			ResultSet chestInfo = Server.userDB.askDB("select ChestSize from user_settings where UserId = "+client.UserId);
+			try {
+				if(chestInfo.next()){
+					client.chestSize = chestInfo.getInt("ChestSize");
+				}else{
+					client.chestSize = 6;
+					Server.userDB.updateDB("insert into user_settings (UserId,ChestSize) values("+client.UserId+","+client.chestSize+")"); 
+				}
+				chestInfo.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}	
+			}
 
+			ServerMessage.printMessage(TimeUtils.now()+": " + client.UserMail+ " logged in successfully!",false);
 
-			addOutGoingMessage(client,"newchar",newInfo.toString());
+			// SKICKA NAMN, RAS, EQUIP, LEVEL
+			// FOR ALLA KARAKTARER TILL SPELAREN
+			String character_info = getCharacterInfo(client);
+
+			addOutGoingMessage(client,"login",client.UserId+";"+client.UserMail+":"+character_info);
+
+			
+			if(hasPKChar){
+				// IF ACCOUNT HAS PK CHAR
+				// LOGIN TO PK CHAR DIRECTLY
+
+				ServerMessage.printMessage("Player has a PK char logged in already! Sending that char...",false);
+
+				if(pkCharId > 0){
+					ConnectHandler.sendPlayerCharacterInfo(client, pkCharId);
+				}
+			}
+		}
+	}
+		
+	public static void handleLogout(Message m) {
+		Client client = m.client;
+		ConnectHandler.logoutCharacter(client);
+		client.UserId = 0;
+		client.UserMail = "";
+	}
+
+	// SEND INFO ABOUT FAMILIES, CLASSES
+	public static void handleNewCharacter(Message m) {
+		Client client = m.client;
+		StringBuilder newInfo = new StringBuilder(1000);
+		
+		newInfo.append("1,Family Creatures/");
+
+		// CreatureId, FamilyName; CreaureId2, FamilyName2 / ItemId; ItemId2
+		ResultSet creatureInfo = Server.gameDB.askDB("select Id, Name, ClassId from creature where PlayerCreature = 1 and FamilyId = 1 and Level = 1");
+		try {
+			while(creatureInfo.next()){
+				newInfo.append(creatureInfo.getString("Id")).append(',')
+							 .append(creatureInfo.getString("Name")).append(';');
+			}
+			creatureInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
+		addOutGoingMessage(client,"newchar",newInfo.toString());
+	}
 
-		if(message.startsWith("<createchar>")){
-			String CharInfo[] = message.substring(12).split(";");
+	public static void handleCreateCharacter(Message m) {
+		Client client = m.client;
+		String CharInfo[] = m.message.split(";");
 
+		boolean createOk = true;
 
-			boolean createOk = true;
+		String charName = CharInfo[0];
 
-			String charName = CharInfo[0];
+		int creatureId = 19;
+		int classId = 2;
 
-			int creatureId = 19;
-			int classId = 2;
+		if(CharInfo.length == 3){
+			try
+			{
+				creatureId = Integer.parseInt(CharInfo[1]);
+				classId = Integer.parseInt(CharInfo[2]);
 
-			if(CharInfo.length == 3){
-				try
-				{
-					creatureId = Integer.parseInt(CharInfo[1]);
-					classId = Integer.parseInt(CharInfo[2]);
-
-					if(classId < 1 || classId > 3){
-						createOk = false;
-					}	
-				}
-				catch (NumberFormatException nfe)
-				{
+				if(classId < 1 || classId > 3){
 					createOk = false;
-				}
-			}else{
+				}	
+			}
+			catch (NumberFormatException nfe)
+			{
 				createOk = false;
 			}
-
-
-			if(createOk){
-				int charId = createCharacter(client,charName,creatureId, classId);
-
-				if(charId > 0){
-					addOutGoingMessage(client,"createchar",String.valueOf(charId));
-				}else if(charId == 0){
-					addOutGoingMessage(client,"createchar","exists");
-				}else if(charId < 0){
-					addOutGoingMessage(client,"createchar","incorrect");
-				}
-			}else{
-				addOutGoingMessage(client,"createchar","error");
-			}
+		}else{
+			createOk = false;
 		}
 
-		if(message.startsWith("<deletechar>")){
-			int characterId = Integer.parseInt(message.substring(12));
+		if(createOk){
+			int charId = createCharacter(client,charName,creatureId, classId);
 
-			// CHECK IF USER OWNS CHARACTER
-			if(Server.userDB.checkCharacterOwnership(characterId, client.UserId)){
+			if(charId > 0){
+				addOutGoingMessage(client,"createchar",String.valueOf(charId));
+			}else if(charId == 0){
+				addOutGoingMessage(client,"createchar","exists");
+			}else if(charId < 0){
+				addOutGoingMessage(client,"createchar","incorrect");
+			}
+		}else{
+			addOutGoingMessage(client,"createchar","error");
+		}
+	}
 
-				ResultSet charInfo = Server.userDB.askDB("select Deleted from user_character where UserId = "+client.UserId+" and Id = "+characterId);
-				try {
-					if(charInfo.next()){
-						if(charInfo.getString("Deleted").equals("No")){
-							Server.userDB.updateDB("update user_character set Deleted = '"+TimeUtils.now()+"' where Id = "+characterId);
-							addOutGoingMessage(client,"deletechar",characterId+",0");
-						}else{
-							Server.userDB.updateDB("update user_character set Deleted = 'No' where Id = "+characterId);
-							addOutGoingMessage(client,"deletechar",characterId+",-1");
-						}
+	public static void handleDeleteCharacter(Message m) {
+		Client client = m.client;
+		int characterId = Integer.parseInt(m.message);
+
+		// CHECK IF USER OWNS CHARACTER
+		if(Server.userDB.checkCharacterOwnership(characterId, client.UserId)){
+
+			ResultSet charInfo = Server.userDB.askDB("select Deleted from user_character where UserId = "+client.UserId+" and Id = "+characterId);
+			try {
+				if(charInfo.next()){
+					if(charInfo.getString("Deleted").equals("No")){
+						Server.userDB.updateDB("update user_character set Deleted = '"+TimeUtils.now()+"' where Id = "+characterId);
+						addOutGoingMessage(client,"deletechar",characterId+",0");
+					}else{
+						Server.userDB.updateDB("update user_character set Deleted = 'No' where Id = "+characterId);
+						addOutGoingMessage(client,"deletechar",characterId+",-1");
 					}
-					charInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
 				}
-			}	
-		}
-
-		if(message.startsWith("<changepassword>")){
-			String passwordInfo[] = message.substring(16).split(";");
-
-			String oldPass = passwordInfo[0];
-			String newPass = passwordInfo[1];
-
-			int statusCode = WebsiteLogin.UpdatePassword(client.UserMail, oldPass, newPass, client.IP);
-			if(statusCode == 1){
-				Handler.addOutGoingMessage(client,"passwordchanged","ok");
-			}else if(statusCode == -1){
-				Handler.addOutGoingMessage(client,"passwordchanged","wrongpass");
+				charInfo.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
+		}	
+	}
+
+	public static void handleChangePassword(Message m) {
+		Client client = m.client;
+		String passwordInfo[] = m.message.split(";");
+
+		String oldPass = passwordInfo[0];
+		String newPass = passwordInfo[1];
+
+		int statusCode = WebsiteLogin.UpdatePassword(client.UserMail, oldPass, newPass, client.IP);
+		if(statusCode == 1){
+			Handler.addOutGoingMessage(client,"passwordchanged","ok");
+		}else if(statusCode == -1){
+			Handler.addOutGoingMessage(client,"passwordchanged","wrongpass");
 		}
 	}
 

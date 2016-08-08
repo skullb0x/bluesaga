@@ -12,8 +12,10 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import creature.Creature.CreatureType;
+import data_handlers.DataHandlers;
 import data_handlers.Handler;
 import data_handlers.MapHandler;
+import data_handlers.Message;
 import data_handlers.item_handler.ContainerHandler;
 import data_handlers.item_handler.Item;
 import utils.RandomUtils;
@@ -67,94 +69,100 @@ public class CardHandler extends Handler {
 			e.printStackTrace();
 		}
 		
+		DataHandlers.register("card_book", m -> handleCardBook(m));
+		DataHandlers.register("card_place", m -> handleCardPlace(m));
+		DataHandlers.register("add_card_to_mouse", m -> handleAddCardToMouse(m));
 	}
 	
-	public static void handleData(Client client, String message) {
-		if(message.startsWith("<card_book>")){
-			sendCardBookContent(client);
-		}else if (message.startsWith("<card_place>")) {
-			String cardInfo[] = message.substring(12).split(",");
-			 
-			Integer.parseInt(cardInfo[0]);
-			int cardSlot = Integer.parseInt(cardInfo[1]);
+	public static void handleCardBook(Message m) {
+		Client client = m.client;
+		sendCardBookContent(client);
+	}
+	
+	public static void handleCardPlace(Message m) {
+		Client client = m.client;
+		String cardInfo[] = m.message.split(",");
+		
+		Integer.parseInt(cardInfo[0]);
+		int cardSlot = Integer.parseInt(cardInfo[1]);
+		
+		// Check if player has card on mouse
+		Item cardItem = client.playerCharacter.getMouseItem();
+		if(cardItem != null){
 			
+			Card playerCard = itemid_cards.get(cardItem.getId());
 			
-			// Check if player has card on mouse
-			Item cardItem = client.playerCharacter.getMouseItem();
-			if(cardItem != null){
+			boolean addItemBackToMouse = true;
+			if(cardItem.getType().equals("Collector Card")){
 				
-				Card playerCard = itemid_cards.get(cardItem.getId());
-				
-				boolean addItemBackToMouse = true;
-				if(cardItem.getType().equals("Collector Card")){
+				if(client.playerCharacter.getCardBook().contains(playerCard)){
+					// Slot already taken
+					addOutGoingMessage(client,"message","#ui.cardbook.slot_taken");
+				}else{
+					// Check if it is the right slot
+					if(playerCard.id == cardSlot){
+						// Add card to book
+						Server.userDB.updateDB("INSERT INTO character_card (CardId, CharacterId, DateTime) VALUES ("+playerCard.id+","+client.playerCharacter.getDBId()+",'"+TimeUtils.now()+"')");
+						client.playerCharacter.getCardBook().add(playerCard);
+						sendCardBookContent(client);
 					
-					if(client.playerCharacter.getCardBook().contains(playerCard)){
-						// Slot already taken
-						addOutGoingMessage(client,"message","#ui.cardbook.slot_taken");
+						// Send card to player
+						addOutGoingMessage(client,"card_place","");
+				
+						// Send card acquisition to website
+						//if(!Server.DEV_MODE){
+							String event = "?check=tjolahopp612&playerId="+client.playerCharacter.getDBId()+"&playerName="+client.playerCharacter.getName()+"&eventType=card_add&eventTargetName="+playerCard.id+"&eventTargetType=card&eventTargetId="+playerCard.id;
+							WebHandler.callUrl("http://www.bluesaga.org/server/addEvent.php"+event);
+						//}
+						
+						// Remove card from mouse
+						Server.userDB.updateDB("DELETE FROM character_item WHERE ItemId = "+cardItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
+						client.playerCharacter.setMouseItem(null);
+						addItemBackToMouse = false;
+					
+						// Check if wins game
+						checkEndGame(client);
 					}else{
-						// Check if it is the right slot
-						if(playerCard.id == cardSlot){
-							// Add card to book
-							Server.userDB.updateDB("INSERT INTO character_card (CardId, CharacterId, DateTime) VALUES ("+playerCard.id+","+client.playerCharacter.getDBId()+",'"+TimeUtils.now()+"')");
-							client.playerCharacter.getCardBook().add(playerCard);
-							sendCardBookContent(client);
-						
-							// Send card to player
-							addOutGoingMessage(client,"card_place","");
-					
-							// Send card acquisition to website
-							//if(!Server.DEV_MODE){
-								String event = "?check=tjolahopp612&playerId="+client.playerCharacter.getDBId()+"&playerName="+client.playerCharacter.getName()+"&eventType=card_add&eventTargetName="+playerCard.id+"&eventTargetType=card&eventTargetId="+playerCard.id;
-								WebHandler.callUrl("http://www.bluesaga.org/server/addEvent.php"+event);
-							//}
-							
-							// Remove card from mouse
-							Server.userDB.updateDB("DELETE FROM character_item WHERE ItemId = "+cardItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
-							client.playerCharacter.setMouseItem(null);
-							addItemBackToMouse = false;
-						
-							// Check if wins game
-							checkEndGame(client);
-						}else{
-							// Wrong slot
-							addOutGoingMessage(client,"message","#ui.cardbook.wrong_slot");
-						}
+						// Wrong slot
+						addOutGoingMessage(client,"message","#ui.cardbook.wrong_slot");
 					}
 				}
-				if(addItemBackToMouse){
-					addOutGoingMessage(client,"addmouseitem",cardItem.getId()+";"+cardItem.getType());
+			}
+			if(addItemBackToMouse){
+				addOutGoingMessage(client,"addmouseitem",cardItem.getId()+";"+cardItem.getType());
+			}
+		}
+	}
+	
+	public static void handleAddCardToMouse(Message m) {
+		Client client = m.client;
+		try{
+			int cardId = Integer.parseInt(m.message);
+			
+			boolean hasCard = false;
+			for(Card card: client.playerCharacter.getCardBook()){
+				if(card.id == cardId){
+					hasCard = true;
+					break;
 				}
 			}
 			
-		}else if(message.startsWith("<add_card_to_mouse>")){
-			try{
-				int cardId = Integer.parseInt(message.substring(19));
+			// Check if player has card
+			if(hasCard){
 				
-				boolean hasCard = false;
-				for(Card card: client.playerCharacter.getCardBook()){
-					if(card.id == cardId){
-						hasCard = true;
-						break;
-					}
-				}
+				Item mouseItem = new Item(ServerGameInfo.itemDef.get(card_ids.get(cardId).itemId));
 				
-				// Check if player has card
-				if(hasCard){
-					
-					Item mouseItem = new Item(ServerGameInfo.itemDef.get(card_ids.get(cardId).itemId));
-					
-					ContainerHandler.addItemToMouse(client, mouseItem);
-					
-					removeCard(client, cardId);
-					
-				}else{
-					client.playerCharacter.setMouseItem(null);
-					addOutGoingMessage(client,"clearmouse","");
-				}
+				ContainerHandler.addItemToMouse(client, mouseItem);
 				
-			}catch(NumberFormatException e){
+				removeCard(client, cardId);
+				
+			}else{
+				client.playerCharacter.setMouseItem(null);
 				addOutGoingMessage(client,"clearmouse","");
 			}
+			
+		}catch(NumberFormatException e){
+			addOutGoingMessage(client,"clearmouse","");
 		}
 	}
 	

@@ -25,36 +25,39 @@ public class MapHandler extends Handler {
 	public static int worldNightTime = 3*3600; // hours before it becomes night time
 
 	public static void init() {
+		DataHandlers.register("screen", m -> handleScreen(m));
+		DataHandlers.register("cinfo", m -> handleInfo(m));
 	}
+	
+	public static void handleScreen(Message m) {
+		Client client = m.client;
+		if(client.playerCharacter != null){
+			sendScreenData(client);
 
-	public static void handleData(Client client, String message){
+			// SEND NEW PLAYER TO NEARBY PLAYERS
+			String playerData = client.playerCharacter.getSmallData();
 
-		if(message.startsWith("<screen>")){
-			if(client.playerCharacter != null){
-				sendScreenData(client);
+			for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
+				Client other = entry.getValue();
 
-				// SEND NEW PLAYER TO NEARBY PLAYERS
-				String playerData = client.playerCharacter.getSmallData();
-
-				for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
-					Client other = entry.getValue();
-
-					if(other.Ready){
-						if(other.playerCharacter.getDBId() != client.playerCharacter.getDBId()){
-							if(isVisibleForPlayer(other.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
-								addOutGoingMessage(other,"new_creature",playerData);
-							}
+				if(other.Ready){
+					if(other.playerCharacter.getDBId() != client.playerCharacter.getDBId()){
+						if(isVisibleForPlayer(other.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ())){
+							addOutGoingMessage(other,"new_creature",playerData);
 						}
 					}
 				}
 			}
-		}else if(message.startsWith("<cinfo>")){
-			String cTypeId[] = message.substring(7).split(",");
-			CreatureType cType = CreatureType.valueOf(cTypeId[0]);
-			int cDbId = Integer.parseInt(cTypeId[1]);
-
-			sendCreatureInfo(client, cType, cDbId);
 		}
+	}
+	
+	public static void handleInfo(Message m) {
+		Client client = m.client;
+		String cTypeId[] = m.message.split(",");
+		CreatureType cType = CreatureType.valueOf(cTypeId[0]);
+		int cDbId = Integer.parseInt(cTypeId[1]);
+
+		sendCreatureInfo(client, cType, cDbId);
 	}
 
 	public static void sendCreatureInfo(Client client, CreatureType cType, int cDbId){

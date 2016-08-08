@@ -10,7 +10,9 @@ import java.util.Map.Entry;
 import utils.ServerGameInfo;
 import utils.MathUtils;
 import utils.RandomUtils;
+import data_handlers.DataHandlers;
 import data_handlers.Handler;
+import data_handlers.Message;
 import data_handlers.SkinHandler;
 import map.Moveable;
 import map.Tile;
@@ -26,145 +28,144 @@ public class ContainerHandler extends Handler {
 	public static void init() {
 		CONTAINERS.clear();
 		MOVEABLES.clear();
+		
+		DataHandlers.register("opencontainer", m -> handleOpenContainer(m));
+		DataHandlers.register("container_addmouseitem", m -> handleAddMouseItem(m));
+		DataHandlers.register("container_placeitem", m -> handlePlaceItem(m));
+		DataHandlers.register("fastloot", m -> handleFastLoot(m));
 	}
-
-
-	public static void handleData(Client client, String serverData){
 	
-
-		if(serverData.startsWith("<opencontainer>")){
-			String containerInfo[] = serverData.substring(15).split(",");
-
-			if(containerInfo[0].contains("container") || containerInfo[0].contains("gathering")){
-				int tileX = Integer.parseInt(containerInfo[1]);
-				int tileY = Integer.parseInt(containerInfo[2]);
-				int tileZ = Integer.parseInt(containerInfo[3]);
-
-				checkContainer(client, Server.WORLD_MAP.getTile(tileX, tileY, tileZ));
-			}
+	public static void handleOpenContainer(Message m) {
+		Client client = m.client;
+		String containerInfo[] = m.message.split(",");
+	
+		if(containerInfo[0].contains("container") || containerInfo[0].contains("gathering")){
+			int tileX = Integer.parseInt(containerInfo[1]);
+			int tileY = Integer.parseInt(containerInfo[2]);
+			int tileZ = Integer.parseInt(containerInfo[3]);
+	
+			checkContainer(client, Server.WORLD_MAP.getTile(tileX, tileY, tileZ));
 		}
-
-		if(serverData.startsWith("<container_addmouseitem>")){
-			String itemInfo[] = serverData.substring(24).split(";");
-
-			String containerId = itemInfo[0];
-			String containerPos[] = containerId.split(",");
-			int containerX = Integer.parseInt(containerPos[0]);
-			int containerY = Integer.parseInt(containerPos[1]);
-			int containerZ = Integer.parseInt(containerPos[2]);
-
-			String position = itemInfo[1];
-
-			addItemFromContainerToMouse(client, containerId, position);
-
-			addOutGoingMessage(client,"container_content",getContainerContent(containerX,containerY,containerZ));
-		}
-
-
-
-		if(serverData.startsWith("<container_placeitem>")){
-			String itemInfo[] = serverData.substring(21).split(";");
-			String containerId = itemInfo[0];
-			String position = itemInfo[1];
-
-			String containerPos[] = containerId.split(",");
-			int containerX = Integer.parseInt(containerPos[0]);
-			int containerY = Integer.parseInt(containerPos[1]);
-			int containerZ = Integer.parseInt(containerPos[2]);
-
-
-			// CHECK IF USER HAS ITEM ON MOUSE
-			if(client.playerCharacter.getMouseItem() != null){
-				if(!client.playerCharacter.getMouseItem().getType().equals("Collector Card")){
-					if(CONTAINERS.get(containerId) != null){
-						Server.userDB.updateDB("delete from character_item where InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
-
-						Item itemToMove = client.playerCharacter.getMouseItem();
-
-						String positionXY[] = position.split(",");
-						int posX = Integer.parseInt(positionXY[0]);
-						int posY = Integer.parseInt(positionXY[1]);
-
-						boolean placeItem = true;
-
-						// CHECK IF ITEM ALREADY EXIST AT LOCATION
-						if(CONTAINERS.get(containerId).getItems().get(position) != null){
-							Item oldItem = CONTAINERS.get(containerId).getItems().get(position);
-
-							if(oldItem.getId() == itemToMove.getId() && oldItem.getStacked() < oldItem.getStackable()){
-								// IF SAME TYPE OF ITEM THEN STACK THEM
-								placeItem = false;
-								
-								int nrItems = itemToMove.getStacked();
-								int nrItemsToAdd = nrItems;
-								
-								if(nrItems + oldItem.getStacked() > oldItem.getStackable()){
-									nrItemsToAdd = oldItem.getStackable() - oldItem.getStacked();
-								}
-								
-								// IF SAME TYPE OF ITEM THEN STACK THEM
-								oldItem.setStacked(oldItem.getStacked()+nrItemsToAdd);
-								
-								
-								// IF ITEMS LEFT AFTER FILLING UP STACK
-								int nrItemsLeft = nrItems - nrItemsToAdd;
-								
-								if(nrItemsLeft > 0){
-									Server.userDB.updateDB("update character_item set Nr = "+nrItemsLeft+" where ItemId = "+oldItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
-									client.playerCharacter.getMouseItem().setStacked(nrItemsLeft);
-									addOutGoingMessage(client,"addmouseitem", oldItem.getId()+";"+oldItem.getType());
-								}else{
-									Server.userDB.updateDB("delete from character_item where ItemId = "+oldItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
-									client.playerCharacter.setMouseItem(null);
-								}
-								
-							}else{
-								// SWITCH ITEMS
-								addItemFromContainerToMouse(client,containerId,position);
+	}
+	
+	public static void handleAddMouseItem(Message m) {
+		Client client = m.client;
+		String itemInfo[] = m.message.split(";");
+	
+		String containerId = itemInfo[0];
+		String containerPos[] = containerId.split(",");
+		int containerX = Integer.parseInt(containerPos[0]);
+		int containerY = Integer.parseInt(containerPos[1]);
+		int containerZ = Integer.parseInt(containerPos[2]);
+	
+		String position = itemInfo[1];
+	
+		addItemFromContainerToMouse(client, containerId, position);
+	
+		addOutGoingMessage(client,"container_content",getContainerContent(containerX,containerY,containerZ));
+	}
+	
+	public static void handlePlaceItem(Message m) {
+		Client client = m.client;
+		String itemInfo[] = m.message.split(";");
+		String containerId = itemInfo[0];
+		String position = itemInfo[1];
+	
+		String containerPos[] = containerId.split(",");
+		int containerX = Integer.parseInt(containerPos[0]);
+		int containerY = Integer.parseInt(containerPos[1]);
+		int containerZ = Integer.parseInt(containerPos[2]);
+	
+	
+		// CHECK IF USER HAS ITEM ON MOUSE
+		if(client.playerCharacter.getMouseItem() != null){
+			if(!client.playerCharacter.getMouseItem().getType().equals("Collector Card")){
+				if(CONTAINERS.get(containerId) != null){
+					Server.userDB.updateDB("delete from character_item where InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
+	
+					Item itemToMove = client.playerCharacter.getMouseItem();
+	
+					String positionXY[] = position.split(",");
+					int posX = Integer.parseInt(positionXY[0]);
+					int posY = Integer.parseInt(positionXY[1]);
+	
+					boolean placeItem = true;
+	
+					// CHECK IF ITEM ALREADY EXIST AT LOCATION
+					if(CONTAINERS.get(containerId).getItems().get(position) != null){
+						Item oldItem = CONTAINERS.get(containerId).getItems().get(position);
+	
+						if(oldItem.getId() == itemToMove.getId() && oldItem.getStacked() < oldItem.getStackable()){
+							// IF SAME TYPE OF ITEM THEN STACK THEM
+							placeItem = false;
+							
+							int nrItems = itemToMove.getStacked();
+							int nrItemsToAdd = nrItems;
+							
+							if(nrItems + oldItem.getStacked() > oldItem.getStackable()){
+								nrItemsToAdd = oldItem.getStackable() - oldItem.getStacked();
 							}
+							
+							// IF SAME TYPE OF ITEM THEN STACK THEM
+							oldItem.setStacked(oldItem.getStacked()+nrItemsToAdd);
+							
+							
+							// IF ITEMS LEFT AFTER FILLING UP STACK
+							int nrItemsLeft = nrItems - nrItemsToAdd;
+							
+							if(nrItemsLeft > 0){
+								Server.userDB.updateDB("update character_item set Nr = "+nrItemsLeft+" where ItemId = "+oldItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
+								client.playerCharacter.getMouseItem().setStacked(nrItemsLeft);
+								addOutGoingMessage(client,"addmouseitem", oldItem.getId()+";"+oldItem.getType());
+							}else{
+								Server.userDB.updateDB("delete from character_item where ItemId = "+oldItem.getId()+" and InventoryPos = 'Mouse' and CharacterId = "+client.playerCharacter.getDBId());
+								client.playerCharacter.setMouseItem(null);
+							}
+							
+						}else{
+							// SWITCH ITEMS
+							addItemFromContainerToMouse(client,containerId,position);
 						}
-
-						
-						if(placeItem){
-							CONTAINERS.get(containerId).addItemAtPos(posX, posY, itemToMove);
-						}
-
-						addOutGoingMessage(client,"container_content",getContainerContent(containerX,containerY,containerZ));
 					}
-				}else{
-					addOutGoingMessage(client,"message","#messages.cards.not_chest");
+	
+					
+					if(placeItem){
+						CONTAINERS.get(containerId).addItemAtPos(posX, posY, itemToMove);
+					}
+	
+					addOutGoingMessage(client,"container_content",getContainerContent(containerX,containerY,containerZ));
+				}
+			}else{
+				addOutGoingMessage(client,"message","#messages.cards.not_chest");
+			}
+		}
+	}
+	
+	public static void handleFastLoot(Message m) {
+		Client client = m.client;
+		String containerInfo[] = m.message.split(",");
+		int containerX = Integer.parseInt(containerInfo[0]);
+		int containerY = Integer.parseInt(containerInfo[1]);
+		int containerZ = Integer.parseInt(containerInfo[2]);
+	
+		int itemX = Integer.parseInt(containerInfo[3]);
+		int itemY = Integer.parseInt(containerInfo[4]);
+	
+		if(CONTAINERS.containsKey(containerX+","+containerY+","+containerZ)){
+			if(CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems() != null){
+				if(CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().get(itemX+","+itemY) != null){
+					// REMOVE FROM CONTAINER
+					Item newItem = CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().get(itemX+","+itemY);
+					CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().remove(itemX+","+itemY);
+	
+					// SEND NEW CONTAINER CONTENT TO PLAYER
+					String content = getContainerContent(containerX,containerY,containerZ);
+					addOutGoingMessage(client, "container_content",content);
+					
+					InventoryHandler.addItemToInventory(client, newItem);
 				}
 			}
 		}
-
-		if(serverData.startsWith("<fastloot>")){
-			String containerInfo[] = serverData.substring(10).split(",");
-			int containerX = Integer.parseInt(containerInfo[0]);
-			int containerY = Integer.parseInt(containerInfo[1]);
-			int containerZ = Integer.parseInt(containerInfo[2]);
-
-			int itemX = Integer.parseInt(containerInfo[3]);
-			int itemY = Integer.parseInt(containerInfo[4]);
-
-			if(CONTAINERS.containsKey(containerX+","+containerY+","+containerZ)){
-				if(CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems() != null){
-					if(CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().get(itemX+","+itemY) != null){
-						// REMOVE FROM CONTAINER
-						Item newItem = CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().get(itemX+","+itemY);
-						CONTAINERS.get(containerX+","+containerY+","+containerZ).getItems().remove(itemX+","+itemY);
-
-						// SEND NEW CONTAINER CONTENT TO PLAYER
-						String content = getContainerContent(containerX,containerY,containerZ);
-						addOutGoingMessage(client, "container_content",content);
-						
-						InventoryHandler.addItemToInventory(client, newItem);
-					}
-				}
-			}
-
-		}
-
-
 	}
 
 	public static void addItemFromContainerToMouse(Client client, String containerId, String position){

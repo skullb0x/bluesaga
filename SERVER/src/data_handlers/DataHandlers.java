@@ -7,8 +7,9 @@ import network.Server;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
 import data_handlers.ability_handler.AbilityHandler;
 import data_handlers.ability_handler.StatusEffectHandler;
@@ -18,12 +19,18 @@ import data_handlers.card_handler.CardHandler;
 import data_handlers.chat_handler.ChatHandler;
 import data_handlers.crafting_handler.CraftingHandler;
 import data_handlers.item_handler.ContainerHandler;
+import data_handlers.item_handler.ActionbarHandler;
+import data_handlers.item_handler.EquipHandler;
+import data_handlers.item_handler.InventoryHandler;
 import data_handlers.item_handler.ItemHandler;
 import data_handlers.monster_handler.MonsterHandler;
 import data_handlers.party_handler.PartyHandler;
 import utils.CrashLogger;
+import utils.ServerMessage;
 
 public class DataHandlers {
+	private static Map<String, Consumer<Message>> dispatch = new HashMap<>();
+	
 	private static ConcurrentLinkedQueue<Message> incomingMessages;
 	private static ConcurrentLinkedQueue<Message> outgoingMessages;
 
@@ -40,8 +47,31 @@ public class DataHandlers {
 		CraftingHandler.init();
 		PartyHandler.init();
 		CardHandler.init();
+		
+		ConnectHandler.init();
+		LoginHandler.init();
+		WalkHandler.init();
+		SkillHandler.init();
+		ItemHandler.init();
+		MapHandler.init();
+		BattleHandler.init();
+		BountyHandler.init();
+		FriendsHandler.init();
+		QuestHandler.init();
+		ShopHandler.init();
+		MusicHandler.init();
+		GatheringHandler.init();
+		SkinHandler.init();
+		TutorialHandler.init();
+		
+		InventoryHandler.init();
+		EquipHandler.init();
+		ActionbarHandler.init();
 	}
-
+	
+	public static void register(String type, Consumer<Message> handle) {
+		dispatch.put(type, handle);
+	}
 	
 	public static void update(long tick){
 		
@@ -91,63 +121,17 @@ public class DataHandlers {
 	//public static void handleData(Client client, String message){
 
 	public static void processIncomingData(){
-
 		for(Iterator<Message> i = incomingMessages.iterator(); i.hasNext(); ) {
 			Message m = i.next();
-
-			Client client = m.client;
-			String message = "<"+m.type+">"+m.message;
-
-			ConnectHandler.handleData(client, message);
-
-			LoginHandler.handleData(client, message);
-
-			WalkHandler.handleData(client,message);
-
-			SkillHandler.handleData(client, message);
-
-			AbilityHandler.handleData(client, message);
-
-			ItemHandler.handleData(client, message);
-
-			MapHandler.handleData(client,message);
-
-			MonsterHandler.handleData(client,message);
-
-			BattleHandler.handleData(client, message);
-
-			ContainerHandler.handleData(client, message);
-
-			ChatHandler.handleData(client, message);
-
-			BountyHandler.handleData(client, message);
-
-			FriendsHandler.handleData(client, message);
-
-			QuestHandler.handleData(client, message);
-
-			ShopHandler.handleData(client, message);
-
-			MusicHandler.handleData(client, message);
-
-			FishingHandler.handleData(client, message);
-
-			GatheringHandler.handleData(client, message);
-
-			SkinHandler.handleData(client, message);
-
-			CraftingHandler.handleData(client, message);
-			
-			TutorialHandler.handleData(client,message);
-			
-			PartyHandler.handleData(client, message);
-			
-			CardHandler.handleData(client, message);
-			
+			Consumer<Message> handle = dispatch.get(m.type);
+			if (handle!=null) {
+				handle.accept(m);
+			} else {
+				ServerMessage.printMessage("WARNING - Unknown message type: "+m.type,false);
+			}
 			i.remove();
 		}
 	}
-
 
 	public static void addOutgoingMessage(Message message){
 		outgoingMessages.add(message);

@@ -23,111 +23,123 @@ import network.Server;
 public class QuestHandler extends Handler {
 
 	public static void init() {
+		DataHandlers.register("talknpc", m -> handleTalkNpc(m));
+		DataHandlers.register("quest", m -> handleQuest(m));
+		DataHandlers.register("questdescr", m -> handleQuestDescription(m));
+		DataHandlers.register("myquests", m -> handleMyQuests(m));
+		DataHandlers.register("checkin", m -> handleCheckIn(m));
+		DataHandlers.register("learn_class", m -> handleLearnClass(m));
+	}
+	
+	public static void handleTalkNpc(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		String talkInfo[] = m.message.split(";");
+
+		int tileX = Integer.parseInt(talkInfo[0]);
+		int tileY = Integer.parseInt(talkInfo[1]);
+		int tileZ = client.playerCharacter.getZ();
+
+		getNpcDialog(client, tileX,tileY,tileZ);
 	}
 
-	public static void handleData(Client client, String serverData){
-		if(client.playerCharacter != null){
-			if(serverData.startsWith("<talknpc>")){
-				String talkInfo[] = serverData.substring(9).split(";");
+	public static void handleQuest(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		String questInfo[] = m.message.split(";");
 
-				int tileX = Integer.parseInt(talkInfo[0]);
-				int tileY = Integer.parseInt(talkInfo[1]);
-				int tileZ = client.playerCharacter.getZ();
+		String action = questInfo[0];
+		int questId = Integer.parseInt(questInfo[1]);
 
-				getNpcDialog(client, tileX,tileY,tileZ);
+		// ACTION, QUEST ID
+		if(action.equals("info")){
+			getQuestInfo(client,questId);
+		}else if(action.equals("add")){
+			addQuest(client,questId);
+		}
+	}
+
+	public static void handleQuestDescription(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		int questId = Integer.parseInt(m.message);
+
+		ResultSet questInfo = Server.mapDB.askDB("select Description from quest where Id = "+questId);
+
+		String questText = "";
+
+		try {
+			if(questInfo.next()){
+				questText = questInfo.getString("Description");
 			}
+			questInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-			if(serverData.startsWith("<quest>")){
-				String questInfo[] = serverData.substring(7).split(";");
+		addOutGoingMessage(client, "questdesc", questText);
+	}
 
-				String action = questInfo[0];
-				int questId = Integer.parseInt(questInfo[1]);
+	public static void handleMyQuests(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		ResultSet myQuestInfo = Server.userDB.askDB("select QuestId, Status from character_quest where CharacterId = "+client.playerCharacter.getDBId()+" and Status > 0 and Status < 3");
 
-				// ACTION, QUEST ID
-				if(action.equals("info")){
-					getQuestInfo(client,questId);
-				}else if(action.equals("add")){
-					addQuest(client,questId);
+		StringBuilder questData = new StringBuilder(1000);
+
+		try {
+			while(myQuestInfo.next()){
+				ResultSet questInfo = Server.mapDB.askDB("select Name, Type, Level from quest where Id = "+myQuestInfo.getInt("QuestId"));
+
+				if(questInfo.next()){
+					questData.append(myQuestInfo.getInt("QuestId")).append(',')
+									 .append(questInfo.getString("Name")).append(',')
+									 .append(questInfo.getString("Type")).append(',')
+									 .append(myQuestInfo.getString("Status")).append(',')
+									 .append(questInfo.getInt("Level")).append(';');
+				}
+				questInfo.close();
+			}
+			myQuestInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		if(questData.length() == 0){
+			questData.append("None");
+		}
+		addOutGoingMessage(client, "myquests", questData.toString());
+	}
+
+	public static void handleCheckIn(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		int checkInId = Integer.parseInt(m.message);
+
+		Server.userDB.updateDB("update user_character set CheckpointId = "+checkInId+" where Id = "+client.playerCharacter.getDBId());
+		addOutGoingMessage(client,"message","#messages.quest.checked_in");
+	}
+
+	public static void handleLearnClass(Message m) {
+		if (m.client.playerCharacter == null) return;
+		Client client = m.client;
+		String classInfo[] = m.message.split(",");
+		int questId = Integer.parseInt(classInfo[0]);
+		int classType = Integer.parseInt(classInfo[1]);
+
+		// Get class that is learnt from quest
+		ResultSet questInfo = Server.mapDB.askDB("select LearnClassId from quest where Id = "+questId);
+		try {
+			if(questInfo.next()){
+				int classId = questInfo.getInt("LearnClassId");
+				if(ClassHandler.learnClass(client,classId,classType)){
+					EquipHandler.checkRequirements(client);
+					rewardQuest(client,questId);
 				}
 			}
-
-			if(serverData.startsWith("<questdescr>")){
-				int questId = Integer.parseInt(serverData.substring(12));
-
-				ResultSet questInfo = Server.mapDB.askDB("select Description from quest where Id = "+questId);
-
-				String questText = "";
-
-				try {
-					if(questInfo.next()){
-						questText = questInfo.getString("Description");
-					}
-					questInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-				addOutGoingMessage(client, "questdesc", questText);
-			}
-
-			if(serverData.startsWith("<myquests>")){
-				ResultSet myQuestInfo = Server.userDB.askDB("select QuestId, Status from character_quest where CharacterId = "+client.playerCharacter.getDBId()+" and Status > 0 and Status < 3");
-
-				StringBuilder questData = new StringBuilder(1000);
-
-				try {
-					while(myQuestInfo.next()){
-						ResultSet questInfo = Server.mapDB.askDB("select Name, Type, Level from quest where Id = "+myQuestInfo.getInt("QuestId"));
-
-						if(questInfo.next()){
-							questData.append(myQuestInfo.getInt("QuestId")).append(',')
-							         .append(questInfo.getString("Name")).append(',')
-							         .append(questInfo.getString("Type")).append(',')
-							         .append(myQuestInfo.getString("Status")).append(',')
-							         .append(questInfo.getInt("Level")).append(';');
-						}
-						questInfo.close();
-					}
-					myQuestInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-				if(questData.length() == 0){
-					questData.append("None");
-				}
-				addOutGoingMessage(client, "myquests", questData.toString());
-			}
-
-
-			if(serverData.startsWith("<checkin>")){
-				int checkInId = Integer.parseInt(serverData.substring(9));
-
-				Server.userDB.updateDB("update user_character set CheckpointId = "+checkInId+" where Id = "+client.playerCharacter.getDBId());
-				addOutGoingMessage(client,"message","#messages.quest.checked_in");
-			}
-
-			if(serverData.startsWith("<learn_class>")){
-				String classInfo[] = serverData.substring(13).split(",");
-				int questId = Integer.parseInt(classInfo[0]);
-				int classType = Integer.parseInt(classInfo[1]);
-
-				// Get class that is learnt from quest
-				ResultSet questInfo = Server.mapDB.askDB("select LearnClassId from quest where Id = "+questId);
-				try {
-					if(questInfo.next()){
-						int classId = questInfo.getInt("LearnClassId");
-						if(ClassHandler.learnClass(client,classId,classType)){
-							EquipHandler.checkRequirements(client);
-							rewardQuest(client,questId);
-						}
-					}
-					questInfo.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-			}
+			questInfo.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

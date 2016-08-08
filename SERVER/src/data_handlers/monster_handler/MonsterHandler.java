@@ -18,8 +18,10 @@ import creature.Creature;
 import creature.Npc;
 import creature.PlayerCharacter;
 import creature.Creature.CreatureType;
+import data_handlers.DataHandlers;
 import data_handlers.Handler;
 import data_handlers.MapHandler;
+import data_handlers.Message;
 import data_handlers.TrapHandler;
 import data_handlers.ability_handler.Ability;
 import data_handlers.ability_handler.AbilityHandler;
@@ -50,6 +52,8 @@ public class MonsterHandler extends Handler {
 		movingMonsterTypes.add(1);
 		movingMonsterTypes.add(2);
 		movingMonsterTypes.add(4);
+		
+		DataHandlers.register("mobinfo", m -> handleMobInfo(m));
 	}
 	
 	public static void changeMonsterSleepState(Creature c, boolean sleepOrNot){
@@ -101,40 +105,39 @@ public class MonsterHandler extends Handler {
 		}
 	}
 
-	public static void handleData(Client client, String message){
-		if(message.startsWith("<mobinfo>")){
-			StringBuilder mobinfo = new StringBuilder(5500);
-			ResultSet mobdata = Server.gameDB.askDB("select Id, Name, SizeW, SizeH, HeadX, HeadY, WeaponX, WeaponY, OffHandX, OffHandY, AmuletX, AmuletY, ArtifactX, ArtifactY, MouthFeatureX, MouthFeatureY, AccessoriesX, AccessoriesY, SkinFeatureX, SkinFeatureY from creature");
+	public static void handleMobInfo(Message m) {
+		Client client = m.client;
+		StringBuilder mobinfo = new StringBuilder(5500);
+		ResultSet mobdata = Server.gameDB.askDB("select Id, Name, SizeW, SizeH, HeadX, HeadY, WeaponX, WeaponY, OffHandX, OffHandY, AmuletX, AmuletY, ArtifactX, ArtifactY, MouthFeatureX, MouthFeatureY, AccessoriesX, AccessoriesY, SkinFeatureX, SkinFeatureY from creature");
 
-			try {
-				while(mobdata.next()){
-					mobinfo.append(mobdata.getInt("Id")).append(',')
-					       .append(mobdata.getString("Name")).append(',')
-					       .append(mobdata.getInt("SizeW")).append(',')
-					       .append(mobdata.getInt("SizeH")).append(',')
-					       .append(mobdata.getInt("HeadX")).append(',')
-					       .append(mobdata.getInt("HeadY")).append(',')
-					       .append(mobdata.getInt("WeaponX")).append(',')
-					       .append(mobdata.getInt("WeaponY")).append(',')
-					       .append(mobdata.getInt("OffHandX")).append(',')
-					       .append(mobdata.getInt("OffHandY")).append(',')
-					       .append(mobdata.getInt("AmuletX")).append(',')
-					       .append(mobdata.getInt("AmuletY")).append(',')
-					       .append(mobdata.getInt("ArtifactX")).append(',')
-					       .append(mobdata.getInt("ArtifactY")).append(',')
-					       .append(mobdata.getInt("MouthFeatureX")).append(',')
-					       .append(mobdata.getInt("MouthFeatureY")).append(',')
-					       .append(mobdata.getInt("AccessoriesX")).append(',')
-					       .append(mobdata.getInt("AccessoriesY")).append(',')
-					       .append(mobdata.getInt("SkinFeatureX")).append(',')
-					       .append(mobdata.getInt("SkinFeatureY")).append(';');
-				}
-				mobdata.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
+		try {
+			while(mobdata.next()){
+				mobinfo.append(mobdata.getInt("Id")).append(',')
+							 .append(mobdata.getString("Name")).append(',')
+							 .append(mobdata.getInt("SizeW")).append(',')
+							 .append(mobdata.getInt("SizeH")).append(',')
+							 .append(mobdata.getInt("HeadX")).append(',')
+							 .append(mobdata.getInt("HeadY")).append(',')
+							 .append(mobdata.getInt("WeaponX")).append(',')
+							 .append(mobdata.getInt("WeaponY")).append(',')
+							 .append(mobdata.getInt("OffHandX")).append(',')
+							 .append(mobdata.getInt("OffHandY")).append(',')
+							 .append(mobdata.getInt("AmuletX")).append(',')
+							 .append(mobdata.getInt("AmuletY")).append(',')
+							 .append(mobdata.getInt("ArtifactX")).append(',')
+							 .append(mobdata.getInt("ArtifactY")).append(',')
+							 .append(mobdata.getInt("MouthFeatureX")).append(',')
+							 .append(mobdata.getInt("MouthFeatureY")).append(',')
+							 .append(mobdata.getInt("AccessoriesX")).append(',')
+							 .append(mobdata.getInt("AccessoriesY")).append(',')
+							 .append(mobdata.getInt("SkinFeatureX")).append(',')
+							 .append(mobdata.getInt("SkinFeatureY")).append(';');
 			}
-			addOutGoingMessage(client, "mobinfo", mobinfo.toString());
+			mobdata.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		addOutGoingMessage(client, "mobinfo", mobinfo.toString());
 	}
 
 	public static void checkMonsterRespawn(){

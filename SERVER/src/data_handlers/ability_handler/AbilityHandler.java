@@ -18,8 +18,10 @@ import creature.Npc;
 import creature.PlayerCharacter;
 import creature.Creature.CreatureType;
 import data_handlers.ClassHandler;
+import data_handlers.DataHandlers;
 import data_handlers.FishingHandler;
 import data_handlers.Handler;
+import data_handlers.Message;
 import data_handlers.WalkHandler;
 import data_handlers.battle_handler.BattleHandler;
 import data_handlers.battle_handler.DamageCalculator;
@@ -38,34 +40,43 @@ public class AbilityHandler extends Handler {
 	public static void init(){
 		projectiles = new ArrayList<Projectile>();
 		AbilityEvents = new Vector<AbilityEvent>();
+
+		DataHandlers.register("abilitydata", m -> handleAbilityData(m));
+		DataHandlers.register("use_ability", m -> handleUseAbility(m));
+		DataHandlers.register("ability_info", m -> handleAbilityInfo(m));
 	}
-
-	public static void handleData(Client client, String message){
-		if(message.startsWith("<abilitydata>")){
-			// 1/ means load more data when done
-			if(client.playerCharacter != null){
-				addOutGoingMessage(client,"abilitydata","1/"+client.playerCharacter.getAbilitiesAsString());
-			}
-		}else if(message.startsWith("<use_ability>")){
-			String actionInfo[] = message.substring(13).split(","); 
-			int goalX = Integer.parseInt(actionInfo[0]);
-			int goalY = Integer.parseInt(actionInfo[1]);
-			int goalZ = client.playerCharacter.getZ();
-
-			int abilityId = Integer.parseInt(actionInfo[2]);
-			
-			Ability ABILITY = client.playerCharacter.getAbilityById(abilityId);
-			if(ABILITY != null){
-				playerUseAbility(client,ABILITY,goalX, goalY, goalZ);
-			}
-		}else if(message.startsWith("<ability_info>")){
-			String info[] = message.substring(14).split(";");
-
-			String infoType = info[0];
-			int abilityId = Integer.parseInt(info[1]);
-
-			getAbilityInfo(client, infoType, abilityId);
+	
+	public static void handleAbilityData(Message m) {
+		Client client = m.client;
+		// 1/ means load more data when done
+		if(client.playerCharacter != null){
+			addOutGoingMessage(client,"abilitydata","1/"+client.playerCharacter.getAbilitiesAsString());
 		}
+	}
+	
+	public static void handleUseAbility(Message m) {
+		Client client = m.client;
+		String actionInfo[] = m.message.split(","); 
+		int goalX = Integer.parseInt(actionInfo[0]);
+		int goalY = Integer.parseInt(actionInfo[1]);
+		int goalZ = client.playerCharacter.getZ();
+
+		int abilityId = Integer.parseInt(actionInfo[2]);
+		
+		Ability ABILITY = client.playerCharacter.getAbilityById(abilityId);
+		if(ABILITY != null){
+			playerUseAbility(client,ABILITY,goalX, goalY, goalZ);
+		}
+	}
+	
+	public static void handleAbilityInfo(Message m) {
+		Client client = m.client;
+		String info[] = m.message.split(";");
+
+		String infoType = info[0];
+		int abilityId = Integer.parseInt(info[1]);
+
+		getAbilityInfo(client, infoType, abilityId);
 	}
 
 

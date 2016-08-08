@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import components.Quest;
 import utils.ServerMessage;
@@ -21,150 +22,164 @@ import data_handlers.party_handler.PartyHandler;
 public class ConnectHandler extends Handler {
 	
 	public static void init(){
+		DataHandlers.register("connection", m -> handleConnection(m));
+		DataHandlers.register("playerinfo", m -> handlePlayerInfo(m));
+		DataHandlers.register("actionbar", m -> handleActionBar(m));
+		DataHandlers.register("ready", m -> handleReady(m));
+		DataHandlers.register("keepalive", m -> handleKeepAlive(m));
+		DataHandlers.register("quitchar", m -> handleQuitCharacter(m));
 	}
 	
-	public static void handleData(Client client, String message){
-		if(message.equals("<connection>hello")){
+	public static void handleConnection(Message m) {
+		Client client = m.client;
+		if("hello".equals(m.message)){
 			client.sendingData = false;
-			addOutGoingMessage(client,"connect",""+ServerSettings.CLIENT_VERSION);
-		}else if(message.startsWith("<playerinfo>")){
+			addOutGoingMessage(client,"connect", ServerSettings.CLIENT_VERSION);
+		}
+	}
+	
+	public static void handlePlayerInfo(Message m) {
+		Client client = m.client;
+		int characterId = Integer.parseInt(m.message);
+		sendPlayerCharacterInfo(client, characterId);
+	}
+	
+	public static void handleActionBar(Message m) {
+		Client client = m.client;
+		sendActionbar(client,true);
+	}
 			
-			// LOAD PLAYER INFO
-			int characterId = Integer.parseInt(message.substring(12));
+	public static void handleReady(Message msg) {
+		Client client = msg.client;
+		if("no".equals(msg.message)){
+			client.Ready = false;
+			return ;
+		}
+		
+		if("ready".equals(msg.message) && client.playerCharacter != null){
 			
-			sendPlayerCharacterInfo(client, characterId);
+			client.Ready = true;
 			
-		}else if(message.startsWith("<actionbar>")){
+			if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()) != null){
 			
-			sendActionbar(client,true);
-			
-		}else if(message.equals("<ready>ready")){
-			if(client.playerCharacter != null){
-				
-				client.Ready = true;
-				
-				if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()) != null){
-				
-					// IF HAS BOAT, SET BOAT
-					if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).isWater()){
+				// IF HAS BOAT, SET BOAT
+				if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).isWater()){
+					
+					boolean bridge = false;
+							
+							if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).getObjectId().contains("bridge")){
+								bridge = true;
+							}
 						
-						boolean bridge = false;
-		        		
-	        			if(Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).getObjectId().contains("bridge")){
-	        				bridge = true;
-	        			}
-	        		
-	        			if(!bridge){
-	        				if(client.playerCharacter.getShip() != null){
-								if(client.playerCharacter.getShip().getShipId() > 0){
-									client.playerCharacter.getShip().setShow(true);
-									
-									for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
-										Client other = entry.getValue();
-			 
-										if(other.Ready){
-											if(isVisibleForPlayer(other.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(), client.playerCharacter.getZ())){
-												addOutGoingMessage(other, "goboat", client.playerCharacter.getSmallData()+";"+client.playerCharacter.getShip().getShipId()+",1");
-											}
+							if(!bridge){
+								if(client.playerCharacter.getShip() != null){
+							if(client.playerCharacter.getShip().getShipId() > 0){
+								client.playerCharacter.getShip().setShow(true);
+								
+								for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
+									Client other = entry.getValue();
+		 
+									if(other.Ready){
+										if(isVisibleForPlayer(other.playerCharacter,client.playerCharacter.getX(),client.playerCharacter.getY(), client.playerCharacter.getZ())){
+											addOutGoingMessage(other, "goboat", client.playerCharacter.getSmallData()+";"+client.playerCharacter.getShip().getShipId()+",1");
 										}
 									}
 								}
 							}
-	        			}
-					}
-					
-					Server.WORLD_MAP.addPlayerToZ(client.playerCharacter, client.playerCharacter.getZ());
-					
-					Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).setOccupant(CreatureType.Player, client.playerCharacter);
-				}
-				
-				// NOTIFY FRIENDS OF ONLINE STATUS
-				if(client.playerCharacter.getAdminLevel() < 5){
-					for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
-						Client other = entry.getValue();
-				 
-						if(other.Ready){
-							if(other.playerCharacter.getDBId() != client.playerCharacter.getDBId()){
-								addOutGoingMessage(other,"message",client.playerCharacter.getName()+" #messages.connect.is_now_online");
+						}
 							}
-						}
-					}
 				}
 				
-				// Remove aggro from player when he logs in
-				for(Iterator<Npc> iter = Server.WORLD_MAP.getMonsters().values().iterator();iter.hasNext();){  
-					Npc m = iter.next();
-					if(m.isAggro()){
-						if(m.getAggroTarget().getCreatureType() == CreatureType.Player && m.getAggroTarget().getDBId() == client.playerCharacter.getDBId()){
-							m.setAggro(null);
-						}
-					}
-				}
+				Server.WORLD_MAP.addPlayerToZ(client.playerCharacter, client.playerCharacter.getZ());
 				
-				// IF NO ACTIVE QUESTS AND HAVN'T COMPLETE THE UNDEAD THREAT, 
-				// THEN NOTIFY PLAYER TO TALK TO INN-KEEPER
-				boolean firstTime = true;
-				boolean showNoobQuestWarning = true;
-				
-				for(Quest q: client.playerCharacter.getQuests()){
-					if(q.getId() == 36){
-						firstTime = false;
-					}
-					if(q.getStatus() == 1){
-						showNoobQuestWarning = false;
-					}
-				}
-				
-				if(client.playerCharacter.getQuestById(6) != null){
-					showNoobQuestWarning = false;
-				}
-				
-				if(client.playerCharacter.getX() != 5005 || client.playerCharacter.getY() != 9984 || client.playerCharacter.getZ() != 2){
-					firstTime = false;
-				}
-				
-				if(client.playerCharacter.getTutorialNr() > 0){
-					firstTime = false;
-				}else{
-					showNoobQuestWarning = false;
-				}
-				
-				// Add world chat
-				client.playerCharacter.addChatChannel("#world");
-				
-				// IF NEW PLAYER SEND INTRO CUTSCENE
-				if(firstTime){
-					addOutGoingMessage(client,"cutscene","1");
-				
-					// If first time playing, show tutorials
-					if(client.playerCharacter.getTutorialNr() == 0){
-						addOutGoingMessage(client,"tutorial","0");
-					}
-				}else if(showNoobQuestWarning){
-					addOutGoingMessage(client,"message","#messages.connect.talk_to_inn_keeper");
-				}
-			}else{
-				// Remove client
-				removeClient(client);
+				Server.WORLD_MAP.getTile(client.playerCharacter.getX(),client.playerCharacter.getY(),client.playerCharacter.getZ()).setOccupant(CreatureType.Player, client.playerCharacter);
 			}
 			
-		}else if(message.equals("<ready>no")){
-			client.Ready = false;
-		}else if(message.startsWith("<keepalive>")){
-			addOutGoingMessage(client,"keepalive","hello");
-		}
-		
-		if(message.startsWith("<quitchar>")){
-			addOutGoingMessage(client,"quitchar","quit");
-		
-			logoutCharacter(client);
+			// NOTIFY FRIENDS OF ONLINE STATUS
+			if(client.playerCharacter.getAdminLevel() < 5){
+				for (Entry<Integer, Client> entry : Server.clients.entrySet()) {
+					Client other = entry.getValue();
+			 
+					if(other.Ready){
+						if(other.playerCharacter.getDBId() != client.playerCharacter.getDBId()){
+							addOutGoingMessage(other,"message",client.playerCharacter.getName()+" #messages.connect.is_now_online");
+						}
+					}
+				}
+			}
 			
-			String character_info = LoginHandler.getCharacterInfo(client);
-			addOutGoingMessage(client,"login",client.UserId+";"+client.UserMail+":"+character_info);
-		
+			// Remove aggro from player when he logs in
+			for(Iterator<Npc> iter = Server.WORLD_MAP.getMonsters().values().iterator();iter.hasNext();){  
+				Npc m = iter.next();
+				if(m.isAggro()){
+					if(m.getAggroTarget().getCreatureType() == CreatureType.Player && m.getAggroTarget().getDBId() == client.playerCharacter.getDBId()){
+						m.setAggro(null);
+					}
+				}
+			}
+			
+			// IF NO ACTIVE QUESTS AND HAVN'T COMPLETE THE UNDEAD THREAT, 
+			// THEN NOTIFY PLAYER TO TALK TO INN-KEEPER
+			boolean firstTime = true;
+			boolean showNoobQuestWarning = true;
+			
+			for(Quest q: client.playerCharacter.getQuests()){
+				if(q.getId() == 36){
+					firstTime = false;
+				}
+				if(q.getStatus() == 1){
+					showNoobQuestWarning = false;
+				}
+			}
+			
+			if(client.playerCharacter.getQuestById(6) != null){
+				showNoobQuestWarning = false;
+			}
+			
+			if(client.playerCharacter.getX() != 5005 || client.playerCharacter.getY() != 9984 || client.playerCharacter.getZ() != 2){
+				firstTime = false;
+			}
+			
+			if(client.playerCharacter.getTutorialNr() > 0){
+				firstTime = false;
+			}else{
+				showNoobQuestWarning = false;
+			}
+			
+			// Add world chat
+			client.playerCharacter.addChatChannel("#world");
+			
+			// IF NEW PLAYER SEND INTRO CUTSCENE
+			if(firstTime){
+				addOutGoingMessage(client,"cutscene","1");
+			
+				// If first time playing, show tutorials
+				if(client.playerCharacter.getTutorialNr() == 0){
+					addOutGoingMessage(client,"tutorial","0");
+				}
+			}else if(showNoobQuestWarning){
+				addOutGoingMessage(client,"message","#messages.connect.talk_to_inn_keeper");
+			}
+		}else{
+			// Remove client
+			removeClient(client);
 		}
 	}
+		
+	public static void handleKeepAlive(Message m) {
+		Client client = m.client;
+		addOutGoingMessage(client,"keepalive","hello");
+	}
 	
+	public static void handleQuitCharacter(Message m) {
+		Client client = m.client;
+		addOutGoingMessage(client,"quitchar","quit");
+	
+		logoutCharacter(client);
+		
+		String character_info = LoginHandler.getCharacterInfo(client);
+		addOutGoingMessage(client,"login",client.UserId+";"+client.UserMail+":"+character_info);
+	}
 	
 	public static void logoutCharacter(Client client){
 		client.Ready = false;
