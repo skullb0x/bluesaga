@@ -3,4 +3,4 @@
 JARS=../JARS
 export CLASSPATH="./build/:$JARS/bs_user.jar:$JARS/grandcentral.jar:$JARS/jogg-0.0.7.jar:$JARS/jorbis-0.0.15.jar:$JARS/json_simple.jar:$JARS/lwjgl.jar:$JARS/natives-linux.jar:$JARS/slick.jar:$JARS/sqlitejdbc-v056.jar"
 
-java -Djava.library.path=$JARS game.BPserver $*
+java -server -XX:StringTableSize=100003 -Djava.library.path=$JARS game.BPserver $*

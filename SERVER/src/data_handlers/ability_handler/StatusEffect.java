@@ -46,7 +46,7 @@ public class StatusEffect {
 		
 		try {
 			if(rs.next()){
-				setName(rs.getString("Name"));
+				setName(rs.getString("Name").intern());
 				StatsModif = new Stats();
 				StatsModif.reset();
 				
@@ -65,7 +65,7 @@ public class StatusEffect {
 				
 				setDuration(rs.getInt("Duration"));
 				setRepeatDamage(rs.getInt("RepeatDamage"));
-				setRepeatDamageType(rs.getString("RepeatDamageType"));
+				setRepeatDamageType(rs.getString("RepeatDamageType").intern());
 				String colorInfo[] = rs.getString("Color").split(",");
 				SEColor = new Color(Integer.parseInt(colorInfo[0]),Integer.parseInt(colorInfo[1]),Integer.parseInt(colorInfo[2]));
 				setClassId(rs.getInt("ClassId"));

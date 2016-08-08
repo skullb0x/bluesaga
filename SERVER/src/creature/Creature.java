@@ -7,9 +7,10 @@ package creature;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.util.pathfinding.Mover;
@@ -28,6 +29,8 @@ import network.Server;
 
 public class Creature implements Mover {
 
+	private static final List<Ability> EMPTY_ABILITIES = new ArrayList(0);
+	
 	protected int dbId; // Id in area_creature table or in user_character
 	protected int CreatureId;
 	protected String Name;
@@ -123,7 +126,7 @@ public class Creature implements Mover {
 	
 	
 	protected HashMap<Integer, JobSkill> jobSkills = new HashMap<Integer, JobSkill>();
-	protected Vector<Ability> abilities = new Vector<Ability>(); 
+	protected List<Ability> abilities;
 	private int DeathAbilityId = 0;
 	
 	
@@ -218,37 +221,35 @@ public class Creature implements Mover {
 			    
 			    setDeathAbilityId(rs.getInt("DeathAbility"));
 			    
-			    abilities = new Vector<Ability>(); 
-				
 			    if(rs.getInt("Ability1") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability1")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				if(rs.getInt("Ability2") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability2")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				if(rs.getInt("Ability3") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability3")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				if(rs.getInt("Ability4") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability4")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				if(rs.getInt("Ability5") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability5")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				if(rs.getInt("Ability6") > 0){
 					Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(rs.getInt("Ability6")));
 					newAbility.setCaster(CreatureType.Monster, this);
-					abilities.add(newAbility);
+					addAbility(newAbility);
 				}
 				
 			    moveTimerEnd = Stats.getValue("SPEED") * 10;
@@ -268,7 +269,6 @@ public class Creature implements Mover {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-	    
 	}
 	
 	public Creature(Creature copy, int creatureX, int creatureY, int creatureZ){
@@ -321,11 +321,10 @@ public class Creature implements Mover {
 		}  
 	    
 		// Add abilities
-		abilities = new Vector<Ability>(); 
 		for(Ability ability: copy.getAbilities()){
 			Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(ability.getAbilityId()));
 			newAbility.setCaster(CreatureType.Monster, this);
-			abilities.add(newAbility);
+			addAbility(newAbility);
 		}
 		
 	    Health = Stats.getValue("MAX_HEALTH");
@@ -524,8 +523,8 @@ public class Creature implements Mover {
 	}
 	
 	
-	public Vector<Ability> getAbilities() {
-		return abilities;
+	public List<Ability> getAbilities() {
+		return (abilities!=null) ? abilities : EMPTY_ABILITIES;
 	}
 	
 	public int getNrAbilities() {
@@ -547,6 +546,9 @@ public class Creature implements Mover {
 	
 	
 	public void addAbility(Ability newAbility){
+		if (abilities==null) {
+			abilities = new ArrayList(1);
+		}
 		abilities.add(newAbility);
 	}
 	

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
@@ -75,7 +76,7 @@ public class Npc extends Creature {
 	private int SpawnZ;
 
 	private boolean usedStashItem = false;
-	private Vector<Item> StashItems;
+	private List<Item> StashItems;
 
 	private boolean BountyMonster = false;
 	private int Bounty = 0;
@@ -94,8 +95,6 @@ public class Npc extends Creature {
 	private boolean titan = false;
 	private boolean raging = false;
 	
-	private Vector<String> states = new Vector<String>();
-	
 	private final BaseAI ai;
 	
 	public Npc(int creatureId, int newX, int newY, int newZ) {
@@ -108,12 +107,10 @@ public class Npc extends Creature {
 		SpawnY = newY;
 		SpawnZ = newZ;
 
-		StashItems = new Vector<Item>();
+		StashItems = new ArrayList<Item>(3);
 
 		attackersDamage = new HashMap<Creature, Integer>();	
 
-		states.clear();
-		
 		ResultSet rs = Server.gameDB.askDB("select AggroRange,RespawnTime, MonsterWeaponIds, MonsterOffHandIds, MonsterHeadIds, GiveXP, Level from creature where Id = "+creatureId);
 		try {
 			if(rs.next()){
@@ -156,12 +153,10 @@ public class Npc extends Creature {
 		SpawnY = npcY;
 		SpawnZ = npcZ;
 
-		StashItems = new Vector<Item>();
+		StashItems = new ArrayList<Item>(3);
 
 		attackersDamage = new HashMap<Creature, Integer>();	
 
-		states.clear();
-		
 		setMonsterWeaponIds(copy.getMonsterWeaponIds());
 		setMonsterOffHandIds(copy.getMonsterOffHandIds());
 		setMonsterHeadIds(copy.getMonsterHeadIds());
@@ -388,15 +383,9 @@ public class Npc extends Creature {
 	}
 
 	public Ability useRandomAbility(){
-		ArrayList<Ability> ActiveAbilities = new ArrayList<Ability>(); 
-
-		for(int i = 0; i < abilities.size(); i++){
-			ActiveAbilities.add(abilities.get(i));
-		}
-
-		if(ActiveAbilities.size() > 0){
-			int random = ThreadLocalRandom.current().nextInt() % ActiveAbilities.size();
-			return ActiveAbilities.get(random);
+		if(abilities!=null && abilities.size()>0){
+			int random = ThreadLocalRandom.current().nextInt() % abilities.size();
+			return abilities.get(random);
 		}
 		return null;
 	}
@@ -531,12 +520,11 @@ public class Npc extends Creature {
 	    Health = Stats.getValue("MAX_HEALTH");
 	    Mana = Stats.getValue("MAX_MANA");
 	
-	    abilities = new Vector<Ability>(); 
-		
+	    abilities = null;
 	    for(Ability a: original_monster.getAbilities()){
 	    	Ability newAbility = new Ability(ServerGameInfo.abilityDef.get(a.getAbilityId()));
 			newAbility.setCaster(CreatureType.Monster, this);
-			abilities.add(newAbility);
+			addAbility(newAbility);
 	    }
 	    
 	    Level = original_monster.getLevel();
@@ -864,7 +852,7 @@ public class Npc extends Creature {
 		}
 	}
 	
-	public Vector<Item> getStashItems(){
+	public List<Item> getStashItems(){
 		return StashItems;
 	}
 
@@ -955,7 +943,6 @@ public class Npc extends Creature {
 	public int getSpecialType(){
 		return SpecialType;
 	}
-
 
 	public boolean isElite() {
 		return elite;
