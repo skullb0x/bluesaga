@@ -19,123 +19,136 @@ import creature.Creature.CreatureType;
 import data_handlers.monster_handler.MonsterHandler;
 
 public class Shy extends BaseAI {
-	private static WorldMap PathMap;
-	private static AStarPathFinder pathfinder;
-	private static Path lastPath;
-	
-	public Shy(Npc monster) {
-		super(monster);
-	}
+  private static WorldMap PathMap;
+  private static AStarPathFinder pathfinder;
+  private static Path lastPath;
 
-	public void doAggroBehaviour(Vector<Npc> monsterMoved) {
-		Creature target = me.getAggroTarget();
-		int dX = target.getX() - me.getX();
-		int dY = target.getY() - me.getY();
+  public Shy(Npc monster) {
+    super(monster);
+  }
 
-		double distToTarget = Math.sqrt(Math.pow(dX, 2)+Math.pow(dY,2));
-		boolean lostAggro = false;
-		
-		// CHECK IF TARGET IS TOO CLOSE, THEN STEP BACK
-		if(Math.floor(distToTarget) < me.getAggroRange() + 5){
-			// Find free tile that is outside range
-			Spiral s = new Spiral(20,20);
-			List<Point> l = s.spiral();
+  public void doAggroBehaviour(Vector<Npc> monsterMoved) {
+    Creature target = me.getAggroTarget();
+    int dX = target.getX() - me.getX();
+    int dY = target.getY() - me.getY();
 
-			Point foundTile = null;
-			
-			for(Point p: l){
-				if(p.getX() != 0 || p.getY() != 0){
-					int escapeX = (int) (me.getX()+p.getX());
-					int escapeY = (int) (me.getY()+p.getY());
+    double distToTarget = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+    boolean lostAggro = false;
 
-					distToTarget = Math.sqrt(Math.pow(escapeX - target.getX(), 2)+Math.pow(escapeY - target.getY(),2));
-					if(distToTarget == me.getAttackRange()){
-						
-						if(Server.WORLD_MAP.getTile(escapeX,escapeY,me.getZ()) != null){
-							if(Server.WORLD_MAP.getTile(escapeX,escapeY,me.getZ()).isPassableNonAggro()){
-								foundTile = new Point(escapeX,escapeY);
-								break;
-							}
-						}
-					}
-				}
-			}
-			
-			if(foundTile != null){
-				int monsterOldX = me.getX();
-				int monsterOldY = me.getY();
-				int monsterOldZ = me.getZ();
-				
-				int goalX = (int) foundTile.getX();
-				int goalY = (int) foundTile.getY();
-				int goalZ = monsterOldZ;
-				
-				// MAKE A PATHFINDING MAP
-				PathMap = new WorldMap();
-				PathMap.createPathMap(monsterOldX, monsterOldY, monsterOldZ, goalX, goalY, goalZ);
+    // CHECK IF TARGET IS TOO CLOSE, THEN STEP BACK
+    if (Math.floor(distToTarget) < me.getAggroRange() + 5) {
+      // Find free tile that is outside range
+      Spiral s = new Spiral(20, 20);
+      List<Point> l = s.spiral();
 
-				pathfinder = new AStarPathFinder(PathMap, PathMap.getPathMapSize(), MonsterHandler.diagonalWalk);
+      Point foundTile = null;
 
-				PathMover pathMover = new PathMover(CreatureType.Monster);
-				pathMover.setTarget(goalX, goalY, goalZ);
+      for (Point p : l) {
+        if (p.getX() != 0 || p.getY() != 0) {
+          int escapeX = (int) (me.getX() + p.getX());
+          int escapeY = (int) (me.getY() + p.getY());
 
-				lastPath = new Path();
-				
-				// FREE TILES
-				Server.WORLD_MAP.getTile(monsterOldX, monsterOldY, monsterOldZ).setOccupant(CreatureType.None, null);
-				
-				try {
-					lastPath = pathfinder.findPath(pathMover, me.getX() - PathMap.getPathMapStartX(), me.getY() - PathMap.getPathMapStartY(), goalX - PathMap.getPathMapStartX(), goalY - PathMap.getPathMapStartY());
-				}catch(ArrayIndexOutOfBoundsException e){
-					ServerMessage.printMessage("crash! - can't find path!",true);
-					lastPath = null;
-				}
+          distToTarget =
+              Math.sqrt(
+                  Math.pow(escapeX - target.getX(), 2) + Math.pow(escapeY - target.getY(), 2));
+          if (distToTarget == me.getAttackRange()) {
 
-				if (lastPath != null) {
-					int stepX = lastPath.getX(1) + PathMap.getPathMapStartX();
-					int stepY = lastPath.getY(1) + PathMap.getPathMapStartY();
-					int stepZ = me.getZ();
-					
-					if(Server.WORLD_MAP.isPassableTileForMonster(me, stepX, stepY, stepZ)){
-						int diagonalMove = 0;
+            if (Server.WORLD_MAP.getTile(escapeX, escapeY, me.getZ()) != null) {
+              if (Server.WORLD_MAP.getTile(escapeX, escapeY, me.getZ()).isPassableNonAggro()) {
+                foundTile = new Point(escapeX, escapeY);
+                break;
+              }
+            }
+          }
+        }
+      }
 
-						me.walkTo(stepX,stepY,stepZ);
+      if (foundTile != null) {
+        int monsterOldX = me.getX();
+        int monsterOldY = me.getY();
+        int monsterOldZ = me.getZ();
 
-						if (stepX < me.getX()) {
-							diagonalMove++;
-						} else if (stepX > me.getX()) {
-							diagonalMove++;
-						} 
+        int goalX = (int) foundTile.getX();
+        int goalY = (int) foundTile.getY();
+        int goalZ = monsterOldZ;
 
-						if (stepY < me.getY()) {
-							diagonalMove++;
-						} else if (stepY > me.getY()) {
-							diagonalMove++;
-						}
+        // MAKE A PATHFINDING MAP
+        PathMap = new WorldMap();
+        PathMap.createPathMap(monsterOldX, monsterOldY, monsterOldZ, goalX, goalY, goalZ);
 
-						boolean diagonal = false;
-						if(diagonalMove > 1){
-							diagonal = true;
-						}
+        pathfinder =
+            new AStarPathFinder(PathMap, PathMap.getPathMapSize(), MonsterHandler.diagonalWalk);
 
-						me.startMoveTimer(diagonal);
-						monsterMoved.add(me);
-					}
-				}
-				
-				// OCCUPY TILES
-				Server.WORLD_MAP.getTile(me.getX(),me.getY(), me.getZ()).setOccupant(CreatureType.Monster, me);
-				
-				// Check monster movement consequences
-				if(goalX != me.getX() || goalY != me.getY()){
-					MonsterHandler.checkMonsterMoveConsequences(me);
-					monsterMoved.add(me);
-				}
-			}
-		}
-		
-		if(lostAggro){
-			monsterMoved.add(me);
-		}
-	}
+        PathMover pathMover = new PathMover(CreatureType.Monster);
+        pathMover.setTarget(goalX, goalY, goalZ);
+
+        lastPath = new Path();
+
+        // FREE TILES
+        Server.WORLD_MAP
+            .getTile(monsterOldX, monsterOldY, monsterOldZ)
+            .setOccupant(CreatureType.None, null);
+
+        try {
+          lastPath =
+              pathfinder.findPath(
+                  pathMover,
+                  me.getX() - PathMap.getPathMapStartX(),
+                  me.getY() - PathMap.getPathMapStartY(),
+                  goalX - PathMap.getPathMapStartX(),
+                  goalY - PathMap.getPathMapStartY());
+        } catch (ArrayIndexOutOfBoundsException e) {
+          ServerMessage.printMessage("crash! - can't find path!", true);
+          lastPath = null;
+        }
+
+        if (lastPath != null) {
+          int stepX = lastPath.getX(1) + PathMap.getPathMapStartX();
+          int stepY = lastPath.getY(1) + PathMap.getPathMapStartY();
+          int stepZ = me.getZ();
+
+          if (Server.WORLD_MAP.isPassableTileForMonster(me, stepX, stepY, stepZ)) {
+            int diagonalMove = 0;
+
+            me.walkTo(stepX, stepY, stepZ);
+
+            if (stepX < me.getX()) {
+              diagonalMove++;
+            } else if (stepX > me.getX()) {
+              diagonalMove++;
+            }
+
+            if (stepY < me.getY()) {
+              diagonalMove++;
+            } else if (stepY > me.getY()) {
+              diagonalMove++;
+            }
+
+            boolean diagonal = false;
+            if (diagonalMove > 1) {
+              diagonal = true;
+            }
+
+            me.startMoveTimer(diagonal);
+            monsterMoved.add(me);
+          }
+        }
+
+        // OCCUPY TILES
+        Server.WORLD_MAP
+            .getTile(me.getX(), me.getY(), me.getZ())
+            .setOccupant(CreatureType.Monster, me);
+
+        // Check monster movement consequences
+        if (goalX != me.getX() || goalY != me.getY()) {
+          MonsterHandler.checkMonsterMoveConsequences(me);
+          monsterMoved.add(me);
+        }
+      }
+    }
+
+    if (lostAggro) {
+      monsterMoved.add(me);
+    }
+  }
 }

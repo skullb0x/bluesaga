@@ -1,38 +1,36 @@
 package components;
 
 public class Crew {
-	
-	private int Id = 0;
-	private String Name = "0";
-	private String MemberState = "0";
-	
-	public Crew(int newId){
-		setId(newId);
-	}
 
-	public String getName() {
-		return Name;
-	}
+  private int Id = 0;
+  private String Name = "0";
+  private String MemberState = "0";
 
-	public void setName(String name) {
-		Name = name;
-	}
+  public Crew(int newId) {
+    setId(newId);
+  }
 
-	public int getId() {
-		return Id;
-	}
+  public String getName() {
+    return Name;
+  }
 
-	public void setId(int id) {
-		Id = id;
-	}
+  public void setName(String name) {
+    Name = name;
+  }
 
-	public String getMemberState() {
-		return MemberState;
-	}
+  public int getId() {
+    return Id;
+  }
 
-	public void setMemberState(String memberState) {
-		MemberState = memberState;
-	}
+  public void setId(int id) {
+    Id = id;
+  }
 
-	
+  public String getMemberState() {
+    return MemberState;
+  }
+
+  public void setMemberState(String memberState) {
+    MemberState = memberState;
+  }
 }

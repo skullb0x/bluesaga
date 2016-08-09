@@ -7,93 +7,91 @@ import org.newdawn.slick.SlickException;
 
 public class Sprite {
 
-	private Image image;
-	private Animation animation;
-	private boolean Animated;
+  private Image image;
+  private Animation animation;
+  private boolean Animated;
 
-	public Sprite(String filename, int nrFrames) {
-		Animated = true;
-		Image[] graphics;
+  public Sprite(String filename, int nrFrames) {
+    Animated = true;
+    Image[] graphics;
 
-		if(nrFrames <= 2 || filename.contains("largewindow")){
-			graphics = new Image[nrFrames];
-		}else{
-			graphics = new Image[nrFrames*2 - 2];
-		}
-		
-		try {
-			int k = 0;
-			for (int i = 0; i < nrFrames; i++) {
-				graphics[k] = new Image(filename + "_" + i + ".png");
-				k++;
-			}
-			
-			if(!filename.contains("largewindow")){
-				if(nrFrames > 2){
-					for(int i = nrFrames-2; i > 0; i--){
-						graphics[k] = new Image(filename + "_" + i + ".png");
-						k++;
-					}
-				}
-			}
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    if (nrFrames <= 2 || filename.contains("largewindow")) {
+      graphics = new Image[nrFrames];
+    } else {
+      graphics = new Image[nrFrames * 2 - 2];
+    }
 
-		int duration = 1000 / nrFrames;
-		
-		if(nrFrames > 2 && !filename.contains("largewindow")){
-			duration = 1000 / ((nrFrames*2)-2);
-		}
-		animation = new Animation(graphics, duration, true);
-	}
+    try {
+      int k = 0;
+      for (int i = 0; i < nrFrames; i++) {
+        graphics[k] = new Image(filename + "_" + i + ".png");
+        k++;
+      }
 
-	
-	public Sprite(String filename) {
-		Animated = false;
-		try {
-			image = new Image(filename+".png");
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+      if (!filename.contains("largewindow")) {
+        if (nrFrames > 2) {
+          for (int i = nrFrames - 2; i > 0; i--) {
+            graphics[k] = new Image(filename + "_" + i + ".png");
+            k++;
+          }
+        }
+      }
+    } catch (SlickException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
-	public boolean isAnimated(){
-		return Animated;
-	}
-	
-	public Animation getAnimation(){
-		return animation;
-	}
-	
-	public Image getImage(){
-		return image;
-	}
-	
-	public void draw(int x, int y) {
-		if (Animated) {
-			animation.draw(x, y);
-		} else {
-			image.draw(x, y);
-		}
-	}
-	
-	public void draw(int x, int y, Color color) {
-		if (Animated) {
-			animation.draw(x, y, color);
-		} else {
-			image.draw(x, y, color);
-		}
-	}
+    int duration = 1000 / nrFrames;
 
-	public void draw(int x, int y, int width, int height, Color color) {
-		if (Animated) {
-			animation.draw(x, y, width, height, color);
-		} else {
-			image.draw(x, y, width, height, color);
-		}
-	}	
+    if (nrFrames > 2 && !filename.contains("largewindow")) {
+      duration = 1000 / ((nrFrames * 2) - 2);
+    }
+    animation = new Animation(graphics, duration, true);
+  }
+
+  public Sprite(String filename) {
+    Animated = false;
+    try {
+      image = new Image(filename + ".png");
+    } catch (SlickException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public boolean isAnimated() {
+    return Animated;
+  }
+
+  public Animation getAnimation() {
+    return animation;
+  }
+
+  public Image getImage() {
+    return image;
+  }
+
+  public void draw(int x, int y) {
+    if (Animated) {
+      animation.draw(x, y);
+    } else {
+      image.draw(x, y);
+    }
+  }
+
+  public void draw(int x, int y, Color color) {
+    if (Animated) {
+      animation.draw(x, y, color);
+    } else {
+      image.draw(x, y, color);
+    }
+  }
+
+  public void draw(int x, int y, int width, int height, Color color) {
+    if (Animated) {
+      animation.draw(x, y, width, height, color);
+    } else {
+      image.draw(x, y, width, height, color);
+    }
+  }
 }

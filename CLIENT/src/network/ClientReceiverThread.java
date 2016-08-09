@@ -1,7 +1,5 @@
 package network;
 
-
-
 import game.BlueSaga;
 import gui.Gui;
 import screens.ScreenHandler;
@@ -14,142 +12,136 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-
-
 /**
  * Fetches messages from Server.
- * 
+ *
  * @author vinsent
- * 
+ *
  */
 public class ClientReceiverThread extends Thread {
 
-	private ObjectInputStream in;
+  private ObjectInputStream in;
 
+  private Vector<String> info = new Vector<String>();
 
-	private Vector<String> info = new Vector<String>();
+  private int info_itr = 0;
 
-	private int info_itr = 0;
+  public boolean lostConnection = false;
 
-	public boolean lostConnection = false;
+  private Timer reconnectTimer;
+  private int reconnectCountdownLimit = 1;
+  private int reconnectCountdownSec = 0;
 
-	private Timer reconnectTimer;
-	private int reconnectCountdownLimit = 1;
-	private int reconnectCountdownSec = 0;
+  /**
+   * Stores reference to socket for communication and Logic to deliver data
+   * to.
+   *
+   * @param socket
+   * @param logic
+   */
+  public ClientReceiverThread(ObjectInputStream input) {
+    lostConnection = false;
+    reconnectCountdownLimit = 1;
+    in = input;
+    reconnectTimer = new Timer();
+  }
 
+  @Override
+  public void run() {
 
-	/**
-	 * Stores reference to socket for communication and Logic to deliver data
-	 * to.
-	 * 
-	 * @param socket
-	 * @param logic
-	 */
-	public ClientReceiverThread(ObjectInputStream input) {
-		lostConnection = false;
-		reconnectCountdownLimit = 1;
-		in = input;
-		reconnectTimer = new Timer();
-	}
+    waitForData();
+  }
 
-	@Override
-	public void run() {
+  public void waitForData() {
+    String getMsg = "";
 
-		waitForData();
+    int lostConnectionNr = 0;
 
+    while (!BlueSaga.HAS_QUIT) {
+      try {
+        try {
+          getMsg = new String((byte[]) in.readObject());
+        } catch (SocketTimeoutException e) {
+          ScreenHandler.setActiveScreen(ScreenType.ERROR);
+          ScreenHandler.LoadingStatus = "Your connection is slow, lost connection with server";
+        }
+        info.add(getMsg);
 
-	}
+      } catch (IOException e) {
+        lostConnectionNr++;
 
-	public void waitForData() {
-		String getMsg = "";
+        if (lostConnectionNr > 20 && ScreenHandler.getActiveScreen() != ScreenType.LOGIN) {
+          if (ScreenHandler.getActiveScreen() == ScreenType.WORLD) {
+            Gui.MapWindow.saveMiniMap(0);
+          }
+          ScreenHandler.setActiveScreen(ScreenType.ERROR);
+          ScreenHandler.LoadingStatus = "Reconnect in " + reconnectCountdownLimit + " seconds";
+          lostConnection = true;
 
-		int lostConnectionNr = 0;
+          startReconnectCountdown();
+          break;
+        }
+        //e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 
-		while (!BlueSaga.HAS_QUIT) {
-			try {
-				try {
-					getMsg = new String((byte[]) in.readObject());
-				}catch(SocketTimeoutException e){
-					ScreenHandler.setActiveScreen(ScreenType.ERROR);
-					ScreenHandler.LoadingStatus = "Your connection is slow, lost connection with server";
-				}
-				info.add(getMsg);
+  public void startReconnectCountdown() {
+    reconnectCountdownSec = reconnectCountdownLimit;
+    reconnectCountdownLimit++;
+    if (!BlueSaga.HAS_QUIT) {
+      reconnectCountdown();
+    }
+  }
 
-			} catch (IOException e) {
-				lostConnectionNr++;
+  private void reconnectCountdown() {
+    reconnectTimer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!BlueSaga.HAS_QUIT) {
+              if (reconnectCountdownSec <= 0) {
+                lostConnection = false;
+                ScreenHandler.setActiveScreen(ScreenType.LOADING);
 
-				if(lostConnectionNr > 20 && ScreenHandler.getActiveScreen() != ScreenType.LOGIN){
-					if(ScreenHandler.getActiveScreen() == ScreenType.WORLD){
-						Gui.MapWindow.saveMiniMap(0);
-					}
-					ScreenHandler.setActiveScreen(ScreenType.ERROR);
-					ScreenHandler.LoadingStatus = "Reconnect in "+reconnectCountdownLimit+" seconds";
-					lostConnection = true;
+                BlueSaga.reconnect();
 
-					startReconnectCountdown();
-					break;
-				}
-				//e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} 
+              } else {
+                reconnectCountdownSec--;
+                ScreenHandler.LoadingStatus =
+                    "Lost connection with server! Reconnect in "
+                        + reconnectCountdownSec
+                        + " seconds";
+                if (BlueSaga.LoginSuccess) {
+                  reconnectCountdown();
+                }
+              }
+            }
+          }
+        },
+        1000);
+  }
 
-		}
-	}
+  public String getInfo() {
+    String data = "";
+    if (info_itr < info.size()) {
+      data = info.get(info_itr);
+      info_itr++;
+    } else {
+      info_itr = 0;
+      info.clear();
+    }
 
-	public void startReconnectCountdown() {
-		reconnectCountdownSec = reconnectCountdownLimit;
-		reconnectCountdownLimit++;
-		if(!BlueSaga.HAS_QUIT){
-			reconnectCountdown();
-		}
-	}
+    return data;
+  }
 
-	private void reconnectCountdown(){
-		reconnectTimer.schedule( new TimerTask(){
-			@Override
-			public void run() {
-				if(!BlueSaga.HAS_QUIT){
-					if(reconnectCountdownSec <= 0){
-						lostConnection = false;
-						ScreenHandler.setActiveScreen(ScreenType.LOADING);
+  public void pause() {}
 
-						BlueSaga.reconnect();
+  public void unpause() {}
 
-					}else{
-						reconnectCountdownSec--;
-						ScreenHandler.LoadingStatus = "Lost connection with server! Reconnect in "+reconnectCountdownSec+" seconds";
-						if(BlueSaga.LoginSuccess){
-							reconnectCountdown();
-						}
-					}
-				}
-
-			}
-		}, 1000);
-	}
-
-	public String getInfo(){
-		String data = "";
-		if(info_itr < info.size()){
-			data = info.get(info_itr);
-			info_itr++;
-		}else{
-			info_itr = 0;
-			info.clear();
-		}
-
-		return data;
-	}
-
-	public void pause(){
-	}
-
-	public void unpause(){
-	}
-
-	public boolean lostConnection() {
-		return lostConnection;
-	}
-
+  public boolean lostConnection() {
+    return lostConnection;
+  }
 }

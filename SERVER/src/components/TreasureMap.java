@@ -6,73 +6,69 @@ import data_handlers.item_handler.Item;
 import utils.ServerGameInfo;
 
 public class TreasureMap extends Item {
-	private int treasureX;
-	private int treasureY;
-	private int treasureZ;
-	
-	private Vector<Item> loot;
-	
-	private int level;
-	
-	private int monsterId = 0;
-	
-	public TreasureMap(){
-		super(ServerGameInfo.itemDef.get(230));
-	}
-	
-	
-	/**
-	 * Getters and setters
-	 * @return
-	 */
-	
-	public int getTreasureX() {
-		return treasureX;
-	}
+  private int treasureX;
+  private int treasureY;
+  private int treasureZ;
 
-	public void setTreasureX(int treasureX) {
-		this.treasureX = treasureX;
-	}
+  private Vector<Item> loot;
 
-	public int getTreasureY() {
-		return treasureY;
-	}
+  private int level;
 
-	public void setTreasureY(int treasureY) {
-		this.treasureY = treasureY;
-	}
+  private int monsterId = 0;
 
-	public int getTreasureZ() {
-		return treasureZ;
-	}
+  public TreasureMap() {
+    super(ServerGameInfo.itemDef.get(230));
+  }
 
-	public void setTreasureZ(int treasureZ) {
-		this.treasureZ = treasureZ;
-	}
+  /**
+   * Getters and setters
+   * @return
+   */
+  public int getTreasureX() {
+    return treasureX;
+  }
 
-	public Vector<Item> getLoot() {
-		return loot;
-	}
+  public void setTreasureX(int treasureX) {
+    this.treasureX = treasureX;
+  }
 
-	public void setLoot(Vector<Item> loot) {
-		this.loot = loot;
-	}
+  public int getTreasureY() {
+    return treasureY;
+  }
 
-	public int getLevel() {
-		return level;
-	}
+  public void setTreasureY(int treasureY) {
+    this.treasureY = treasureY;
+  }
 
-	public void setLevel(int level) {
-		this.level = level;
-	}
+  public int getTreasureZ() {
+    return treasureZ;
+  }
 
-	public int getMonsterId() {
-		return monsterId;
-	}
+  public void setTreasureZ(int treasureZ) {
+    this.treasureZ = treasureZ;
+  }
 
-	public void setMonsterId(int monsterId) {
-		this.monsterId = monsterId;
-	}
+  public Vector<Item> getLoot() {
+    return loot;
+  }
 
-	
+  public void setLoot(Vector<Item> loot) {
+    this.loot = loot;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+
+  public void setLevel(int level) {
+    this.level = level;
+  }
+
+  public int getMonsterId() {
+    return monsterId;
+  }
+
+  public void setMonsterId(int monsterId) {
+    this.monsterId = monsterId;
+  }
 }

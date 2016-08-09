@@ -14,143 +14,141 @@ import org.newdawn.slick.Graphics;
 import utils.LanguageUtils;
 
 public abstract class AbstractMovie {
-	
-	private int x = 212;
-	private int y = 160;
-	
-	private int width = 600;
-	private int height = 320;
-	
-	private int timeItr = 0;
-	
-	private int duration = 0;
-	
-	protected int fadeAlpha = 0;
-	
-	private boolean active;
 
-	protected boolean skipped = false;
-	
-	private String endMessage = "";
-	
-	protected boolean canSkip = true;
-	
-	public void play(){
-		ScreenHandler.setActiveScreen(ScreenType.CUT_SCENE);
-		BlueSaga.BG_MUSIC.stop();
-		Gui.stopMoveWindows();
-		timeItr = 0;
-		setActive(true);
-	}
-	
-	public void replay(){
-		play();
-	}
-	
-	public void update(){
-		if(timeItr < duration && fadeAlpha < 255){
-			timeItr++;
-		}else{
-			setActive(false);
-			if(!getEndMessage().equals("")){
-				Gui.addMessage(getEndMessage(), BlueSagaColors.RED);
-			}
-		}
-	}
+  private int x = 212;
+  private int y = 160;
 
-	public void skipMovie(){
-		if(canSkip){
-			skipped = true;
-			endMovie();
-		}
-	}
-	
-	public void endMovie(){
-		if(fadeAlpha == 0){
-			fadeAlpha = 1;
-		}
-	}
-	
-	public void draw(Graphics g){
-		g.setColor(new Color(0,0,0));
-		g.fillRect(0, 0, ClientSettings.SCREEN_WIDTH, ClientSettings.SCREEN_HEIGHT);
-	
-		g.setFont(Font.size16);
-		g.setColor(new Color(255,255,255));
-		if(canSkip){
-			g.drawString(LanguageUtils.getString("movies.press_escape"), 790, 605);
-		}else{
-			g.drawString(LanguageUtils.getString("movies.server_restart"), 730, 605);
-		}
-	}
-	
-	/**
-	 * Getters and Setters
-	 * @return
-	 */
-	
-	public boolean isActive() {
-		return active;
-	}
+  private int width = 600;
+  private int height = 320;
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+  private int timeItr = 0;
 
-	public int getX() {
-		return x;
-	}
+  private int duration = 0;
 
-	public void setX(int x) {
-		this.x = x;
-	}
+  protected int fadeAlpha = 0;
 
-	public int getY() {
-		return y;
-	}
+  private boolean active;
 
-	public void setY(int y) {
-		this.y = y;
-	}
+  protected boolean skipped = false;
 
-	public int getDuration() {
-		return duration;
-	}
+  private String endMessage = "";
 
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-	
-	public int getTimeItr() {
-		return timeItr;
-	}
+  protected boolean canSkip = true;
 
-	public void setTimeItr(int timeItr) {
-		this.timeItr = timeItr;
-	}
+  public void play() {
+    ScreenHandler.setActiveScreen(ScreenType.CUT_SCENE);
+    BlueSaga.BG_MUSIC.stop();
+    Gui.stopMoveWindows();
+    timeItr = 0;
+    setActive(true);
+  }
 
-	public int getWidth() {
-		return width;
-	}
+  public void replay() {
+    play();
+  }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+  public void update() {
+    if (timeItr < duration && fadeAlpha < 255) {
+      timeItr++;
+    } else {
+      setActive(false);
+      if (!getEndMessage().equals("")) {
+        Gui.addMessage(getEndMessage(), BlueSagaColors.RED);
+      }
+    }
+  }
 
-	public int getHeight() {
-		return height;
-	}
+  public void skipMovie() {
+    if (canSkip) {
+      skipped = true;
+      endMovie();
+    }
+  }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+  public void endMovie() {
+    if (fadeAlpha == 0) {
+      fadeAlpha = 1;
+    }
+  }
 
-	public String getEndMessage() {
-		return endMessage;
-	}
+  public void draw(Graphics g) {
+    g.setColor(new Color(0, 0, 0));
+    g.fillRect(0, 0, ClientSettings.SCREEN_WIDTH, ClientSettings.SCREEN_HEIGHT);
 
-	public void setEndMessage(String endMessage) {
-		this.endMessage = endMessage;
-	}
+    g.setFont(Font.size16);
+    g.setColor(new Color(255, 255, 255));
+    if (canSkip) {
+      g.drawString(LanguageUtils.getString("movies.press_escape"), 790, 605);
+    } else {
+      g.drawString(LanguageUtils.getString("movies.server_restart"), 730, 605);
+    }
+  }
 
+  /**
+   * Getters and Setters
+   * @return
+   */
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public void setX(int x) {
+    this.x = x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
+  public void setY(int y) {
+    this.y = y;
+  }
+
+  public int getDuration() {
+    return duration;
+  }
+
+  public void setDuration(int duration) {
+    this.duration = duration;
+  }
+
+  public int getTimeItr() {
+    return timeItr;
+  }
+
+  public void setTimeItr(int timeItr) {
+    this.timeItr = timeItr;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public String getEndMessage() {
+    return endMessage;
+  }
+
+  public void setEndMessage(String endMessage) {
+    this.endMessage = endMessage;
+  }
 }

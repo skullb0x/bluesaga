@@ -12,86 +12,86 @@ import game.BP_EDITOR;
 
 public class AreaEffectMenu {
 
-	private boolean Active;
-	
-	private TextField nrField;
-	
-	private int startX = 400;
-	private int startY = 350;
-	
-	public AreaEffectMenu(GameContainer app){
-		Active = false;
-	
-		nrField = new TextField(app, BP_EDITOR.FONTS.size12, startX+18, startY+45, 150, 20);
-		nrField.setBackgroundColor(new Color(0,0,0,80));
-		nrField.setBorderColor(new Color(0,0,0,0));
-		nrField.setFocus(false);
-		nrField.setCursorVisible(true);
-		
-	}
-	
-	
-	public void draw(Graphics g, GameContainer app){
-		if(Active){
+  private boolean Active;
 
-			
-			g.setColor(new Color(238,82,65,255));
-			g.fillRect(startX, startY, 213, 255);
-			
-			g.setColor(new Color(255,255,255,255));
-			
-			g.drawString("Area Effect Id:", startX+20, startY+20);
-			nrField.render(app, g);
-			
-		}
-	}
-	
-	public boolean isActive(){
-		return Active;
-	}
-	
-	public void toggle(){
-		if(Active){
-			Active = false;
-		}else{
-			Active = true;
-			nrField.setFocus(true);
-		}
-	}
-	
-	public void keyLogic(Input INPUT){
-		if(INPUT.isKeyPressed(Input.KEY_ESCAPE)){
-			Active = false;
-		}
-		
-		if(INPUT.isKeyPressed(Input.KEY_ENTER)){
-			if(!nrField.getText().equals("")){
-				BP_EDITOR.AREA_EFFECT_ID = Integer.parseInt(nrField.getText());
-				
-				
-				if(BP_EDITOR.AREA_EFFECT_ID > 0){
-					ResultSet effectRS = BP_EDITOR.mapDB.askDB("select Id from area_effect where Id = "+BP_EDITOR.AREA_EFFECT_ID);
-					
-					try {
-						if(effectRS.next()){
-							
-						}else{
-							BP_EDITOR.mapDB.updateDB("insert into area_effect (Id, AreaName) values ("+BP_EDITOR.AREA_EFFECT_ID+",'')");
-							
-							ResultSet newEffectRS = BP_EDITOR.mapDB.askDB("select Id from area_effect order by Id desc");
-							if(newEffectRS.next()){
-								BP_EDITOR.AREA_EFFECT_ID = newEffectRS.getInt("Id");
-							}
-							newEffectRS.close();
-						}
-						effectRS.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-				toggle();
-			}
-		}
-	}
-	
+  private TextField nrField;
+
+  private int startX = 400;
+  private int startY = 350;
+
+  public AreaEffectMenu(GameContainer app) {
+    Active = false;
+
+    nrField = new TextField(app, BP_EDITOR.FONTS.size12, startX + 18, startY + 45, 150, 20);
+    nrField.setBackgroundColor(new Color(0, 0, 0, 80));
+    nrField.setBorderColor(new Color(0, 0, 0, 0));
+    nrField.setFocus(false);
+    nrField.setCursorVisible(true);
+  }
+
+  public void draw(Graphics g, GameContainer app) {
+    if (Active) {
+
+      g.setColor(new Color(238, 82, 65, 255));
+      g.fillRect(startX, startY, 213, 255);
+
+      g.setColor(new Color(255, 255, 255, 255));
+
+      g.drawString("Area Effect Id:", startX + 20, startY + 20);
+      nrField.render(app, g);
+    }
+  }
+
+  public boolean isActive() {
+    return Active;
+  }
+
+  public void toggle() {
+    if (Active) {
+      Active = false;
+    } else {
+      Active = true;
+      nrField.setFocus(true);
+    }
+  }
+
+  public void keyLogic(Input INPUT) {
+    if (INPUT.isKeyPressed(Input.KEY_ESCAPE)) {
+      Active = false;
+    }
+
+    if (INPUT.isKeyPressed(Input.KEY_ENTER)) {
+      if (!nrField.getText().equals("")) {
+        BP_EDITOR.AREA_EFFECT_ID = Integer.parseInt(nrField.getText());
+
+        if (BP_EDITOR.AREA_EFFECT_ID > 0) {
+          ResultSet effectRS =
+              BP_EDITOR.mapDB.askDB(
+                  "select Id from area_effect where Id = " + BP_EDITOR.AREA_EFFECT_ID);
+
+          try {
+            if (effectRS.next()) {
+
+            } else {
+              BP_EDITOR.mapDB.updateDB(
+                  "insert into area_effect (Id, AreaName) values ("
+                      + BP_EDITOR.AREA_EFFECT_ID
+                      + ",'')");
+
+              ResultSet newEffectRS =
+                  BP_EDITOR.mapDB.askDB("select Id from area_effect order by Id desc");
+              if (newEffectRS.next()) {
+                BP_EDITOR.AREA_EFFECT_ID = newEffectRS.getInt("Id");
+              }
+              newEffectRS.close();
+            }
+            effectRS.close();
+          } catch (SQLException e) {
+            e.printStackTrace();
+          }
+        }
+        toggle();
+      }
+    }
+  }
 }

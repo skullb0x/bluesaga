@@ -1,134 +1,135 @@
 package map;
 
 public class AreaEffect {
-	
-	private int id = 0;
-	
-	private String areaName = "";
 
-	private int guardedLevel = 0;
+  private int id = 0;
 
-	private String particles = "None";
-	
-	private int tint = 0;
-	private String tintColor = "0";
-	
-	private int fog = 0;
-	private String fogColor = "0";
-	
-	private String song = "None";
-	private String ambient = "None";
-	
-	private String areaItems = "None";
-	private int areaCopper = 0;
-	
-	public AreaEffect(int id){
-		this.id = id;
-	}
+  private String areaName = "";
 
-	public String getInfo(){
-		String effectData = id+","+areaName+","+tint+","+tintColor+","+fog+","+fogColor+","+song+","+ambient+","+particles;
-		return effectData;
-	}
-	
-	/**
-	 * Getters and setters
-	 * @return
-	 */
-	
-	public int getId() {
-		return id;
-	}
+  private int guardedLevel = 0;
 
-	public String getTintColor() {
-		return tintColor;
-	}
+  private String particles = "None";
 
-	public void setTintColor(String tintColor) {
-		this.tintColor = tintColor;
-	}
+  private int tint = 0;
+  private String tintColor = "0";
 
-	public int getFog() {
-		return fog;
-	}
+  private int fog = 0;
+  private String fogColor = "0";
 
-	public void setFog(int fog) {
-		this.fog = fog;
-	}
+  private String song = "None";
+  private String ambient = "None";
 
-	public String getFogColor() {
-		return fogColor;
-	}
+  private String areaItems = "None";
+  private int areaCopper = 0;
 
-	public void setFogColor(String fogColor) {
-		this.fogColor = fogColor;
-	}
+  public AreaEffect(int id) {
+    this.id = id;
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public String getInfo() {
+    String effectData =
+        id + "," + areaName + "," + tint + "," + tintColor + "," + fog + "," + fogColor + "," + song
+            + "," + ambient + "," + particles;
+    return effectData;
+  }
 
-	public String getAreaName() {
-		return areaName;
-	}
+  /**
+   * Getters and setters
+   * @return
+   */
+  public int getId() {
+    return id;
+  }
 
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
-	}
+  public String getTintColor() {
+    return tintColor;
+  }
 
-	public int getGuardedLevel() {
-		return guardedLevel;
-	}
+  public void setTintColor(String tintColor) {
+    this.tintColor = tintColor;
+  }
 
-	public void setGuardedLevel(int guardedLevel) {
-		this.guardedLevel = guardedLevel;
-	}
+  public int getFog() {
+    return fog;
+  }
 
-	public String getParticles() {
-		return particles;
-	}
+  public void setFog(int fog) {
+    this.fog = fog;
+  }
 
-	public void setParticles(String particles) {
-		this.particles = particles;
-	}
+  public String getFogColor() {
+    return fogColor;
+  }
 
-	public int getTint() {
-		return tint;
-	}
+  public void setFogColor(String fogColor) {
+    this.fogColor = fogColor;
+  }
 
-	public void setTint(int tint) {
-		this.tint = tint;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public String getAreaItems() {
-		return areaItems;
-	}
+  public String getAreaName() {
+    return areaName;
+  }
 
-	public void setAreaItems(String areaItems) {
-		this.areaItems = areaItems;
-	}
+  public void setAreaName(String areaName) {
+    this.areaName = areaName;
+  }
 
-	public int getAreaCopper() {
-		return areaCopper;
-	}
+  public int getGuardedLevel() {
+    return guardedLevel;
+  }
 
-	public void setAreaCopper(int areaCopper) {
-		this.areaCopper = areaCopper;
-	}
+  public void setGuardedLevel(int guardedLevel) {
+    this.guardedLevel = guardedLevel;
+  }
 
-	public String getSong() {
-		return song;
-	}
+  public String getParticles() {
+    return particles;
+  }
 
-	public void setSong(String song) {
-		this.song = song;
-	}
+  public void setParticles(String particles) {
+    this.particles = particles;
+  }
 
-	public String getAmbient() {
-		return ambient;
-	}
+  public int getTint() {
+    return tint;
+  }
 
-	public void setAmbient(String ambient) {
-		this.ambient = ambient;
-	}
+  public void setTint(int tint) {
+    this.tint = tint;
+  }
+
+  public String getAreaItems() {
+    return areaItems;
+  }
+
+  public void setAreaItems(String areaItems) {
+    this.areaItems = areaItems;
+  }
+
+  public int getAreaCopper() {
+    return areaCopper;
+  }
+
+  public void setAreaCopper(int areaCopper) {
+    this.areaCopper = areaCopper;
+  }
+
+  public String getSong() {
+    return song;
+  }
+
+  public void setSong(String song) {
+    this.song = song;
+  }
+
+  public String getAmbient() {
+    return ambient;
+  }
+
+  public void setAmbient(String ambient) {
+    this.ambient = ambient;
+  }
 }

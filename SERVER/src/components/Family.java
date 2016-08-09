@@ -1,37 +1,37 @@
 package components;
 
 public class Family {
-	private int id;
-	private String name;
-	private int enemyId;
-	
-	public Family(int id, String name, int enemyId){
-		setId(id);
-		setName(name);
-		setEnemyId(enemyId);
-	}
+  private int id;
+  private String name;
+  private int enemyId;
 
-	public int getId() {
-		return id;
-	}
+  public Family(int id, String name, int enemyId) {
+    setId(id);
+    setName(name);
+    setEnemyId(enemyId);
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public int getEnemyId() {
-		return enemyId;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setEnemyId(int enemyId) {
-		this.enemyId = enemyId;
-	}
+  public int getEnemyId() {
+    return enemyId;
+  }
+
+  public void setEnemyId(int enemyId) {
+    this.enemyId = enemyId;
+  }
 }
