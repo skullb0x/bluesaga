@@ -29,23 +29,22 @@ public class PartyHandler extends Handler {
 	
 	public static void handlePartyMembers(Message m) {
 		Client client = m.client;
-		String partyMembers = "";
-		
-		int nrMembers = 0;
 		
 		if(client.playerCharacter.getParty() != null){
-			Iterator<Client> partyMembersItr = client.playerCharacter.getParty().getPlayers().iterator();
-		
-			while(partyMembersItr.hasNext()){
-				Client member = partyMembersItr.next();
+			StringBuilder partyMembers = new StringBuilder(1000);
+			Party p = client.playerCharacter.getParty();
+			partyMembers.append(p.getNrMembers()-1).append('/'); // Don't count self
+
+			for (Client member : p.getPlayers()) {
 				if(member.playerCharacter.getDBId() != client.playerCharacter.getDBId()){
-					partyMembers += member.playerCharacter.getName()+",";
-					nrMembers++;
+					partyMembers.append(member.playerCharacter.getName()).append(',');
 				}
 			}
+			addOutGoingMessage(client,"party_members",partyMembers.toString());
 		}
-		
-		addOutGoingMessage(client,"party_members",nrMembers+"/"+partyMembers);
+		else {
+			addOutGoingMessage(client,"party_members","0/");
+		}
 	}
 	
 	

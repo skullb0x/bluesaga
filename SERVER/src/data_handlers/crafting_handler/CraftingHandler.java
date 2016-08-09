@@ -81,7 +81,8 @@ public class CraftingHandler extends Handler {
 		
 		ResultSet recipesInfo = Server.userDB.askDB("select RecipeId from character_recipe where CharacterId = "+client.playerCharacter.getDBId());
 	
-		String recipesToSend = craftingStationName+"/";
+		StringBuilder recipesToSend = new StringBuilder(1000);
+		recipesToSend.append(craftingStationName).append('/');
 		
 		try {
 			while(recipesInfo.next()){
@@ -96,11 +97,12 @@ public class CraftingHandler extends Handler {
 		}
 		
 		for(Recipe recipe: availableRecipes){
-			recipesToSend += recipe.getProduct().getId()+","+recipe.getProduct().getName()+";";
+			recipesToSend.append(recipe.getProduct().getId()).append(',')
+			             .append(recipe.getProduct().getName()).append(';');
 		}
 	
-		if(!recipesToSend.equals("")){
-			addOutGoingMessage(client,"recipes",recipesToSend);
+		if(recipesToSend.length()>0){
+			addOutGoingMessage(client,"recipes",recipesToSend.toString());
 		}
 	}
 	

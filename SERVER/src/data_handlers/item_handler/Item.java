@@ -340,28 +340,28 @@ public class Item {
 	}
 
 	public String getStatsAsString() {
-		String bonusStats = "";
+		StringBuilder bonusStats = new StringBuilder(500);
 
-		bonusStats += Stats.getValue("STRENGTH") + ",";
-		bonusStats += Stats.getValue("INTELLIGENCE") + ",";
-		bonusStats += Stats.getValue("AGILITY") + ",";
-		bonusStats += Stats.getValue("SPEED") + ",";
+		bonusStats.append(Stats.getValue("STRENGTH")).append(',')
+		          .append(Stats.getValue("INTELLIGENCE")).append(',')
+		          .append(Stats.getValue("AGILITY")).append(',')
+		          .append(Stats.getValue("SPEED")).append(',')
 
-		bonusStats += Stats.getValue("CRITICAL_HIT") + ",";
-		bonusStats += Stats.getValue("EVASION") + ",";
-		bonusStats += Stats.getValue("ACCURACY") + ",";
+		          .append(Stats.getValue("CRITICAL_HIT")).append(',')
+		          .append(Stats.getValue("EVASION")).append(',')
+		          .append(Stats.getValue("ACCURACY")).append(',')
 
-		bonusStats += Stats.getValue("MAX_HEALTH") + ",";
-		bonusStats += Stats.getValue("MAX_MANA") + ",";
+		          .append(Stats.getValue("MAX_HEALTH")).append(',')
+		          .append(Stats.getValue("MAX_MANA")).append(',')
 
-		bonusStats += Stats.getValue("FIRE_DEF") + ",";
-		bonusStats += Stats.getValue("COLD_DEF") + ",";
-		bonusStats += Stats.getValue("SHOCK_DEF") + ",";
-		bonusStats += Stats.getValue("CHEMS_DEF") + ",";
-		bonusStats += Stats.getValue("MIND_DEF") + ",";
-		bonusStats += Stats.getValue("ARMOR");
+		          .append(Stats.getValue("FIRE_DEF")).append(',')
+		          .append(Stats.getValue("COLD_DEF")).append(',')
+		          .append(Stats.getValue("SHOCK_DEF")).append(',')
+		          .append(Stats.getValue("CHEMS_DEF")).append(',')
+		          .append(Stats.getValue("MIND_DEF")).append(',')
+		          .append(Stats.getValue("ARMOR"));
 
-		return bonusStats;		
+		return bonusStats.toString();
 	}
 
 

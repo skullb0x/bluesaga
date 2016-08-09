@@ -15,12 +15,10 @@ public class FriendsHandler extends Handler {
 	public static void handlePlayersOnline(Message m) {
 		if(m.client.playerCharacter == null) return;
 		Client client = m.client;
-		String sendInfo = "";
 		
 		int total_online = 0;
 		
-		String playerInfo = "";
-		
+		StringBuilder playerInfo = new StringBuilder(1000);
 		
 		for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
 			Client s = entry.getValue();
@@ -28,14 +26,13 @@ public class FriendsHandler extends Handler {
 			if(s.Ready){
 				total_online++;
 				if(s.playerCharacter.getDBId() != client.playerCharacter.getDBId() && client.playerCharacter.getFriendsList().contains(s.playerCharacter.getDBId())){
-					playerInfo += s.playerCharacter.getName()+";";
+					playerInfo.append(s.playerCharacter.getName()).append(';');
 				}
 			}
 		}
 		
-		sendInfo = total_online+"/"+playerInfo;
-		
-		if(!sendInfo.equals("")){
+		if(playerInfo.length()>0){
+			String sendInfo = total_online+'/'+playerInfo.toString();
 			addOutGoingMessage(client,"playersonline",sendInfo);
 		}
 	}

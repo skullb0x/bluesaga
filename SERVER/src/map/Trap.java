@@ -7,7 +7,8 @@ public class Trap {
 	private int Id;
 	
 	private int TrapId;
-	private String Name;
+	private String NameOn;
+	private String NameOff;
 	
 	private int X;
 	private int Y;
@@ -36,7 +37,9 @@ public class Trap {
 		try {
 			setTrapId(info.getInt("Id"));
 			
-			setName(info.getString("Name"));
+			String name = info.getString("Name");
+			NameOn  = (name + "_on").intern();
+			NameOff = (name + "_off").intern();
 			
 			if(info.getInt("Active") == 0){
 				setActive(false);
@@ -44,7 +47,7 @@ public class Trap {
 				setActive(true);
 			}
 			setDamage(info.getInt("Damage"));
-			setDamageType(info.getString("DamageType"));
+			setDamageType(info.getString("DamageType").intern());
 			setAbilityId(info.getInt("AbilityId"));
 			setRepeat(info.getInt("Repeat"));
 			setEffectSpan(info.getInt("EffectSpan"));
@@ -177,12 +180,12 @@ public class Trap {
 		}
 	}
 
-	public String getName() {
-		return Name;
+	public String getNameOn() {
+		return NameOff;
 	}
 
-	public void setName(String name) {
-		Name = name;
+	public String getNameOff() {
+		return NameOff;
 	}
 
 	public int getTrapId() {
