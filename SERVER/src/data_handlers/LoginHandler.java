@@ -271,12 +271,12 @@ public class LoginHandler extends Handler {
 		if(correctName){
 		
 			// SAVE CHARACTER INFO
-			String sqlStatement = "insert into user_character (UserId, CreatureId, Level, XP, HEALTH, MANA, X, Y, Z, Name, PlayerKiller, Bounty, CheckpointId, CreatedOn, ShipId, AreaEffectId, Deleted, LastOnline, MouthFeatureId, AccessoriesId, SkinFeatureId, HeadSkinId, WeaponSkinId, OffHandSkinId, AmuletSkinId, ArtifactSkinId, AdminLevel, Muted, InventorySize, TutorialNr, BaseClassId, BaseCreatureId, BlueSagaId) values (";
+			StringBuilder sqlStatement = new StringBuilder(1000);
+			sqlStatement.append("insert into user_character (UserId, CreatureId, Level, XP, HEALTH, MANA, X, Y, Z, Name, PlayerKiller, Bounty, CheckpointId, CreatedOn, ShipId, AreaEffectId, Deleted, LastOnline, MouthFeatureId, AccessoriesId, SkinFeatureId, HeadSkinId, WeaponSkinId, OffHandSkinId, AmuletSkinId, ArtifactSkinId, AdminLevel, Muted, InventorySize, TutorialNr, BaseClassId, BaseCreatureId, BlueSagaId) values (")
 
-			sqlStatement += client.UserId+",";
-			sqlStatement += creatureId+",";
-			sqlStatement += "1,";
-			sqlStatement += "0,";
+			            .append(client.UserId).append(',')
+			            .append(creatureId)
+			            .append(",1,0,");
 
 			int health = 0;
 			int mana = 0;
@@ -285,25 +285,33 @@ public class LoginHandler extends Handler {
 			health = ServerGameInfo.classDef.get(classId).getStartStats().getValue("MAX_HEALTH");
 			mana = ServerGameInfo.classDef.get(classId).getStartStats().getValue("MAX_MANA");
 
-			sqlStatement += health+","+mana+",";
-			sqlStatement += "5005,9984,2,"; // X, Y, Z
+			sqlStatement.append(health).append(',')
+			            .append(mana)
+			            .append(",5005,9984,2,"); // X, Y, Z
 
 			// FIX NAME SO THAT ALL LETTERS ARE LOWER CASE EXCEPT FIRST LETTER
 			String firstLetter = name.substring(0,1).toUpperCase();
 			String restLetters = name.substring(1).toLowerCase();
 			String fixedName = firstLetter+restLetters;
 
-			sqlStatement += "'"+fixedName+"',"; // CHARACTER NAME
+			sqlStatement.append('\'')
+			            .append(fixedName)  // CHARACTER NAME
+			            .append("',")
 
-			sqlStatement += "0,0,"; // PLAYER KILLER / BOUNTY
-			sqlStatement += "1,'"+TimeUtils.now()+"',0,0,'No',"; // CheckpointId, CreatedOn, ShipId, AreaEffectId, Deleted
-			sqlStatement += "'"+TimeUtils.now()+"',0,0,0,0,0,0,0,0,"; // LastOnline, MouthFeatureId, AccessoriesId, SkinFeatureId, HeadSkinId, WeaponSkinId, OffHandSkinId, AmuletSkinId, ArtifactSkinId
-			sqlStatement += "0,'No',4,0,"; //AdminLevel, Muted, InventorySize, TutorialNr
-			sqlStatement += classId+","+creatureId+","; // BaseClassId, BaseCreatureId
-			sqlStatement += blueSagaId+")"; // BlueSagaId
+			            .append("0,0,") // PLAYER KILLER / BOUNTY
+			            .append("1,'") // CheckpointId
+			            .append(TimeUtils.now()) // CreatedOn
+			            .append("',0,0,'No',") // ShipId, AreaEffectId, Deleted
+			            .append('\'')
+			            .append(TimeUtils.now()) // LastOnline
+			            .append("',0,0,0,0,0,0,0,0,") // MouthFeatureId, AccessoriesId, SkinFeatureId, HeadSkinId, WeaponSkinId, OffHandSkinId, AmuletSkinId, ArtifactSkinId
+			            .append("0,'No',4,0,") //AdminLevel, Muted, InventorySize, TutorialNr
+			            .append(classId).append(',') // BaseClassId
+			            .append(creatureId).append(',') // BaseCreatureId
+			            .append(blueSagaId).append(')'); // BlueSagaId
 			
 			try {
-				Server.userDB.updateDB(sqlStatement);
+				Server.userDB.updateDB(sqlStatement.toString());
 
 				ResultSet newChar = Server.userDB.askDB("select Id from user_character order by Id desc limit 1");
 				if(newChar.next()){
@@ -349,7 +357,8 @@ public class LoginHandler extends Handler {
 	}	
 
 	public static String getCharacterInfo(Client client){
-		String character_info = "None";
+		StringBuilder character_info = new StringBuilder(1000);
+		character_info.append("None");
 
 		ResultSet characterRS = Server.userDB.askDB("select * from user_character where UserId = "+client.UserId+" and Deleted <> 'Yes' order by Id asc");
 
@@ -383,14 +392,19 @@ public class LoginHandler extends Handler {
 
 					if(charAvailable){
 						if(nrCharacters > 0){
-							character_info += "/";
+							character_info.append('/');
 						}else{
-							character_info = "";
+							character_info.setLength(0);
 						}
 
 						// CreatureId; Name; Level; AreaId; HeadId; WeaponId; OffHandId; AmuletId; ArtifactId;
-						character_info += characterRS.getInt("Id")+";"+characterRS.getInt("CreatureId")+";"+characterRS.getString("Name")+";"+characterRS.getInt("Level")+";";
-						character_info += characterRS.getInt("MouthFeatureId")+";"+characterRS.getInt("AccessoriesId")+";"+characterRS.getString("SkinFeatureId")+";";
+						character_info.append(characterRS.getInt("Id")).append(';')
+						              .append(characterRS.getInt("CreatureId")).append(';')
+						              .append(characterRS.getString("Name")).append(';')
+						              .append(characterRS.getInt("Level")).append(';')
+						              .append(characterRS.getInt("MouthFeatureId")).append(';')
+						              .append(characterRS.getInt("AccessoriesId")).append(';')
+						              .append(characterRS.getString("SkinFeatureId")).append(';');
 
 						ResultSet equipRS = Server.userDB.askDB("select ItemId from character_item where CharacterId = "+characterRS.getInt("Id")+" and Equipped = 1");
 
@@ -420,14 +434,30 @@ public class LoginHandler extends Handler {
 
 						// GET SKINS
 
-						character_info += headItemId+";"+weaponItemId+";"+offhandItemId+";"+amuletItemId+";"+artifactItemId+";";
+						character_info.append(headItemId).append(';')
+						              .append(weaponItemId).append(';')
+						              .append(offhandItemId).append(';')
+						              .append(amuletItemId).append(';')
+						              .append(artifactItemId).append(';')
 
-						character_info += creatureRS.getInt("HeadX")+";"+creatureRS.getInt("HeadY")+";"+creatureRS.getInt("WeaponX")+";"+creatureRS.getInt("WeaponY")+";"+creatureRS.getInt("OffHandX")+";"+creatureRS.getInt("OffHandY")+";"+creatureRS.getInt("AmuletX")+";"+creatureRS.getInt("AmuletY")+";"+creatureRS.getInt("ArtifactX")+";"+creatureRS.getInt("ArtifactY")+";";
-						character_info += creatureRS.getInt("MouthFeatureX")+";"+creatureRS.getInt("MouthFeatureY")+";"+creatureRS.getInt("AccessoriesX")+";"+creatureRS.getInt("AccessoriesY")+";"+creatureRS.getInt("SkinFeatureX")+";"+creatureRS.getInt("SkinFeatureY")+";";
+						              .append(creatureRS.getInt("HeadX")).append(';')
+						              .append(creatureRS.getInt("HeadY")).append(';')
+						              .append(creatureRS.getInt("WeaponX")).append(';')
+						              .append(creatureRS.getInt("WeaponY")).append(';')
+						              .append(creatureRS.getInt("OffHandX")).append(';')
+						              .append(creatureRS.getInt("OffHandY")).append(';')
+						              .append(creatureRS.getInt("AmuletX")).append(';')
+						              .append(creatureRS.getInt("AmuletY")).append(';')
+						              .append(creatureRS.getInt("ArtifactX")).append(';')
+						              .append(creatureRS.getInt("ArtifactY")).append(';')
+						              .append(creatureRS.getInt("MouthFeatureX")).append(';')
+						              .append(creatureRS.getInt("MouthFeatureY")).append(';')
+						              .append(creatureRS.getInt("AccessoriesX")).append(';')
+						              .append(creatureRS.getInt("AccessoriesY")).append(';')
+						              .append(creatureRS.getInt("SkinFeatureX")).append(';')
+						              .append(creatureRS.getInt("SkinFeatureY")).append(';')
 
-						character_info += deleted;
-
-						//character_info += characterRS.getString("Color");
+						              .append(deleted);
 
 						nrCharacters++;
 					}
@@ -439,6 +469,6 @@ public class LoginHandler extends Handler {
 			e.printStackTrace();
 		}
 
-		return character_info;
-	}	
+		return character_info.toString();
+	}
 }

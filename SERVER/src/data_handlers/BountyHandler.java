@@ -21,20 +21,23 @@ public class BountyHandler extends Handler {
 		Client client = m.client;
 		ResultSet rs = Server.userDB.askDB("select Name, Bounty from user_character where Bounty > 0 order by Bounty desc limit 10");
 	
-		String wantedData = "none";
+		StringBuilder wantedData = new StringBuilder(1000);
 		
 		try {
 			while(rs.next()){
-				if(wantedData.equals("none")){
-					wantedData = "";
-				}
-				wantedData += rs.getString("Name")+","+rs.getInt("Bounty")+";";
+				wantedData.append(rs.getString("Name")).append(',')
+				          .append(rs.getInt("Bounty")).append(';');
 			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		addOutGoingMessage(client,"mostwanted",wantedData);
+		
+		if (wantedData.length()>0) {
+			addOutGoingMessage(client,"mostwanted",wantedData.toString());
+		} else {
+			addOutGoingMessage(client,"mostwanted","none");
+		}
 	}
 	
 		/*

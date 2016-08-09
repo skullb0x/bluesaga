@@ -358,10 +358,8 @@ public class InventoryHandler extends Handler {
 	}
 	
 	public static void sendInventoryInfo(Client client){
-		String inventoryInfo = "";
-
-		inventoryInfo = client.playerCharacter.getInventorySize()+"/";
-
+		StringBuilder inventoryInfo = new StringBuilder(1000);
+		inventoryInfo.append(client.playerCharacter.getInventorySize()).append('/');
 
 		ResultSet invInfo = Server.userDB.askDB("select Id, ItemId, InventoryPos, Nr from character_item where CharacterId = "+client.playerCharacter.getDBId()+" and Equipped = 0 and InventoryPos <> 'None' and InventoryPos <> 'Mouse'");
 
@@ -369,7 +367,10 @@ public class InventoryHandler extends Handler {
 			while(invInfo.next()){
 				ResultSet itemInfo = Server.gameDB.askDB("select Type from item where Id = "+invInfo.getInt("ItemId"));
 				if(itemInfo.next()){
-					inventoryInfo += invInfo.getInt("Id")+","+invInfo.getInt("ItemId")+","+invInfo.getInt("Nr")+","+invInfo.getString("InventoryPos")+";";
+					inventoryInfo.append(invInfo.getInt("Id")).append(',')
+					             .append(invInfo.getInt("ItemId")).append(',')
+					             .append(invInfo.getInt("Nr")).append(',')
+					             .append(invInfo.getString("InventoryPos")).append(';');
 				}
 				itemInfo.close();
 			}
@@ -378,7 +379,7 @@ public class InventoryHandler extends Handler {
 			e.printStackTrace();
 		}
 
-		addOutGoingMessage(client,"inventory",inventoryInfo);
+		addOutGoingMessage(client,"inventory",inventoryInfo.toString());
 	}
 
 	public static boolean addSpecialItemToInventory(Client client, Item itemToMove){

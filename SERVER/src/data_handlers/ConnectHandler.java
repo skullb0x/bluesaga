@@ -224,7 +224,12 @@ public class ConnectHandler extends Handler {
 	}
 	
 	public static void sendActionbar(Client client, boolean loadMore){
-		String info = "";
+		StringBuilder info = new StringBuilder(1000);
+		if(loadMore){
+			info.append("1/");
+		}else{
+			info.append("0/");
+		}
 		
 		// ACTIONBAR DATA
 		boolean foundAbility = false;
@@ -233,21 +238,18 @@ public class ConnectHandler extends Handler {
 			while(aInfo.next()){
 				//TODO: CHECK IF CAN HAVE ABILITY
 				foundAbility = true;
-				info += aInfo.getInt("OrderNr")+","+aInfo.getString("ActionType")+","+aInfo.getInt("ActionId")+";";
+				info.append(aInfo.getInt("OrderNr")).append(',')
+				    .append(aInfo.getString("ActionType")).append(',')
+				    .append(aInfo.getInt("ActionId")).append(';');
 			}
 			aInfo.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		if(!foundAbility){
-			info += "None";
+			info.append("None");
 		}	
-		// 1/ means load more when done
-		if(loadMore){
-			addOutGoingMessage(client,"actionbar","1/"+info);
-		}else{
-			addOutGoingMessage(client,"actionbar","0/"+info);
-		}
+		addOutGoingMessage(client,"actionbar",info.toString());
 	}
 	
 	public static void sendPlayerCharacterInfo(Client client, int characterId){

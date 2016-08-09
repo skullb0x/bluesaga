@@ -79,7 +79,8 @@ public class AdminControlsHandler extends Handler {
 	 * @return
 	 */
 	private static boolean levelOneControls(Client client, String chatText){
-		if(chatText.toLowerCase().equals("/server restart")){
+		String chatLower = chatText.toLowerCase();
+		if(chatLower.equals("/server restart")){
 			Server.restartServer();
 			return true;
 		}
@@ -93,17 +94,18 @@ public class AdminControlsHandler extends Handler {
 	 * @return
 	 */
 	private static boolean levelTwoControls(Client client, String chatText){
-		if(chatText.toLowerCase().startsWith("/move ")){
-			String playerName = chatText.toLowerCase().substring(6);
+		String chatLower = chatText.toLowerCase();
+		if(chatLower.startsWith("/move ")){
+			String playerName = chatLower.substring(6);
 			movePlayer(client,playerName);
 			return true;
 		}
-		if(chatText.toLowerCase().startsWith("/mute ")){
-			String playerName = chatText.toLowerCase().substring(6);
+		if(chatLower.startsWith("/mute ")){
+			String playerName = chatLower.substring(6);
 			ChatHandler.mutePlayer(client,playerName);
 			return true;
 		}
-		if(chatText.toLowerCase().startsWith("/changename ")){
+		if(chatLower.startsWith("/changename ")){
 			String nameInfo[] = chatText.substring(12).split(",");
 
 			if(nameInfo.length > 1){
@@ -148,15 +150,16 @@ public class AdminControlsHandler extends Handler {
 	 * @return
 	 */
 	private static boolean levelThreeControls(Client client, String chatText){
-		if(chatText.toLowerCase().startsWith("/goto ")){
+		String chatLower = chatText.toLowerCase();
+		if(chatLower.startsWith("/goto ")){
 			teleportAdmin(client,chatText);
 			return true;
 		}
-		if(chatText.toLowerCase().startsWith("/gotoxyz ")){
+		if(chatLower.startsWith("/gotoxyz ")){
 			teleportAdmin(client,chatText);
 			return true;
 		}
-		if(chatText.toLowerCase().startsWith("/ban ")){
+		if(chatLower.startsWith("/ban ")){
 			String banInfo[] = chatText.substring(5).split(",");
 
 			if(banInfo.length > 1){
@@ -166,7 +169,7 @@ public class AdminControlsHandler extends Handler {
 			}
 			return true;
 		}
-		if(chatText.toLowerCase().startsWith("/givequest ")){
+		if(chatLower.startsWith("/givequest ")){
 			String questInfo[] = chatText.substring(11).split(",");
 			if(questInfo.length > 1){
 				String charName = questInfo[0];
@@ -176,7 +179,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/banip ")){
+		if(chatLower.startsWith("/banip ")){
 			String charName = chatText.substring(7);
 			banIp(client,charName);
 			return true;
@@ -191,17 +194,18 @@ public class AdminControlsHandler extends Handler {
 	 * @return
 	 */
 	private static boolean levelFourControls(Client client, String chatText){
-		if(chatText.toLowerCase().startsWith("/night")){
+		String chatLower = chatText.toLowerCase();
+		if(chatLower.startsWith("/night")){
 			MapHandler.worldTimeItr = MapHandler.worldNightTime-1;
 			return true;
 		}
 
-		if(chatText.toLowerCase().startsWith("/day")){
+		if(chatLower.startsWith("/day")){
 			MapHandler.worldTimeItr = MapHandler.worldDayDuration-1;
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/ability ")){
+		if(chatLower.startsWith("/ability ")){
 			String abilityInfo = chatText.substring(9);
 			try{
 				int abilityId = Integer.parseInt(abilityInfo);
@@ -217,7 +221,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/bring ")){
+		if(chatLower.startsWith("/bring ")){
 			String charName = chatText.substring(7);
 			Client player = findPlayerClient(charName);
 
@@ -227,7 +231,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 
-		if(chatText.toLowerCase().startsWith("/level ")){
+		if(chatLower.startsWith("/level ")){
 			try{
 				int level = Integer.parseInt(chatText.substring(7));
 			
@@ -246,8 +250,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 
-
-		if(chatText.toLowerCase().startsWith("/setclass ")){
+		if(chatLower.startsWith("/setclass ")){
 			String classInfo[] = chatText.substring(10).split(",");
 			if(classInfo.length == 3){
 				try{
@@ -297,7 +300,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/setlevel ")){
+		if(chatLower.startsWith("/setlevel ")){
 			String levelInfo[] = chatText.substring(10).split(",");
 			if(levelInfo.length == 2){
 				String charName = levelInfo[0];
@@ -328,8 +331,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 
-		
-		if(chatText.toLowerCase().startsWith("/spawn ")){
+		if(chatLower.startsWith("/spawn ")){
 			String spawnInfo[] = chatText.substring(7).split(",");
 
 			boolean success = true;
@@ -378,7 +380,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/skill ")){
+		if(chatLower.startsWith("/skill ")){
 			String skillLevel[] = chatText.substring(7).split(",");
 			if(skillLevel.length > 1){
 				try{
@@ -399,7 +401,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/getstat ")){
+		if(chatLower.startsWith("/getstat ")){
 			String creatureInfo[] = chatText.substring(9).split(",");
 
 			// CreatureId, StatName
@@ -452,26 +454,27 @@ public class AdminControlsHandler extends Handler {
 					if(foundStat){
 						addOutGoingMessage(client,"message",c.getName()+" has "+statValue+" in "+statName);
 					}else {
-						String statMessage = "Stats does not exist! Available stats: ";
+						StringBuilder statMessage = new StringBuilder(1000);
+						statMessage.append("Stats does not exist! Available stats: ");
 
 						for(Iterator<String> iter = stats.getHashMap().keySet().iterator();iter.hasNext();){  
-							String key = iter.next().toString();  
-							statMessage += key+", ";
+							String key = iter.next().toString();
+							statMessage.append(key).append(", ");
 						} 
 
 						for(Iterator<String> iter = c.coords.keySet().iterator();iter.hasNext();){  
-							String key = iter.next().toString();  
-							statMessage += key+", ";
+							String key = iter.next().toString();
+							statMessage.append(key).append(", ");
 						} 
 
 						for(Iterator<String> iter = c.getCustomization().coords.keySet().iterator();iter.hasNext();){  
 							String key = iter.next().toString();  
-							statMessage += key+", ";
+							statMessage.append(key).append(", ");
 						} 
 
-						statMessage += " GiveXP, Ability1, Ability2, Ability3, Ability4, Ability5, Ability6";
+						statMessage.append("GiveXP, Ability1, Ability2, Ability3, Ability4, Ability5, Ability6");
 						
-						addOutGoingMessage(client,"message",statMessage);
+						addOutGoingMessage(client,"message",statMessage.toString());
 					}
 				}catch(NumberFormatException e){
 					// NOT A NUMBER!
@@ -483,7 +486,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 
-		if(chatText.toLowerCase().startsWith("/setstat ")){
+		if(chatLower.startsWith("/setstat ")){
 			String creatureInfo[] = chatText.substring(9).split(",");
 
 			// CreatureId, StatName, StatValue
@@ -535,27 +538,27 @@ public class AdminControlsHandler extends Handler {
 
 							addOutGoingMessage(client,"message",c.getName()+" has "+statValue+" in "+statName);
 						}else{
-							String statMessage = "Stats does not exist! Available stats: ";
+							StringBuilder statMessage = new StringBuilder(1000);
+							statMessage.append("Stats does not exist! Available stats: ");
 
 							for(Iterator<String> iter = stats.getHashMap().keySet().iterator();iter.hasNext();){  
-								String key = iter.next().toString();  
-								statMessage += key+", ";
+								String key = iter.next().toString();
+								statMessage.append(key).append(", ");
 							} 
 
 							for(Iterator<String> iter = c.coords.keySet().iterator();iter.hasNext();){  
-								String key = iter.next().toString();  
-								statMessage += key+", ";
+								String key = iter.next().toString();
+								statMessage.append(key).append(", ");
 							} 
 
 							for(Iterator<String> iter = c.getCustomization().coords.keySet().iterator();iter.hasNext();){  
-								String key = iter.next().toString();  
-								statMessage += key+", ";
+								String key = iter.next().toString();
+								statMessage.append(key).append(", ");
 							} 
 							
-							statMessage += "GiveXP, Ability1, Ability2, Ability3, Ability4, Ability5, Ability6";
-							addOutGoingMessage(client,"message",statMessage);
+							statMessage.append("GiveXP, Ability1, Ability2, Ability3, Ability4, Ability5, Ability6");
+							addOutGoingMessage(client,"message",statMessage.toString());
 						}
-
 
 					}else{
 						addOutGoingMessage(client,"message","Creature does not exist!");
@@ -579,8 +582,9 @@ public class AdminControlsHandler extends Handler {
 	 * @return
 	 */
 	private static boolean levelFiveControls(Client client, String chatText){
+		String chatLower = chatText.toLowerCase();
 		// ADD ADMIN EVENT MESSAGE
-		if(chatText.toLowerCase().startsWith("/givexp ")){
+		if(chatLower.startsWith("/givexp ")){
 			String playerInfo[] = chatText.substring(8).split(",");
 
 			if(playerInfo.length == 2){
@@ -607,7 +611,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/givebounty ")){
+		if(chatLower.startsWith("/givebounty ")){
 			String playerInfo[] = chatText.substring(12).split(",");
 
 			if(playerInfo.length == 2){
@@ -636,7 +640,7 @@ public class AdminControlsHandler extends Handler {
 		}
 		
 		
-		if(chatText.toLowerCase().startsWith("/giveskill ")){
+		if(chatLower.startsWith("/giveskill ")){
 			String skillInfo[] = chatText.substring(11).split(",");
 
 			if(skillInfo.length == 3){
@@ -670,7 +674,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/giveadmin ")){
+		if(chatLower.startsWith("/giveadmin ")){
 			String adminInfo[] = chatText.substring(11).split(",");
 
 			if(adminInfo.length == 2){
@@ -719,7 +723,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 
-		if(chatText.toLowerCase().startsWith("/skin ")){
+		if(chatLower.startsWith("/skin ")){
 			String skinInfo[] = chatText.substring(6).split(",");
 			if(skinInfo.length > 1){
 				try{
@@ -751,7 +755,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/item ")){
+		if(chatLower.startsWith("/item ")){
 			String itemInfo[] = chatText.substring(6).split(",");
 			
 			Item newItem = null;
@@ -791,7 +795,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().startsWith("/give ")){
+		if(chatLower.startsWith("/give ")){
 			String giftInfo[] = chatText.substring(6).split(",");
 
 			if(giftInfo.length == 3){
@@ -850,7 +854,7 @@ public class AdminControlsHandler extends Handler {
 			return true;
 		}
 		
-		if(chatText.toLowerCase().equals("/server stop")){
+		if(chatLower.equals("/server stop")){
 			Server.stopServer();
 			return true;
 		}
@@ -1041,11 +1045,12 @@ public class AdminControlsHandler extends Handler {
 
 				try {
 					WebHandler.sendPost("http://www.bluesaga.org/server/banPlayer.php","id="+userId+"&hours="+hours+"&check="+check);
+					String playerLower = playerName.toLowerCase();
 					for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
 						Client s = entry.getValue();
 
 						if(s.Ready){
-							if(s.playerCharacter.getName().toLowerCase().equals(playerName.toLowerCase())){
+							if(s.playerCharacter.getName().toLowerCase().equals(playerLower)){
 								addOutGoingMessage(s,"backtologin",banMessage);
 
 								s.RemoveMe = true;
@@ -1084,11 +1089,12 @@ public class AdminControlsHandler extends Handler {
 				String ip = "not found";
 				
 				try {
+					String playerLower = playerName.toLowerCase();
 					for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
 						Client s = entry.getValue();
 
 						if(s.Ready){
-							if(s.playerCharacter.getName().toLowerCase().equals(playerName.toLowerCase())){
+							if(s.playerCharacter.getName().toLowerCase().equals(playerLower)){
 								addOutGoingMessage(s,"backtologin",banMessage);
 								ip = s.IP;
 								s.RemoveMe = true;
