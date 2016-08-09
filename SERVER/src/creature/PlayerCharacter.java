@@ -1521,14 +1521,16 @@ public class PlayerCharacter extends Creature {
 	 * Chat channels subscriptions
 	 */
 	public void addChatChannel(String chatChannel){
-		if(!chatChannels.contains(chatChannel.toLowerCase())){
-			chatChannels.add(chatChannel.toLowerCase());
+		String chatLower = chatChannel.toLowerCase();
+		if(!chatChannels.contains(chatLower)){
+			chatChannels.add(chatLower);
 		}
 	}
 	
 	public void removeChatChannel(String chatChannel){
-		if(chatChannels.contains(chatChannel.toLowerCase())){
-			chatChannels.remove(chatChannel.toLowerCase());
+		String chatLower = chatChannel.toLowerCase();
+		if(chatChannels.contains(chatLower)){
+			chatChannels.remove(chatLower);
 		}
 	}
 	

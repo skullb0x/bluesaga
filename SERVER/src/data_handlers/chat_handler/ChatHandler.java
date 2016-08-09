@@ -339,20 +339,18 @@ public class ChatHandler extends Handler {
 	}
 
 	public static void mutePlayer(Client client, String playerName){
-		
+		playerName = playerName.toLowerCase();
 		for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
 			Client s = entry.getValue();
-			if(s.Ready){
-				if(s.playerCharacter.getName().toLowerCase().equals(playerName.toLowerCase())){
-					if(!mutedUsers.contains(s.UserId)){
-						mutedUsers.add(s.UserId);
-						addOutGoingMessage(s,"#message","messages.chat.muted");
-						addOutGoingMessage(client,"message","You have muted "+s.playerCharacter.getName()+" til next server restart");
-						break;
-					}
-				}
+			if(s.Ready
+			&& !mutedUsers.contains(s.UserId)
+			&& playerName.equals(s.playerCharacter.getName().toLowerCase())
+			){
+				mutedUsers.add(s.UserId);
+				addOutGoingMessage(s,"#message","messages.chat.muted");
+				addOutGoingMessage(client,"message","You have muted "+s.playerCharacter.getName()+" til next server restart");
+				break;
 			}
 		}
 	}
-	
 }

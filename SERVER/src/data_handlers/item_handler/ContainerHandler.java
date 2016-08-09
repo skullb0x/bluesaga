@@ -211,21 +211,29 @@ public class ContainerHandler extends Handler {
 		// GET CONTENT IN CONTAINER
 		Container TheContainer = CONTAINERS.get(tileX+","+tileY+","+tileZ);
 
-		String content = "None";
-
 		if(TheContainer != null){
-			content = TheContainer.getName()+";"+TheContainer.getType()+";"+TheContainer.getSizeW()+";"+TheContainer.getSizeH()+";"+tileX+","+tileY+","+tileZ+":";
+			StringBuilder content = new StringBuilder(1000);
+			content.append(TheContainer.getName()).append(';')
+				     .append(TheContainer.getType()).append(';')
+				     .append(TheContainer.getSizeW()).append(';')
+				     .append(TheContainer.getSizeH()).append(';')
+				     .append(tileX).append(',')
+				     .append(tileY).append(',')
+				     .append(tileZ).append(':');
 
-			for(Iterator<Entry<String, Item>> iter = TheContainer.getItems().entrySet().iterator();iter.hasNext();){  
-				Entry<String, Item> entry = iter.next();
-
-				if(entry.getValue() != null){
-					content += entry.getValue().getId()+","+entry.getValue().getStacked()+","+entry.getKey()+","+entry.getValue().getUserItemId()+";";				    
+			for (Entry<String, Item> entry : TheContainer.getItems().entrySet()) {
+				Item item = entry.getValue();
+				if (item != null) {
+					content.append(item.getId()).append(',')
+				         .append(item.getStacked()).append(',')
+				         .append(entry.getKey()).append(',')
+				         .append(item.getUserItemId()).append(';');
 				}
-			}	
+			}
+			return content.toString();
+		} else {
+			return "None";
 		}
-
-		return content;
 	}
 
 	public static void checkContainer(Client client, Tile TILE){
@@ -442,11 +450,18 @@ public class ContainerHandler extends Handler {
 		ResultSet chestInfo = Server.userDB.askDB("select Id, ItemId, Nr, Pos from user_chest where UserId = "+client.UserId);
 		
 		
-		String content = "Personal Chest"+";"+"chest"+";"+chestSize+";"+chestSize+";0,0,0:";
+		StringBuilder content = new StringBuilder(1000);
+		content.append("Personal Chest;chest;")
+		       .append(chestSize).append(';')
+		       .append(chestSize)
+		       .append(";0,0,0:");
 
 		try {
 			while(chestInfo.next()){
-				content += chestInfo.getInt("ItemId")+","+chestInfo.getInt("Nr")+","+chestInfo.getString("Pos")+","+chestInfo.getInt("Id")+";";				    
+				content.append(chestInfo.getInt("ItemId")).append(',')
+				       .append(chestInfo.getInt("Nr")).append(',')
+				       .append(chestInfo.getString("Pos")).append(',')
+				       .append(chestInfo.getInt("Id")).append(';');
 			}
 			chestInfo.close();
 		} catch (SQLException e) {
@@ -454,7 +469,7 @@ public class ContainerHandler extends Handler {
 			e.printStackTrace();
 		}
 		
-		return content;
+		return content.toString();
 	}
 
 	public static void checkContainerRespawn(){

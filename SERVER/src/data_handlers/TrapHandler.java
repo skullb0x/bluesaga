@@ -1,9 +1,7 @@
 package data_handlers;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
+
 import utils.ServerGameInfo;
 import creature.Creature;
 import creature.Creature.CreatureType;
@@ -16,20 +14,19 @@ import network.Server;
 
 public class TrapHandler extends Handler {
 	
-	
-	private static HashMap<Integer,Trap> Traps;
+	private static Map<Integer,Trap> Traps;
 	
 	public static void init(){
-		Traps = new HashMap<Integer,Trap>();
+		Traps = new HashMap<>();
 	}
 	
 	
 	public static void update(){
-		Vector<Trap> updatedTraps = new Vector<Trap>();
+		List<Trap> updatedTraps = new ArrayList<>(Traps.size());
 		
 		// TRIGGER TRAPS THAT ARE ACTIVE
-		for(Iterator<Trap> iter = Traps.values().iterator();iter.hasNext();){  
-			Trap T = iter.next();
+		for (Map.Entry<Integer, Trap> ent : Traps.entrySet()) {
+			Trap T = ent.getValue();
 			
 			if(T.isActive()){
 				if(T.isReady()){
@@ -44,18 +41,10 @@ public class TrapHandler extends Handler {
 			}
 		}
 		
-		for(Iterator<Trap> iter = updatedTraps.iterator();iter.hasNext();){  
-			Trap T = iter.next();
-			
-			String TrapName = T.getName();
-			if(T.isOn()){
-				TrapName += "_on";
-			}else{
-				TrapName += "_off";
-			}
+		for (Trap T : updatedTraps) {
+			String TrapName = T.isOn() ? T.getNameOn() : T.getNameOff();
 			
 			Server.WORLD_MAP.getTile(T.getX(), T.getY(), T.getZ()).setObjectId(TrapName);
-			
 			
 			// SEND INFO ABOUT TRIGGERED TRAPS TO CLIENTS
 			for (Map.Entry<Integer, Client> entry : Server.clients.entrySet()) {
