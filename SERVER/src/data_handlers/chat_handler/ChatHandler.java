@@ -79,7 +79,7 @@ public class ChatHandler extends Handler {
 		Client client = m.client;
 		boolean specialCommand = false;
 		
-		String chatInfo[] = m.message.split(";");
+		String chatInfo[] = m.message.split(";",2);
 		
 		if(chatInfo.length == 2){
 			String chatChannel = chatInfo[0].toLowerCase();

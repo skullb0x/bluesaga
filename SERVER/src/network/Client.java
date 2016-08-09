@@ -93,7 +93,7 @@ public class Client implements Runnable {
 								int messageId = Obfuscator.illuminate(messageIdobf);
 								
 								
-								String messageInfo[] = message.substring(messageIndex).split(">");
+								String messageInfo[] = message.substring(messageIndex).split(">",2);
 								String messageType = messageInfo[0].substring(1);
 								String messageText = messageInfo[1];
 		
