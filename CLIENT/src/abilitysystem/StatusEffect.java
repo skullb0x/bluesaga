@@ -10,176 +10,162 @@ import graphics.Sprite;
 
 public class StatusEffect {
 
-	private int Id;
-	private String Name = "";
-	private Stats StatsModif;
-	private int DurationItr;
-	private int Duration; // Duration in seconds
-	private int RepeatDamage;
-	private String RepeatDamageType;
-	
-	private String CasterType;
-	private Creature Caster;
-	
-	private boolean Active;
-	
-	private Sprite Gfx; 
-	private float scale = 0.0f;
-	
-	private int GraphicsNr;
-	private int AnimationId;
-	
-	private Color Color;
+  private int Id;
+  private String Name = "";
+  private Stats StatsModif;
+  private int DurationItr;
+  private int Duration; // Duration in seconds
+  private int RepeatDamage;
+  private String RepeatDamageType;
 
-	public StatusEffect(int newId, int graphicsNr){
-		setId(newId);
-		setGraphicsNr(graphicsNr);
-		
-		setCasterType("None");
-		Gfx = ImageResource.getSprite("statuseffects/"+getGraphicsNr());
-		/*
-		int randomFrame = RandomUtils.getInt(0,Gfx.getFrameCount()-1);
-		Gfx.getAnimation().setCurrentFrame(randomFrame);
-		*/
-		setDurationItr(0);
-		
-		Active = true;
-	}
+  private String CasterType;
+  private Creature Caster;
 
+  private boolean Active;
 
-	
-	public String getName() {
-		return Name;
-	}
+  private Sprite Gfx;
+  private float scale = 0.0f;
 
-	public void setName(String name) {
-		Name = name;
-	}
+  private int GraphicsNr;
+  private int AnimationId;
 
-	public int getDuration() {
-		return Duration;
-	}
+  private Color Color;
 
-	public void setDuration(int duration) {
-		Duration = duration;
-	}
+  public StatusEffect(int newId, int graphicsNr) {
+    setId(newId);
+    setGraphicsNr(graphicsNr);
 
-	public int getRepeatDamage() {
-		return RepeatDamage;
-	}
+    setCasterType("None");
+    Gfx = ImageResource.getSprite("statuseffects/" + getGraphicsNr());
+    /*
+    int randomFrame = RandomUtils.getInt(0,Gfx.getFrameCount()-1);
+    Gfx.getAnimation().setCurrentFrame(randomFrame);
+    */
+    setDurationItr(0);
 
-	public void setRepeatDamage(int repeatDamage) {
-		RepeatDamage = repeatDamage;
-	}
+    Active = true;
+  }
 
-	public String getRepeatDamageType() {
-		return RepeatDamageType;
-	}
+  public String getName() {
+    return Name;
+  }
 
-	public void setRepeatDamageType(String repeatDamageType) {
-		RepeatDamageType = repeatDamageType;
-	}
-	
-	public Stats getStatsModif(){
-		return StatsModif;
-	}
+  public void setName(String name) {
+    Name = name;
+  }
 
-	public int getId() {
-		return Id;
-	}
+  public int getDuration() {
+    return Duration;
+  }
 
-	public void setId(int id) {
-		Id = id;
-	}
+  public void setDuration(int duration) {
+    Duration = duration;
+  }
 
-	public boolean isActive() {
-		return Active;
-	}
+  public int getRepeatDamage() {
+    return RepeatDamage;
+  }
 
-	public void setActive(boolean active) {
-		Active = active;
-	}
+  public void setRepeatDamage(int repeatDamage) {
+    RepeatDamage = repeatDamage;
+  }
 
-	public String getCasterType() {
-		return CasterType;
-	}
+  public String getRepeatDamageType() {
+    return RepeatDamageType;
+  }
 
-	public void setCasterType(String casterType) {
-		CasterType = casterType;
-	}
+  public void setRepeatDamageType(String repeatDamageType) {
+    RepeatDamageType = repeatDamageType;
+  }
 
-	public Creature getCaster() {
-		return Caster;
-	}
+  public Stats getStatsModif() {
+    return StatsModif;
+  }
 
-	public void setCaster(Creature caster) {
-		Caster = caster;
-	}
+  public int getId() {
+    return Id;
+  }
 
-	public Sprite getSprite(){
-		return Gfx;
-	}
-	
-	public void draw(int x, int y){
-		if(scale < 1.0f){
-			scale += 0.1f;
-		}
-		Gfx.getAnimation().updateNoDraw();
-		Gfx.getAnimation().getCurrentFrame().getScaledCopy(scale).drawCentered(x, y);
-		
-		//MyEmitter.SetPosition(x,y);
-	}
+  public void setId(int id) {
+    Id = id;
+  }
 
-	public Color getColor(){
-		return Color;
-	}
-	
-	public void setColor(Color newColor){
-		Color = newColor;
-	}
+  public boolean isActive() {
+    return Active;
+  }
 
+  public void setActive(boolean active) {
+    Active = active;
+  }
 
+  public String getCasterType() {
+    return CasterType;
+  }
 
-	public int getGraphicsNr() {
-		return GraphicsNr;
-	}
+  public void setCasterType(String casterType) {
+    CasterType = casterType;
+  }
 
+  public Creature getCaster() {
+    return Caster;
+  }
 
+  public void setCaster(Creature caster) {
+    Caster = caster;
+  }
 
-	public void setGraphicsNr(int graphicsNr) {
-		GraphicsNr = graphicsNr;
-	}
+  public Sprite getSprite() {
+    return Gfx;
+  }
 
+  public void draw(int x, int y) {
+    if (scale < 1.0f) {
+      scale += 0.1f;
+    }
+    Gfx.getAnimation().updateNoDraw();
+    Gfx.getAnimation().getCurrentFrame().getScaledCopy(scale).drawCentered(x, y);
 
-	public boolean increaseDurationItr(int value){
-		DurationItr += value;
-		if(DurationItr > getDuration()){
-			DurationItr = getDuration();
-			setActive(false);
-		}
-		return isActive();
-	}
+    //MyEmitter.SetPosition(x,y);
+  }
 
-	public int getDurationItr() {
-		return DurationItr;
-	}
+  public Color getColor() {
+    return Color;
+  }
 
+  public void setColor(Color newColor) {
+    Color = newColor;
+  }
 
+  public int getGraphicsNr() {
+    return GraphicsNr;
+  }
 
-	public void setDurationItr(int durationItr) {
-		DurationItr = durationItr;
-	}
+  public void setGraphicsNr(int graphicsNr) {
+    GraphicsNr = graphicsNr;
+  }
 
+  public boolean increaseDurationItr(int value) {
+    DurationItr += value;
+    if (DurationItr > getDuration()) {
+      DurationItr = getDuration();
+      setActive(false);
+    }
+    return isActive();
+  }
 
+  public int getDurationItr() {
+    return DurationItr;
+  }
 
-	public int getAnimationId() {
-		return AnimationId;
-	}
+  public void setDurationItr(int durationItr) {
+    DurationItr = durationItr;
+  }
 
+  public int getAnimationId() {
+    return AnimationId;
+  }
 
-
-	public void setAnimationId(int animationId) {
-		AnimationId = animationId;
-	}
-
+  public void setAnimationId(int animationId) {
+    AnimationId = animationId;
+  }
 }

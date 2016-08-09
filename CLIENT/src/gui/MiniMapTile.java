@@ -4,35 +4,35 @@ import org.newdawn.slick.Color;
 
 public class MiniMapTile {
 
-	private Color Color;
-	private boolean New = false;
-	private boolean Update = false;
-	
-	public MiniMapTile(Color newColor){
-		setColor(newColor);
-	}
+  private Color Color;
+  private boolean New = false;
+  private boolean Update = false;
 
-	public org.newdawn.slick.Color getColor() {
-		return Color;
-	}
+  public MiniMapTile(Color newColor) {
+    setColor(newColor);
+  }
 
-	public void setColor(org.newdawn.slick.Color color) {
-		Color = color;
-	}
+  public org.newdawn.slick.Color getColor() {
+    return Color;
+  }
 
-	public boolean isNew() {
-		return New;
-	}
+  public void setColor(org.newdawn.slick.Color color) {
+    Color = color;
+  }
 
-	public void setNew(boolean new1) {
-		New = new1;
-	}
+  public boolean isNew() {
+    return New;
+  }
 
-	public boolean isUpdate() {
-		return Update;
-	}
+  public void setNew(boolean new1) {
+    New = new1;
+  }
 
-	public void setUpdate(boolean update) {
-		Update = update;
-	}
+  public boolean isUpdate() {
+    return Update;
+  }
+
+  public void setUpdate(boolean update) {
+    Update = update;
+  }
 }

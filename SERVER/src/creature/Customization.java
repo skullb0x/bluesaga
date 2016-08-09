@@ -4,159 +4,144 @@ import java.util.HashMap;
 
 public class Customization {
 
-	public HashMap<String,Integer> coords = new HashMap<String,Integer>();
-	
-	private int MouthFeatureId = 0;
-	private int AccessoriesId = 0;
-	private int SkinFeatureId = 0;
-		
-	private int HeadSkinId = 0;
-	private int WeaponSkinId = 0;
-	private int OffHandSkinId = 0;
-	private int AmuletSkinId = 0;
-	private int ArtifactSkinId = 0;
-	
-	
-	
-	public Customization(){
-		coords.put("MouthFeatureX", 0);
-		coords.put("MouthFeatureY", 0);
-		coords.put("AccessoriesX", 0);
-		coords.put("AccessoriesY", 0);
-		coords.put("SkinFeatureX", 0);
-		coords.put("SkinFeatureY", 0);
-	}
-	
-	/**
-	 * Setters and getters
-	 * @return
-	 */
-	public int getMouthFeatureX() {
-		return coords.get("MouthFeatureX");
-	}
+  public HashMap<String, Integer> coords = new HashMap<String, Integer>();
 
-	public void setMouthFeatureX(int mouthFeatureX) {
-		coords.put("MouthFeatureX", mouthFeatureX);
-	}
-	
-	public int getMouthFeatureY() {
-		return coords.get("MouthFeatureY");
-	}
+  private int MouthFeatureId = 0;
+  private int AccessoriesId = 0;
+  private int SkinFeatureId = 0;
 
-	public void setMouthFeatureY(int mouthFeatureY) {
-		coords.put("MouthFeatureY",mouthFeatureY);
-	}
+  private int HeadSkinId = 0;
+  private int WeaponSkinId = 0;
+  private int OffHandSkinId = 0;
+  private int AmuletSkinId = 0;
+  private int ArtifactSkinId = 0;
 
-	public int getAccessoriesX() {
-		return coords.get("AccessoriesX");
-	}
+  public Customization() {
+    coords.put("MouthFeatureX", 0);
+    coords.put("MouthFeatureY", 0);
+    coords.put("AccessoriesX", 0);
+    coords.put("AccessoriesY", 0);
+    coords.put("SkinFeatureX", 0);
+    coords.put("SkinFeatureY", 0);
+  }
 
-	public void setAccessoriesX(int accessoriesX) {
-		coords.put("AccessoriesX", accessoriesX);
-	}
+  /**
+   * Setters and getters
+   * @return
+   */
+  public int getMouthFeatureX() {
+    return coords.get("MouthFeatureX");
+  }
 
-	public int getAccessoriesY() {
-		return coords.get("AccessoriesY");
-	}
+  public void setMouthFeatureX(int mouthFeatureX) {
+    coords.put("MouthFeatureX", mouthFeatureX);
+  }
 
-	public void setAccessoriesY(int accessoriesY) {
-		coords.put("AccessoriesY", accessoriesY);
-	}
+  public int getMouthFeatureY() {
+    return coords.get("MouthFeatureY");
+  }
 
-	public int getSkinFeatureX() {
-		return coords.get("SkinFeatureX");
-	}
+  public void setMouthFeatureY(int mouthFeatureY) {
+    coords.put("MouthFeatureY", mouthFeatureY);
+  }
 
-	public void setSkinFeatureX(int skinFeatureX) {
-		coords.put("SkinFeatureX", skinFeatureX);
-	}
+  public int getAccessoriesX() {
+    return coords.get("AccessoriesX");
+  }
 
-	public int getSkinFeatureY() {
-		return coords.get("SkinFeatureY");
-	}
+  public void setAccessoriesX(int accessoriesX) {
+    coords.put("AccessoriesX", accessoriesX);
+  }
 
-	public void setSkinFeatureY(int skinFeatureY) {
-		coords.put("SkinFeatureY", skinFeatureY);
-	}
+  public int getAccessoriesY() {
+    return coords.get("AccessoriesY");
+  }
 
-	/**
-	 * Customization Ids
-	 * @return
-	 */
-	
-	public int getMouthFeatureId() {
-		return MouthFeatureId;
-	}
+  public void setAccessoriesY(int accessoriesY) {
+    coords.put("AccessoriesY", accessoriesY);
+  }
 
-	public void setMouthFeatureId(int mouthFeatureId) {
-		MouthFeatureId = mouthFeatureId;
-	}
+  public int getSkinFeatureX() {
+    return coords.get("SkinFeatureX");
+  }
 
-	public int getAccessoriesId() {
-		return AccessoriesId;
-	}
+  public void setSkinFeatureX(int skinFeatureX) {
+    coords.put("SkinFeatureX", skinFeatureX);
+  }
 
-	public void setAccessoriesId(int accessoriesId) {
-		AccessoriesId = accessoriesId;
-	}
+  public int getSkinFeatureY() {
+    return coords.get("SkinFeatureY");
+  }
 
-	public int getSkinFeatureId() {
-		return SkinFeatureId;
-	}
+  public void setSkinFeatureY(int skinFeatureY) {
+    coords.put("SkinFeatureY", skinFeatureY);
+  }
 
-	public void setSkinFeatureId(int skinFeatureId) {
-		SkinFeatureId = skinFeatureId;
-	}
+  /**
+   * Customization Ids
+   * @return
+   */
+  public int getMouthFeatureId() {
+    return MouthFeatureId;
+  }
 
-	
+  public void setMouthFeatureId(int mouthFeatureId) {
+    MouthFeatureId = mouthFeatureId;
+  }
 
-	public int getHeadSkinId() {
-		return HeadSkinId;
-	}
+  public int getAccessoriesId() {
+    return AccessoriesId;
+  }
 
+  public void setAccessoriesId(int accessoriesId) {
+    AccessoriesId = accessoriesId;
+  }
 
-	public void setHeadSkinId(int headSkinId) {
-		HeadSkinId = headSkinId;
-	}
+  public int getSkinFeatureId() {
+    return SkinFeatureId;
+  }
 
+  public void setSkinFeatureId(int skinFeatureId) {
+    SkinFeatureId = skinFeatureId;
+  }
 
-	public int getWeaponSkinId() {
-		return WeaponSkinId;
-	}
+  public int getHeadSkinId() {
+    return HeadSkinId;
+  }
 
+  public void setHeadSkinId(int headSkinId) {
+    HeadSkinId = headSkinId;
+  }
 
-	public void setWeaponSkinId(int weaponSkinId) {
-		WeaponSkinId = weaponSkinId;
-	}
+  public int getWeaponSkinId() {
+    return WeaponSkinId;
+  }
 
+  public void setWeaponSkinId(int weaponSkinId) {
+    WeaponSkinId = weaponSkinId;
+  }
 
-	public int getOffHandSkinId() {
-		return OffHandSkinId;
-	}
+  public int getOffHandSkinId() {
+    return OffHandSkinId;
+  }
 
+  public void setOffHandSkinId(int offHandSkinId) {
+    OffHandSkinId = offHandSkinId;
+  }
 
-	public void setOffHandSkinId(int offHandSkinId) {
-		OffHandSkinId = offHandSkinId;
-	}
+  public int getAmuletSkinId() {
+    return AmuletSkinId;
+  }
 
+  public void setAmuletSkinId(int amuletSkinId) {
+    AmuletSkinId = amuletSkinId;
+  }
 
-	public int getAmuletSkinId() {
-		return AmuletSkinId;
-	}
+  public int getArtifactSkinId() {
+    return ArtifactSkinId;
+  }
 
-
-	public void setAmuletSkinId(int amuletSkinId) {
-		AmuletSkinId = amuletSkinId;
-	}
-
-
-	public int getArtifactSkinId() {
-		return ArtifactSkinId;
-	}
-
-
-	public void setArtifactSkinId(int artifactSkinId) {
-		ArtifactSkinId = artifactSkinId;
-	}
-
+  public void setArtifactSkinId(int artifactSkinId) {
+    ArtifactSkinId = artifactSkinId;
+  }
 }

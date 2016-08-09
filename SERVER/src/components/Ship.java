@@ -1,36 +1,36 @@
 package components;
 
 public class Ship {
-	private int DbId;
-	private int ShipId;
-	private boolean Show;
-	
-	public Ship(int newId){
-		setShipId(newId);
-		setShow(false);
-	}
+  private int DbId;
+  private int ShipId;
+  private boolean Show;
 
-	public int getShipId() {
-		return ShipId;
-	}
+  public Ship(int newId) {
+    setShipId(newId);
+    setShow(false);
+  }
 
-	public void setShipId(int shipId) {
-		ShipId = shipId;
-	}
+  public int getShipId() {
+    return ShipId;
+  }
 
-	public int getDbId() {
-		return DbId;
-	}
+  public void setShipId(int shipId) {
+    ShipId = shipId;
+  }
 
-	public void setDbId(int dbId) {
-		DbId = dbId;
-	}
+  public int getDbId() {
+    return DbId;
+  }
 
-	public boolean isShow() {
-		return Show;
-	}
+  public void setDbId(int dbId) {
+    DbId = dbId;
+  }
 
-	public void setShow(boolean show) {
-		Show = show;
-	}
+  public boolean isShow() {
+    return Show;
+  }
+
+  public void setShow(boolean show) {
+    Show = show;
+  }
 }

@@ -23,12 +23,12 @@ import screens.ScreenHandler;
 import screens.ScreenHandler.ScreenType;
 import data_handlers.*;
 
-import org.newdawn.slick.BasicGame; 
-import org.newdawn.slick.GameContainer; 
-import org.newdawn.slick.Graphics; 
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException; 
-import org.newdawn.slick.AppGameContainer; 
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.AppGameContainer;
 
 import abilitysystem.Ability;
 import abilitysystem.StatusEffect;
@@ -42,393 +42,385 @@ import creature.PlayerCharacter;
 
 public class BlueSaga extends BasicGame {
 
+  public static DebugOutput DEBUG = new DebugOutput(ClientSettings.DEV_MODE);
 
-	public static DebugOutput DEBUG = new DebugOutput(ClientSettings.DEV_MODE);
+  // GAME STATES
+  public static boolean HAS_QUIT = false;
 
-	// GAME STATES
-	public static boolean HAS_QUIT = false;
+  public static long updateTimeItr = 0;
+  public static int logoutTime = 20;
+  public static int playerKillerLogoutTime = 60 * 5;
+  public static int logoutTimeItr = 0;
 
-	public static long updateTimeItr = 0;
-	public static int logoutTime = 20;
-	public static int playerKillerLogoutTime = 60*5;
-	public static int logoutTimeItr = 0;
+  public static Database gameDB;
 
-	public static Database gameDB;
+  // CONTROL
+  public static Input INPUT;
 
-	// CONTROL
-	public static Input INPUT;
+  // SCREEN DATA
+  public static WorldMap WORLD_MAP;
 
-	// SCREEN DATA
-	public static WorldMap WORLD_MAP; 
-	
-	// PLAYER
-	public static PlayerCharacter playerCharacter;
-	public static int lastPlayedDbId = 0;
-	
-	// GUI
-	public static Gui GUI;
-	public static boolean actionServerWait = false;
-	public static boolean LoginSuccess = false;
+  // PLAYER
+  public static PlayerCharacter playerCharacter;
+  public static int lastPlayedDbId = 0;
 
-	// NETWORK
-	public static Client client;
-	private String serverData;
-	public static ClientReceiverThread reciever;
-	public static boolean ServerCheck = false;
+  // GUI
+  public static Gui GUI;
+  public static boolean actionServerWait = false;
+  public static boolean LoginSuccess = false;
 
-	// MUSIC & SFX
-	public static BgMusic BG_MUSIC; 
+  // NETWORK
+  public static Client client;
+  private String serverData;
+  public static ClientReceiverThread reciever;
+  public static boolean ServerCheck = false;
 
-	public static AppGameContainer app;
-	private static Timer closeTimer;
-	
-	public BlueSaga() { 
-		super("Blue Saga v0."+ClientSettings.VERSION_NR); 
-	}
-	
-	@Override
-	public void init(GameContainer container) throws SlickException {
-		
-		INPUT = container.getInput();
-				
-		// Load translation
-		File jarFile = new File(BlueSaga.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		String translation_path = jarFile.getAbsolutePath() + "/../assets/languages/game_text.txt";
-		JSONObject translationJSON = ClientSettings.loadTranslationLanguageFile(translation_path);
-		if(translationJSON != null){
-			LanguageUtils.loadJson(translationJSON,false);
-		}
-		
-		// Load original english text
-		JSONObject originalJSON = ClientSettings.loadOriginalLanguageFile();
-		LanguageUtils.loadJson(originalJSON,true);
-		
-		loading(container);
-	}
+  // MUSIC & SFX
+  public static BgMusic BG_MUSIC;
 
-	public void loading(GameContainer container) throws SlickException {
-		// Connect to DB
-		try {
-			gameDB = new Database();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		Font.load();
+  public static AppGameContainer app;
+  private static Timer closeTimer;
 
-		GameInfo.load();
-		
-		ImageResource.load();
-		
-		DataHandlers.init();
-		
-		ScreenHandler.init(container);
-		
-		// LOAD SOUNDS
-		BG_MUSIC = new BgMusic();
-		Sfx.load(gameDB);
+  public BlueSaga() {
+    super("Blue Saga v0." + ClientSettings.VERSION_NR);
+  }
 
-		// NETWORK INIT
-		client = new Client();
+  @Override
+  public void init(GameContainer container) throws SlickException {
 
-		// LOAD OPTIONS
-		gameDB.loadOptions();
+    INPUT = container.getInput();
 
-		ServerCheck = false;
+    // Load translation
+    File jarFile =
+        new File(BlueSaga.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    String translation_path = jarFile.getAbsolutePath() + "/../assets/languages/game_text.txt";
+    JSONObject translationJSON = ClientSettings.loadTranslationLanguageFile(translation_path);
+    if (translationJSON != null) {
+      LanguageUtils.loadJson(translationJSON, false);
+    }
 
-		// GUI INIT
-		GUI = new Gui();
-		GUI.init(container);
-		
-		WORLD_MAP = new WorldMap();
+    // Load original english text
+    JSONObject originalJSON = ClientSettings.loadOriginalLanguageFile();
+    LanguageUtils.loadJson(originalJSON, true);
 
-		container.setMouseCursor("images/gui/cursors/cursor_hidden.png", 5, 5);
+    loading(container);
+  }
 
-		if(ClientSettings.DEV_MODE){
-			ClientSettings.MUSIC_ON = false;
-			ClientSettings.SFX_ON = false;
-		}
-		
-		BG_MUSIC.changeSong("title","title");
-		ScreenHandler.setActiveScreen(ScreenType.LOGIN);
-		
-	}
+  public void loading(GameContainer container) throws SlickException {
+    // Connect to DB
+    try {
+      gameDB = new Database();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
 
-	@SuppressWarnings("deprecation")
-	public static void stopClient(){
-		HAS_QUIT = true;
-		reciever.stop();
-		ServerCheck = false;
-	}
+    Font.load();
 
-	public static void chooseServer(String ServerName){
-		LoginScreen.clickedLogin = true;
-		
-		
-		if(client.init().equals("error")){
-			ScreenHandler.setActiveScreen(ScreenType.ERROR);
-			ScreenHandler.setLoadingStatus("Can't connect to server!");
-			LoginScreen.clickedLogin = false;
-		}else{
-			BlueSaga.HAS_QUIT = false;
+    GameInfo.load();
 
-			reciever = new ClientReceiverThread(client.in_answer);
-			reciever.start();
+    ImageResource.load();
 
-			ServerCheck = true;
-			client.resetPacketId();
-			client.sendMessage("connection","hello");
-		}
-	}
+    DataHandlers.init();
 
+    ScreenHandler.init(container);
 
-	public static void reconnect() {
+    // LOAD SOUNDS
+    BG_MUSIC = new BgMusic();
+    Sfx.load(gameDB);
 
-		if(client.init().equals("error")){
-			reciever.lostConnection = true;
-			ScreenHandler.LoadingStatus = "Failed to reconnect with server!";
-			reciever.startReconnectCountdown();
-		}else{
-			reciever = new ClientReceiverThread(client.in_answer);
-			reciever.start();
+    // NETWORK INIT
+    client = new Client();
 
-			ServerCheck = true;
+    // LOAD OPTIONS
+    gameDB.loadOptions();
 
-			client.sendMessage("connection","hello");
-		}
-	}
+    ServerCheck = false;
 
-	public void serverCheck() {
-		if(ServerCheck){
-			serverData = reciever.getInfo();
+    // GUI INIT
+    GUI = new Gui();
+    GUI.init(container);
 
-			DataHandlers.handleData(serverData);
-		}
-	}
+    WORLD_MAP = new WorldMap();
 
+    container.setMouseCursor("images/gui/cursors/cursor_hidden.png", 5, 5);
 
-	@Override
-	public void update(GameContainer container, int delta) throws SlickException {
-		
-		float elapsedTime = (delta) / 1000.0f;
+    if (ClientSettings.DEV_MODE) {
+      ClientSettings.MUSIC_ON = false;
+      ClientSettings.SFX_ON = false;
+    }
 
-		updateTimeItr++;
+    BG_MUSIC.changeSong("title", "title");
+    ScreenHandler.setActiveScreen(ScreenType.LOGIN);
+  }
 
-		if(updateTimeItr % 60 == 0){
-			// Every 1000 ms
+  @SuppressWarnings("deprecation")
+  public static void stopClient() {
+    HAS_QUIT = true;
+    reciever.stop();
+    ServerCheck = false;
+  }
 
-			if(client.connected){
-				// Send keep alive packet
-				client.sendKeepAlive();
-			}
-			// UPDATE LOGOUT TIMER
-			if(logoutTimeItr > 0){
-				logoutTimeItr--;
-				if(logoutTimeItr == 0){
-					Gui.getActionBar().updateSoulstone();
-				}
-			}
+  public static void chooseServer(String ServerName) {
+    LoginScreen.clickedLogin = true;
 
-			// UPDATE STATUSEFFECTS
-			if(playerCharacter != null){
-				for(Iterator<StatusEffect> iter = playerCharacter.getStatusEffects().iterator();iter.hasNext();){  
-					StatusEffect s = iter.next();
-					if(!s.increaseDurationItr(1)){
-						iter.remove();
-						playerCharacter.updateBonusStats();
-					}
-				}
-			}
-		}
+    if (client.init().equals("error")) {
+      ScreenHandler.setActiveScreen(ScreenType.ERROR);
+      ScreenHandler.setLoadingStatus("Can't connect to server!");
+      LoginScreen.clickedLogin = false;
+    } else {
+      BlueSaga.HAS_QUIT = false;
 
-		if(updateTimeItr % 12 == 0){
-			// Every 200 ms
+      reciever = new ClientReceiverThread(client.in_answer);
+      reciever.start();
 
-			if(playerCharacter != null){
-				// UPDATE ABILITY COOLDOWN
+      ServerCheck = true;
+      client.resetPacketId();
+      client.sendMessage("connection", "hello");
+    }
+  }
 
-				for(Iterator<Ability> iter = playerCharacter.getAbilities().iterator();iter.hasNext();){  
-					Ability a = iter.next();
-					if(a != null){
-						a.cooldown();
-					}
-				}
-			}
+  public static void reconnect() {
 
-		}
+    if (client.init().equals("error")) {
+      reciever.lostConnection = true;
+      ScreenHandler.LoadingStatus = "Failed to reconnect with server!";
+      reciever.startReconnectCountdown();
+    } else {
+      reciever = new ClientReceiverThread(client.in_answer);
+      reciever.start();
 
-		if(updateTimeItr % 6 == 0){
-			// Every 100 ms
-			
-			AbilityHandler.updateAbilityCooldown();
-			
-			// update monster rotation
-			for(ScreenObject c: ScreenHandler.SCREEN_OBJECTS_DRAW){
-				if(c != null){
-					if(c.getType().equals("Creature")){
-						c.getCreature().updateRotation();
-					}
-				}
-			}
-		}
+      ServerCheck = true;
 
-		// CHECK IF NEW INFO FROM SERVER HAS COME
-		serverCheck();
+      client.sendMessage("connection", "hello");
+    }
+  }
 
-		ScreenHandler.update(elapsedTime);
+  public void serverCheck() {
+    if (ServerCheck) {
+      serverData = reciever.getInfo();
 
-		if(ScreenHandler.getActiveScreen() == ScreenType.WORLD){
-			WalkHandler.updatePlayerWalk(playerCharacter);
-		}
+      DataHandlers.handleData(serverData);
+    }
+  }
 
-		keyLogic(container, elapsedTime);
-	}
+  @Override
+  public void update(GameContainer container, int delta) throws SlickException {
 
+    float elapsedTime = (delta) / 1000.0f;
 
-	@Override
-	public void render(GameContainer container, Graphics g) throws SlickException { 
-		
-		Font.loadGlyphs();
+    updateTimeItr++;
 
-		ScreenHandler.draw(g,container);
-		GUI.draw(g, container);
-		
-	}
+    if (updateTimeItr % 60 == 0) {
+      // Every 1000 ms
 
+      if (client.connected) {
+        // Send keep alive packet
+        client.sendKeepAlive();
+      }
+      // UPDATE LOGOUT TIMER
+      if (logoutTimeItr > 0) {
+        logoutTimeItr--;
+        if (logoutTimeItr == 0) {
+          Gui.getActionBar().updateSoulstone();
+        }
+      }
 
-	public static void main(String[] args) { 
+      // UPDATE STATUSEFFECTS
+      if (playerCharacter != null) {
+        for (Iterator<StatusEffect> iter = playerCharacter.getStatusEffects().iterator();
+            iter.hasNext();
+            ) {
+          StatusEffect s = iter.next();
+          if (!s.increaseDurationItr(1)) {
+            iter.remove();
+            playerCharacter.updateBonusStats();
+          }
+        }
+      }
+    }
 
-		for (int i = 0 ; i<args.length ; i ++) {
-			if ("-dev".equals(args[i])) {
-				ClientSettings.DEV_MODE = true;
-			}
-			else if (args[i].startsWith("-server")) {
-				String[] parts = args[i].split(":"); // IPv4 only
-				try {
-					ClientSettings.PORT = Integer.parseInt(parts[2]);
-					ClientSettings.SERVER_IP = parts[1];
-				}
-				catch (NumberFormatException ex) {
-					System.err.println("Invalid -server:ip:port in " + args[i]);
-					System.exit(1);
-				}
-			}
-			else {
-				System.err.println("Unknown parameter: " + args[i]);
-				System.exit(1);
-			}
-		}
-		
-		if(!ClientSettings.DEV_MODE){
-			// CRASH REPORTS
-			Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-				@Override
-				public void uncaughtException(Thread t, Throwable e) {
-					Calendar cal = Calendar.getInstance();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    if (updateTimeItr % 12 == 0) {
+      // Every 200 ms
 
-					String filename = "libs/crashlogs/crashlog_"+sdf.format(cal.getTime())+".txt";
+      if (playerCharacter != null) {
+        // UPDATE ABILITY COOLDOWN
 
-					PrintStream writer;
-					try {
-						writer = new PrintStream(filename, "UTF-8");
-						writer.println(e.getClass() + ": " + e.getMessage());
-						for (int i = 0; i < e.getStackTrace().length; i++) {
-							writer.println(e.getStackTrace()[i].toString());
-						}
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					} catch (UnsupportedEncodingException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		if(!ClientSettings.DEV_MODE){
-			System.setProperty("org.lwjgl.librarypath", new File("libs/").getAbsolutePath());
-		}
+        for (Iterator<Ability> iter = playerCharacter.getAbilities().iterator(); iter.hasNext(); ) {
+          Ability a = iter.next();
+          if (a != null) {
+            a.cooldown();
+          }
+        }
+      }
+    }
 
-		try { 
+    if (updateTimeItr % 6 == 0) {
+      // Every 100 ms
 
-			app = new AppGameContainer(new BlueSaga()); 
+      AbilityHandler.updateAbilityCooldown();
 
-			app.setDisplayMode(ClientSettings.SCREEN_WIDTH,ClientSettings.SCREEN_HEIGHT,ClientSettings.FULL_SCREEN);
-			app.setTargetFrameRate(ClientSettings.FRAME_RATE);
-			app.setShowFPS(ClientSettings.DEV_MODE);
-			app.setAlwaysRender(true);
-			app.setVSync(false);
-			
-			app.setIcons(new String[] {
-			          "images/icons/16x16.png",
-			          "images/icons/24x24.png",
-			          "images/icons/32x32.png",
-			          "images/icons/64x64.png",
-			          "images/icons/128x128.png"
-			         });
-			
-			app.start();
-		} catch (SlickException e) { 
-			e.printStackTrace(); 
-		} 
-	}
+      // update monster rotation
+      for (ScreenObject c : ScreenHandler.SCREEN_OBJECTS_DRAW) {
+        if (c != null) {
+          if (c.getType().equals("Creature")) {
+            c.getCreature().updateRotation();
+          }
+        }
+      }
+    }
 
-	/*
-	 * 
-	 * 	KEYBOARD & MOUSE
-	 * 
-	 */
+    // CHECK IF NEW INFO FROM SERVER HAS COME
+    serverCheck();
 
-	private void keyLogic(GameContainer GC, float aElapsedTime) {
-		INPUT = GC.getInput();
-		
-		if(INPUT.isKeyPressed(Input.KEY_F1)){
-			toggleFullscreen(app);
-		}
-		
-		ScreenHandler.keyLogic(INPUT);
-	}
+    ScreenHandler.update(elapsedTime);
 
+    if (ScreenHandler.getActiveScreen() == ScreenType.WORLD) {
+      WalkHandler.updatePlayerWalk(playerCharacter);
+    }
 
+    keyLogic(container, elapsedTime);
+  }
 
-	public static void restartLogoutTimer(int logoutTime){
-		if(BlueSaga.playerCharacter.isResting()){
-			BlueSaga.playerCharacter.setResting(false);
-			BlueSaga.client.sendMessage("rest","stop");
-		}
-		
-		logoutTimeItr = logoutTime;
-		
-		Gui.getActionBar().updateSoulstone();
-	}
+  @Override
+  public void render(GameContainer container, Graphics g) throws SlickException {
 
-	public static void logoutTimerOk(){
-		logoutTimeItr = 0;
-	}
+    Font.loadGlyphs();
 
+    ScreenHandler.draw(g, container);
+    GUI.draw(g, container);
+  }
 
+  public static void main(String[] args) {
 
-	public static void toggleFullscreen(AppGameContainer app){
-		ClientSettings.toggleFullScreen();
-		try {
-			app.setDisplayMode(ClientSettings.SCREEN_WIDTH, ClientSettings.SCREEN_HEIGHT, ClientSettings.FULL_SCREEN);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public static void close(){
-		BlueSaga.client.closeConnection();
-		gameDB.closeDB();
-		
-		closeTimer = new Timer();
-		
-		closeTimer.schedule( new TimerTask(){
-			@Override
-			public void run() {
-				System.exit(0);
-			}
-		}, 1000);		
-	}
+    for (int i = 0; i < args.length; i++) {
+      if ("-dev".equals(args[i])) {
+        ClientSettings.DEV_MODE = true;
+      } else if (args[i].startsWith("-server")) {
+        String[] parts = args[i].split(":"); // IPv4 only
+        try {
+          ClientSettings.PORT = Integer.parseInt(parts[2]);
+          ClientSettings.SERVER_IP = parts[1];
+        } catch (NumberFormatException ex) {
+          System.err.println("Invalid -server:ip:port in " + args[i]);
+          System.exit(1);
+        }
+      } else {
+        System.err.println("Unknown parameter: " + args[i]);
+        System.exit(1);
+      }
+    }
+
+    if (!ClientSettings.DEV_MODE) {
+      // CRASH REPORTS
+      Thread.setDefaultUncaughtExceptionHandler(
+          new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+              Calendar cal = Calendar.getInstance();
+              SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+              String filename = "libs/crashlogs/crashlog_" + sdf.format(cal.getTime()) + ".txt";
+
+              PrintStream writer;
+              try {
+                writer = new PrintStream(filename, "UTF-8");
+                writer.println(e.getClass() + ": " + e.getMessage());
+                for (int i = 0; i < e.getStackTrace().length; i++) {
+                  writer.println(e.getStackTrace()[i].toString());
+                }
+              } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+              } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+              }
+            }
+          });
+    }
+    if (!ClientSettings.DEV_MODE) {
+      System.setProperty("org.lwjgl.librarypath", new File("libs/").getAbsolutePath());
+    }
+
+    try {
+
+      app = new AppGameContainer(new BlueSaga());
+
+      app.setDisplayMode(
+          ClientSettings.SCREEN_WIDTH, ClientSettings.SCREEN_HEIGHT, ClientSettings.FULL_SCREEN);
+      app.setTargetFrameRate(ClientSettings.FRAME_RATE);
+      app.setShowFPS(ClientSettings.DEV_MODE);
+      app.setAlwaysRender(true);
+      app.setVSync(false);
+
+      app.setIcons(
+          new String[] {
+            "images/icons/16x16.png",
+            "images/icons/24x24.png",
+            "images/icons/32x32.png",
+            "images/icons/64x64.png",
+            "images/icons/128x128.png"
+          });
+
+      app.start();
+    } catch (SlickException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /*
+   *
+   * 	KEYBOARD & MOUSE
+   *
+   */
+
+  private void keyLogic(GameContainer GC, float aElapsedTime) {
+    INPUT = GC.getInput();
+
+    if (INPUT.isKeyPressed(Input.KEY_F1)) {
+      toggleFullscreen(app);
+    }
+
+    ScreenHandler.keyLogic(INPUT);
+  }
+
+  public static void restartLogoutTimer(int logoutTime) {
+    if (BlueSaga.playerCharacter.isResting()) {
+      BlueSaga.playerCharacter.setResting(false);
+      BlueSaga.client.sendMessage("rest", "stop");
+    }
+
+    logoutTimeItr = logoutTime;
+
+    Gui.getActionBar().updateSoulstone();
+  }
+
+  public static void logoutTimerOk() {
+    logoutTimeItr = 0;
+  }
+
+  public static void toggleFullscreen(AppGameContainer app) {
+    ClientSettings.toggleFullScreen();
+    try {
+      app.setDisplayMode(
+          ClientSettings.SCREEN_WIDTH, ClientSettings.SCREEN_HEIGHT, ClientSettings.FULL_SCREEN);
+    } catch (SlickException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public static void close() {
+    BlueSaga.client.closeConnection();
+    gameDB.closeDB();
+
+    closeTimer = new Timer();
+
+    closeTimer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            System.exit(0);
+          }
+        },
+        1000);
+  }
 }
