@@ -521,10 +521,16 @@ public class MapHandler extends Handler {
           o1y -= 3;
         }
       }
+      else if (o1.getObject() != null && o1.getObject().getHeight()==1) {
+        o1y--;
+      }
       if (o2c) {
         if (o2.getCreature().isDead()) {
           o2y -= 3;
         }
+      }
+      else if (o2.getObject() != null && o2.getObject().getHeight()==1) {
+        o2y--;
       }
 
       if (o1y == o2y) {
