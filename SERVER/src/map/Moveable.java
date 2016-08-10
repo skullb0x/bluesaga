@@ -1,108 +1,107 @@
 package map;
 
 public class Moveable {
-	private String Name;
-	
-	private int SpawnX;
-	private int SpawnY;
-	private int SpawnZ;
-	
-	private int X;
-	private int Y;
-	private int Z;
-	
-	private int respawnItr = 0;
-	private int respawnItrEnd = 3;
-	
-	public Moveable(String newName, int x, int y, int z){
-		setName(newName);
-		setX(x);
-		setY(y);
-		setZ(z);
-		setSpawnX(x);
-		setSpawnY(y);
-		setSpawnZ(z);
-	}
+  private String Name;
 
-	public int getSpawnX() {
-		return SpawnX;
-	}
+  private int SpawnX;
+  private int SpawnY;
+  private int SpawnZ;
 
-	public void setSpawnX(int spawnX) {
-		SpawnX = spawnX;
-	}
+  private int X;
+  private int Y;
+  private int Z;
 
-	public int getSpawnY() {
-		return SpawnY;
-	}
+  private int respawnItr = 0;
+  private int respawnItrEnd = 3;
 
-	public void setSpawnY(int spawnY) {
-		SpawnY = spawnY;
-	}
+  public Moveable(String newName, int x, int y, int z) {
+    setName(newName);
+    setX(x);
+    setY(y);
+    setZ(z);
+    setSpawnX(x);
+    setSpawnY(y);
+    setSpawnZ(z);
+  }
 
-	public int getSpawnZ() {
-		return SpawnZ;
-	}
+  public int getSpawnX() {
+    return SpawnX;
+  }
 
-	public void setSpawnZ(int spawnZ) {
-		SpawnZ = spawnZ;
-	}
+  public void setSpawnX(int spawnX) {
+    SpawnX = spawnX;
+  }
 
-	public int getX() {
-		return X;
-	}
+  public int getSpawnY() {
+    return SpawnY;
+  }
 
-	public void setX(int x) {
-		X = x;
-	}
+  public void setSpawnY(int spawnY) {
+    SpawnY = spawnY;
+  }
 
-	public int getY() {
-		return Y;
-	}
+  public int getSpawnZ() {
+    return SpawnZ;
+  }
 
-	public void setY(int y) {
-		Y = y;
-	}
+  public void setSpawnZ(int spawnZ) {
+    SpawnZ = spawnZ;
+  }
 
-	public int getZ() {
-		return Z;
-	}
+  public int getX() {
+    return X;
+  }
 
-	public void setZ(int z) {
-		Z = z;
-	}
-	
-	public boolean checkRespawn(){
-		boolean respawn = false;
-		if(getX() == getSpawnX() && getY() == getSpawnY() && getZ() == getSpawnZ()){
-			
-		}else{
-			respawnItr++;
-			if(respawnItr >= respawnItrEnd){
-				respawn();
-				respawn = true;
-			}
-		}
-		return respawn;
-	}
-	
-	public void respawn(){
-		setX(getSpawnX());
-		setY(getSpawnY());
-		setZ(getSpawnZ());
-		respawnItr = 0;
-		
-	}
+  public void setX(int x) {
+    X = x;
+  }
 
-	public void resetRespawnTimer(){
-		respawnItr = 0;
-	}
-	
-	public String getName() {
-		return Name;
-	}
+  public int getY() {
+    return Y;
+  }
 
-	public void setName(String name) {
-		Name = name;
-	}
+  public void setY(int y) {
+    Y = y;
+  }
+
+  public int getZ() {
+    return Z;
+  }
+
+  public void setZ(int z) {
+    Z = z;
+  }
+
+  public boolean checkRespawn() {
+    boolean respawn = false;
+    if (getX() == getSpawnX() && getY() == getSpawnY() && getZ() == getSpawnZ()) {
+
+    } else {
+      respawnItr++;
+      if (respawnItr >= respawnItrEnd) {
+        respawn();
+        respawn = true;
+      }
+    }
+    return respawn;
+  }
+
+  public void respawn() {
+    setX(getSpawnX());
+    setY(getSpawnY());
+    setZ(getSpawnZ());
+    respawnItr = 0;
+  }
+
+  public void resetRespawnTimer() {
+    respawnItr = 0;
+  }
+
+  public String getName() {
+    return Name;
+  }
+
+  public void setName(String name) {
+    Name = name;
+  }
 }

@@ -29,148 +29,144 @@ import utils.CrashLogger;
 import utils.ServerMessage;
 
 public class DataHandlers {
-	private static Map<String, Consumer<Message>> dispatch = new HashMap<>();
-	
-	private static ConcurrentLinkedQueue<Message> incomingMessages;
-	private static ConcurrentLinkedQueue<Message> outgoingMessages;
+  private static Map<String, Consumer<Message>> dispatch = new HashMap<>();
 
-	public static void init(){
-		incomingMessages = new ConcurrentLinkedQueue<Message>();
-		outgoingMessages = new ConcurrentLinkedQueue<Message>();
-		
-		MonsterHandler.init();
-		AbilityHandler.init();
-		ContainerHandler.init();
-		ChatHandler.init();
-		FishingHandler.init();
-		TrapHandler.init();
-		CraftingHandler.init();
-		PartyHandler.init();
-		CardHandler.init();
-		
-		ConnectHandler.init();
-		LoginHandler.init();
-		WalkHandler.init();
-		SkillHandler.init();
-		ItemHandler.init();
-		MapHandler.init();
-		BattleHandler.init();
-		BountyHandler.init();
-		FriendsHandler.init();
-		QuestHandler.init();
-		ShopHandler.init();
-		MusicHandler.init();
-		GatheringHandler.init();
-		SkinHandler.init();
-		TutorialHandler.init();
-		
-		InventoryHandler.init();
-		EquipHandler.init();
-		ActionbarHandler.init();
-	}
-	
-	public static void register(String type, Consumer<Message> handle) {
-		dispatch.put(type, handle);
-	}
-	
-	public static void update(long tick){
-		
-		// Every 50 ms
-		MonsterHandler.update(tick);
-		BattleHandler.updateRangedCooldowns();
-		
-		AbilityHandler.updateProjectiles();
-		AbilityHandler.updateAbilityEvents();
-		AbilityHandler.updatePlayerCasting();
-		
-		// Every 200 ms
-		if(tick % 4 == 0){
-			BattleHandler.update();
-			AbilityHandler.updateCooldowns();
-		}
-		
-		// Every 1000 ms
-		if(tick % 20 == 0){
-			TrapHandler.update(); 
-			StatusEffectHandler.updateStatusEffects();
-			StatusEffectHandler.updateTileStatusEffects();
-			PvpHandler.updatePKTimers();
-			MapHandler.updateNightTime();
-		}
-		
-		// Every 10000 ms
-		if(tick % 200 == 0){
-			ContainerHandler.checkContainerRespawn();
-		}
-	
-		// Every minute
-		if(tick % 1200 == 0){
-			if(!ServerSettings.DEV_MODE){
-				int nrPlayers = Server.clients.size();
-				WebsiteServerStatus.UpdateServerStatus(ServerSettings.SERVER_ID, nrPlayers);
-			}
-		}
-	}
-	
-	
-	public static void addIncomingMessage(Message message){
-		incomingMessages.add(message);
-	}
+  private static ConcurrentLinkedQueue<Message> incomingMessages;
+  private static ConcurrentLinkedQueue<Message> outgoingMessages;
 
+  public static void init() {
+    incomingMessages = new ConcurrentLinkedQueue<Message>();
+    outgoingMessages = new ConcurrentLinkedQueue<Message>();
 
-	//public static void handleData(Client client, String message){
+    MonsterHandler.init();
+    AbilityHandler.init();
+    ContainerHandler.init();
+    ChatHandler.init();
+    FishingHandler.init();
+    TrapHandler.init();
+    CraftingHandler.init();
+    PartyHandler.init();
+    CardHandler.init();
 
-	public static void processIncomingData(){
-		for(Iterator<Message> i = incomingMessages.iterator(); i.hasNext(); ) {
-			Message m = i.next();
-			Consumer<Message> handle = dispatch.get(m.type);
-			if (handle!=null) {
-				handle.accept(m);
-			} else {
-				ServerMessage.printMessage("WARNING - Unknown message type: "+m.type,false);
-			}
-			i.remove();
-		}
-	}
+    ConnectHandler.init();
+    LoginHandler.init();
+    WalkHandler.init();
+    SkillHandler.init();
+    ItemHandler.init();
+    MapHandler.init();
+    BattleHandler.init();
+    BountyHandler.init();
+    FriendsHandler.init();
+    QuestHandler.init();
+    ShopHandler.init();
+    MusicHandler.init();
+    GatheringHandler.init();
+    SkinHandler.init();
+    TutorialHandler.init();
 
-	public static void addOutgoingMessage(Message message){
-		outgoingMessages.add(message);
-	}
+    InventoryHandler.init();
+    EquipHandler.init();
+    ActionbarHandler.init();
+  }
 
-	public static void processOutgoingData(){
-		for(Iterator<Message> i = outgoingMessages.iterator(); i.hasNext(); ) {
-			Message m = i.next();
+  public static void register(String type, Consumer<Message> handle) {
+    dispatch.put(type, handle);
+  }
 
-			sendMessage(m);
+  public static void update(long tick) {
 
-			i.remove();
-		}
-	}
+    // Every 50 ms
+    MonsterHandler.update(tick);
+    BattleHandler.updateRangedCooldowns();
 
-	private static boolean sendMessage(Message message){
-		boolean sendOk = true;
-		Client client = message.client;
+    AbilityHandler.updateProjectiles();
+    AbilityHandler.updateAbilityEvents();
+    AbilityHandler.updatePlayerCasting();
 
-		try{
-			try{
-				String dataToSend = "<"+message.type+">"+message.message;
-				
-				byte[] byteMsg = (dataToSend).getBytes();
-				if(client.out != null){
-					client.out.writeObject(byteMsg);
-					client.out.reset();
-					client.out.flush();
-				}
-				
-				
-			}catch(SocketException e){
-				sendOk = false;
-			}
-		}
-		catch(IOException ioException){
-			CrashLogger.uncaughtException(ioException);
-			sendOk = false;
-		}
-		return sendOk;
-	}
+    // Every 200 ms
+    if (tick % 4 == 0) {
+      BattleHandler.update();
+      AbilityHandler.updateCooldowns();
+    }
+
+    // Every 1000 ms
+    if (tick % 20 == 0) {
+      TrapHandler.update();
+      StatusEffectHandler.updateStatusEffects();
+      StatusEffectHandler.updateTileStatusEffects();
+      PvpHandler.updatePKTimers();
+      MapHandler.updateNightTime();
+    }
+
+    // Every 10000 ms
+    if (tick % 200 == 0) {
+      ContainerHandler.checkContainerRespawn();
+    }
+
+    // Every minute
+    if (tick % 1200 == 0) {
+      if (!ServerSettings.DEV_MODE) {
+        int nrPlayers = Server.clients.size();
+        WebsiteServerStatus.UpdateServerStatus(ServerSettings.SERVER_ID, nrPlayers);
+      }
+    }
+  }
+
+  public static void addIncomingMessage(Message message) {
+    incomingMessages.add(message);
+  }
+
+  //public static void handleData(Client client, String message){
+
+  public static void processIncomingData() {
+    for (Iterator<Message> i = incomingMessages.iterator(); i.hasNext(); ) {
+      Message m = i.next();
+      Consumer<Message> handle = dispatch.get(m.type);
+      if (handle != null) {
+        handle.accept(m);
+      } else {
+        ServerMessage.printMessage("WARNING - Unknown message type: " + m.type, false);
+      }
+      i.remove();
+    }
+  }
+
+  public static void addOutgoingMessage(Message message) {
+    outgoingMessages.add(message);
+  }
+
+  public static void processOutgoingData() {
+    for (Iterator<Message> i = outgoingMessages.iterator(); i.hasNext(); ) {
+      Message m = i.next();
+
+      sendMessage(m);
+
+      i.remove();
+    }
+  }
+
+  private static boolean sendMessage(Message message) {
+    boolean sendOk = true;
+    Client client = message.client;
+
+    try {
+      try {
+        String dataToSend = "<" + message.type + ">" + message.message;
+
+        byte[] byteMsg = (dataToSend).getBytes();
+        if (client.out != null) {
+          client.out.writeObject(byteMsg);
+          client.out.reset();
+          client.out.flush();
+        }
+
+      } catch (SocketException e) {
+        sendOk = false;
+      }
+    } catch (IOException ioException) {
+      CrashLogger.uncaughtException(ioException);
+      sendOk = false;
+    }
+    return sendOk;
+  }
 }
