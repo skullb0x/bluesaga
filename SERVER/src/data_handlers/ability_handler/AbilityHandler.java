@@ -1067,6 +1067,12 @@ public class AbilityHandler extends Handler {
 
                 // ADD DAMAGE, ADD STATUSEFFECTS TO TARGET
                 if (TARGET != null) {
+                  // Caster on the same tile as target? Then force ability to caster.
+                  if (CASTER.getX() == TARGET.getX()
+                      && CASTER.getY() == TARGET.getY()
+                      && CASTER.getZ() == TARGET.getZ()) {
+                    TARGET = CASTER;
+                  }
 
                   int damage = 0;
 
