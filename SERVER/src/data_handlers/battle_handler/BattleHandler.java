@@ -504,38 +504,40 @@ public class BattleHandler extends Handler {
 
         addOutGoingMessage(client, "level_up", levelUpData);
 
-        System.out.println("SEND LEVEL UP INFO!");
-        // Send level up info to website
-        // DO NOT CODE BELOW
-        String characterInfo =
-            ServerSettings.SERVER_ID
-                + ","
-                + client.playerCharacter.blueSagaId
-                + ","
-                + client.UserId
-                + ","
-                + client.playerCharacter.getDBId()
-                + ","
-                + client.playerCharacter.getName()
-                + ","
-                + client.playerCharacter.getCreatureId()
-                + ","
-                + client.playerCharacter.getLevel()
-                + ","
-                + client.playerCharacter.getHeadId()
-                + ","
-                + client.playerCharacter.getWeaponId()
-                + ","
-                + client.playerCharacter.getOffHandId()
-                + ","
-                + client.playerCharacter.getAmuletId()
-                + ","
-                + client.playerCharacter.getArtifactId()
-                + ","
-                + client.playerCharacter.getBounty();
+        if (!ServerSettings.DEV_MODE) {
+          System.out.println("SEND LEVEL UP INFO!");
+          // Send level up info to website
+          // DO NOT CODE BELOW
+          String characterInfo =
+              ServerSettings.SERVER_ID
+                  + ","
+                  + client.playerCharacter.blueSagaId
+                  + ","
+                  + client.UserId
+                  + ","
+                  + client.playerCharacter.getDBId()
+                  + ","
+                  + client.playerCharacter.getName()
+                  + ","
+                  + client.playerCharacter.getCreatureId()
+                  + ","
+                  + client.playerCharacter.getLevel()
+                  + ","
+                  + client.playerCharacter.getHeadId()
+                  + ","
+                  + client.playerCharacter.getWeaponId()
+                  + ","
+                  + client.playerCharacter.getOffHandId()
+                  + ","
+                  + client.playerCharacter.getAmuletId()
+                  + ","
+                  + client.playerCharacter.getArtifactId()
+                  + ","
+                  + client.playerCharacter.getBounty();
 
-        CharacterInfo.SendCharacterInfoToWebsite(characterInfo);
-        // DO NOT CHANGE THE CODE ABOVE
+          CharacterInfo.SendCharacterInfoToWebsite(characterInfo);
+          // DO NOT CHANGE THE CODE ABOVE
+        }
 
         String playerData = client.playerCharacter.getSmallData();
 
