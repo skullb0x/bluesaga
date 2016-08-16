@@ -276,19 +276,40 @@ public class LoginHandler extends Handler {
     boolean correctName = true;
     int blueSagaId = 0;
 
-    //SEND NAME TO WEBSITE API
-    // Checks if name doesnt contain a bad word
-    // Checks if name only contains letters
-    // Checks if name already is taken
-    int statusCode =
-        CharacterCreate.CreateCharacter(ServerSettings.SERVER_ID, client.UserId, creatureId, name);
-
-    if (statusCode <= 0) {
-      correctName = false;
-    } else {
-      blueSagaId = statusCode;
+    if (ServerSettings.DEV_MODE) {
+      if (!name.matches("[A-Za-z]+")) {
+        return 0;
+      }
+      for (String badword : ChatHandler.BadWords) {
+        if (name.contains(badword)) {
+          return 0;
+        }
+      }
+      ResultSet charInfo = Server.userDB.askDB("select Id from user_character where Name like '" + name + "'");
+      try {
+        if (charInfo.next()) {
+          return 0;
+        }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        return 0;
+      }
     }
-    System.out.println("NEW BLUESAGA ID: " + blueSagaId);
+    else {
+      //SEND NAME TO WEBSITE API
+      // Checks if name doesnt contain a bad word
+      // Checks if name only contains letters
+      // Checks if name already is taken
+      int statusCode =
+          CharacterCreate.CreateCharacter(ServerSettings.SERVER_ID, client.UserId, creatureId, name);
+
+      if (statusCode <= 0) {
+        correctName = false;
+      } else {
+        blueSagaId = statusCode;
+      }
+      System.out.println("NEW BLUESAGA ID: " + blueSagaId);
+    }
 
     if (correctName) {
 
