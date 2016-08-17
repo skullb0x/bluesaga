@@ -248,22 +248,22 @@ public class BP_EDITOR extends BasicGame {
   public static void loadScreen() {
     /*
     for(int i = 0; i < 22; i++){
-    	for(int j = 0; j < 14; j++){
+      for(int j = 0; j < 14; j++){
 
-    		ResultSet tileInfo = mapDB.askDB("select X, Y, Z, Type, Number from area_tile where X = "+(PLAYER_X-TILE_HALF_W+i)+" and Y = "+(PLAYER_Y-TILE_HALF_H+j)+" and Z = "+PLAYER_Z);
-    		try {
-    			if(tileInfo.next()){
-    				SCREEN_TILES[i][j].setType(tileInfo.getString("Type"), tileInfo.getInt("Number"));
-    			}else{
-    				SCREEN_TILES[i][j].setType("None", 0);
-    			}
-    			tileInfo.close();
-    		} catch (SQLException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
+        ResultSet tileInfo = mapDB.askDB("select X, Y, Z, Type, Number from area_tile where X = "+(PLAYER_X-TILE_HALF_W+i)+" and Y = "+(PLAYER_Y-TILE_HALF_H+j)+" and Z = "+PLAYER_Z);
+        try {
+          if(tileInfo.next()){
+            SCREEN_TILES[i][j].setType(tileInfo.getString("Type"), tileInfo.getInt("Number"));
+          }else{
+            SCREEN_TILES[i][j].setType("None", 0);
+          }
+          tileInfo.close();
+        } catch (SQLException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
 
-    	}
+      }
     }
     */
 
@@ -1152,6 +1152,8 @@ public class BP_EDITOR extends BasicGame {
 
       boolean passable = false;
 
+      mapDB.updateDB("BEGIN TRANSACTION");
+
       for (int i = screenX; i < screenX + BrushSize; i++) {
         for (int j = screenY; j < screenY + BrushSize; j++) {
           if (i > 0 && i < 21 && j > 0 && j < 13) {
@@ -1271,12 +1273,14 @@ public class BP_EDITOR extends BasicGame {
           }
         }
       }
+      mapDB.updateDB("END TRANSACTION");
 
     } else {
       String tileName = MouseTile.getName();
       String tileType = MouseTile.getType();
       String saveName = MouseTile.getName();
 
+      mapDB.updateDB("BEGIN TRANSACTION");
       for (int i = screenX; i < screenX + BrushSize; i++) {
         for (int j = screenY; j < screenY + BrushSize; j++) {
           Tile checkTile = new Tile(0, 0, PLAYER_Z);
@@ -1346,6 +1350,7 @@ public class BP_EDITOR extends BasicGame {
           }
         }
       }
+      mapDB.updateDB("END TRANSACTION");
     }
     /*
 
