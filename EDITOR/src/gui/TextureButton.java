@@ -9,6 +9,9 @@ import org.newdawn.slick.Graphics;
 
 public class TextureButton {
 
+  public final static Color BLACK = new Color(0, 0, 0, 255);
+  public final static Color WHITE = new Color(255, 255, 255, 255);
+
   private Sprite ButtonImage;
   private int X = 0;
   private int Y = 0;
@@ -75,20 +78,31 @@ public class TextureButton {
 
     if (type.equals("Folder")) {
       ButtonImage.draw(X, Y);
-      g.setColor(new Color(0, 0, 0, 255));
+      g.setColor(BLACK);
       g.setFont(BP_EDITOR.FONTS.size8);
       g.drawString(name, X + 10, Y + 30);
     } else if (type.equals("Back")) {
       ButtonImage.draw(X, Y);
-      g.setColor(new Color(0, 0, 0, 255));
+      g.setColor(BLACK);
       g.setFont(BP_EDITOR.FONTS.size8);
       g.drawString("..", X + 10, Y + 30);
     } else if (type.equals("Delete")) {
       ButtonImage.draw(X, Y);
+      ButtonImage.draw(X, Y);
+      g.setColor(WHITE);
+      g.drawRect(X, Y, width, height);
     } else {
       ButtonImage.draw(X, Y);
-      g.setColor(new Color(255, 255, 255, 255));
+      g.setColor(WHITE);
       g.drawRect(X, Y, width, height);
+      if (BP_EDITOR.canFixEdges(name)) {
+        g.setColor(BLACK);
+        g.setFont(BP_EDITOR.FONTS.size12bold);
+        g.drawString("F", X + 7, Y + 7);
+        g.setColor(WHITE);
+        g.setFont(BP_EDITOR.FONTS.size12bold);
+        g.drawString("F", X + 5, Y + 5);
+      }
     }
 
     if (X < mouseX && X + width > mouseX && Y < mouseY && Y + height > mouseY) {
