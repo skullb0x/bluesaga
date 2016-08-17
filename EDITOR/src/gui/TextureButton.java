@@ -95,7 +95,7 @@ public class TextureButton {
       ButtonImage.draw(X, Y);
       g.setColor(WHITE);
       g.drawRect(X, Y, width, height);
-      if (name.contains("D")) {
+      if (BP_EDITOR.canFixEdges(name)) {
         g.setColor(BLACK);
         g.setFont(BP_EDITOR.FONTS.size12bold);
         g.drawString("F", X + 7, Y + 7);
