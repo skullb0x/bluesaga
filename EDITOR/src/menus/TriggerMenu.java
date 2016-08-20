@@ -79,7 +79,7 @@ public class TriggerMenu {
       }
     }
 
-    if (INPUT.isKeyPressed(Input.KEY_ENTER)) {
+    if (INPUT.isKeyPressed(Input.KEY_ENTER) || INPUT.isKeyPressed(Input.KEY_NUMPADENTER)) {
       if (!trapField.getText().equals("") && !doorField.getText().equals("")) {
         BP_EDITOR.TRIGGER_TRAP_ID = Integer.parseInt(trapField.getText());
         BP_EDITOR.TRIGGER_DOOR_ID = Integer.parseInt(doorField.getText());

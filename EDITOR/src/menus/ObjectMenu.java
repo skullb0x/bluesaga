@@ -1,6 +1,7 @@
 package menus;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Vector;
 
 import map.TileObject;
@@ -36,19 +37,20 @@ public class ObjectMenu {
     Buttons.clear();
     /*
 
-    		int x = 0;
-    		int y = 0;
+        int x = 0;
+        int y = 0;
 
-    		Buttons.add(new ObjectButton(X+x,Y+y,"delete"));
-    		x+=50;
-    		Buttons.add(new ObjectButton(X+x,Y+y,"barrel"));
-    		x+=50;
-    		Buttons.add(new ObjectButton(X+x,Y+y,"chest"));
+        Buttons.add(new ObjectButton(X+x,Y+y,"delete"));
+        x+=50;
+        Buttons.add(new ObjectButton(X+x,Y+y,"barrel"));
+        x+=50;
+        Buttons.add(new ObjectButton(X+x,Y+y,"chest"));
     */
 
     Buttons.clear();
 
     File[] files = new File("../CLIENT/src/images/" + ActivePath).listFiles();
+    Arrays.sort(files);
 
     int i = 0;
 
@@ -78,6 +80,7 @@ public class ObjectMenu {
               && !name.contains("_6")
               && !name.contains("_7")
               && !name.contains("_8")
+              && !name.contains("_open")
               && !name.contains("_on")) {
             if (name.contains("_0")) {
               name = name.substring(0, name.length() - 2);

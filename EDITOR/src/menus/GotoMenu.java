@@ -86,21 +86,31 @@ public class GotoMenu {
           gotoZField.setFocus(true);
         } else {
           gotoXField.setFocus(true);
+          gotoYField.setFocus(false);
+          gotoZField.setFocus(false);
         }
       }
 
       // SAVE COORDINATES OF DOOR GOAL
-      if (INPUT.isKeyPressed(Input.KEY_ENTER)) {
+      if (INPUT.isKeyPressed(Input.KEY_ENTER) || INPUT.isKeyPressed(Input.KEY_NUMPADENTER)) {
         if (!gotoXField.getText().equals("")
             && !gotoYField.getText().equals("")
             && !gotoZField.getText().equals("")) {
-          BP_EDITOR.PLAYER_X = Integer.parseInt(gotoXField.getText());
-          BP_EDITOR.PLAYER_Y = Integer.parseInt(gotoYField.getText());
-          BP_EDITOR.PLAYER_Z = Integer.parseInt(gotoZField.getText());
+          try {
+            BP_EDITOR.PLAYER_X = Integer.parseInt(gotoXField.getText());
+            BP_EDITOR.PLAYER_Y = Integer.parseInt(gotoYField.getText());
+            BP_EDITOR.PLAYER_Z = Integer.parseInt(gotoZField.getText());
 
-          BP_EDITOR.loadScreen();
+            BP_EDITOR.loadScreen();
 
-          Active = false;
+            Active = false;
+          }
+          catch (NumberFormatException ex) {
+            System.err.println("ERROR - Not a coordinate: "
+                + gotoXField.getText() + ','
+                + gotoYField.getText() + ','
+                + gotoZField.getText());
+          }
         }
       }
     }

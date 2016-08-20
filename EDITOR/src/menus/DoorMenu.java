@@ -118,26 +118,41 @@ public class DoorMenu {
         gotoZField.setFocus(true);
       } else {
         gotoXField.setFocus(true);
+        gotoYField.setFocus(false);
+        gotoZField.setFocus(false);
       }
     }
 
     // SAVE COORDINATES OF DOOR GOAL
-    if (INPUT.isKeyPressed(Input.KEY_ENTER)) {
+    if (INPUT.isKeyPressed(Input.KEY_ENTER) || INPUT.isKeyPressed(Input.KEY_NUMPADENTER)) {
       if (!gotoXField.getText().equals("")
           && !gotoYField.getText().equals("")
           && !gotoZField.getText().equals("")) {
-        BP_EDITOR.mapDB.updateDB(
-            "update door set GotoX = "
-                + gotoXField.getText()
-                + ", GotoY = "
-                + gotoYField.getText()
-                + ", GotoZ = "
-                + gotoZField.getText()
-                + " where Id = "
-                + ActiveDoorId);
+        try {
+          // Don't need the value, just test if it's a number
+          Integer.parseInt(gotoXField.getText());
+          Integer.parseInt(gotoYField.getText());
+          Integer.parseInt(gotoZField.getText());
 
-        Active = false;
-        BP_EDITOR.PLACE_DOOR = false;
+          BP_EDITOR.mapDB.updateDB(
+              "update door set GotoX = "
+                  + gotoXField.getText()
+                  + ", GotoY = "
+                  + gotoYField.getText()
+                  + ", GotoZ = "
+                  + gotoZField.getText()
+                  + " where Id = "
+                  + ActiveDoorId);
+
+          Active = false;
+          BP_EDITOR.PLACE_DOOR = false;
+        }
+        catch (NumberFormatException ex) {
+          System.err.println("ERROR - Not a coordinate: "
+              + gotoXField.getText() + ','
+              + gotoYField.getText() + ','
+              + gotoZField.getText());
+        }
       }
     }
   }

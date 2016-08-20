@@ -1,6 +1,7 @@
 package menus;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Vector;
 
 import map.Tile;
@@ -48,6 +49,7 @@ public class TextureMenu {
     Buttons.clear();
 
     File[] files = new File(ActivePath).listFiles();
+    Arrays.sort(files);
 
     int i = 0;
 
