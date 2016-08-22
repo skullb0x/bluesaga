@@ -143,10 +143,14 @@ public class Database {
             + y);
   }
 
+  public void update(String sqlStatement) throws SQLException {
+    Statement stat = conn.createStatement();
+    stat.execute(sqlStatement);
+  }
+
   public void updateDB(String sqlStatement) {
     try {
       Statement stat = conn.createStatement();
-
       stat.execute(sqlStatement);
 
     } catch (SQLException e) {

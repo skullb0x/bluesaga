@@ -51,6 +51,7 @@ public class AreaEffectMenu {
       Active = false;
     } else {
       Active = true;
+      nrField.setText("");
       nrField.setFocus(true);
     }
   }
@@ -60,9 +61,18 @@ public class AreaEffectMenu {
       Active = false;
     }
 
-    if (INPUT.isKeyPressed(Input.KEY_ENTER)) {
-      if (!nrField.getText().equals("")) {
-        BP_EDITOR.AREA_EFFECT_ID = Integer.parseInt(nrField.getText());
+    if (INPUT.isKeyPressed(Input.KEY_ENTER) || INPUT.isKeyPressed(Input.KEY_NUMPADENTER)) {
+      String valueStr = nrField.getText();
+      if (valueStr.equals("")) {
+          BP_EDITOR.AREA_EFFECT_ID = -1;
+      }
+      else {
+        try {
+          BP_EDITOR.AREA_EFFECT_ID = Integer.parseInt(valueStr);
+        }
+        catch (NumberFormatException ex) {
+          System.err.println("ERROR - Not a AREA_EFFECT_ID: " + valueStr);
+        }
 
         if (BP_EDITOR.AREA_EFFECT_ID > 0) {
           ResultSet effectRS =
@@ -90,8 +100,8 @@ public class AreaEffectMenu {
             e.printStackTrace();
           }
         }
-        toggle();
       }
+      toggle();
     }
   }
 }
